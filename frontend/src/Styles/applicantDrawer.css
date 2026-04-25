@@ -1,0 +1,197 @@
+﻿/* ===============================
+   OVERLAY
+================================ */
+
+.applicant-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.65)
+  );
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+}
+
+/* ===============================
+   DRAWER CONTAINER
+================================ */
+
+.applicant-drawer {
+  width: 440px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #111 0%,
+    #0b0b0b 100%
+  );
+  color: #ffffff;
+  padding: 28px 26px;
+  overflow-y: auto;
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.7);
+  border-left: 1px solid #1f1f1f;
+
+  animation: slideIn 0.35s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.drawer-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.drawer-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.drawer-close:hover {
+  color: #c4161c;
+}
+
+/* ===============================
+   SECTION BLOCKS
+================================ */
+
+.drawer-section {
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 18px 18px;
+  margin-bottom: 18px;
+}
+
+.drawer-section h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #c4161c;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* ===============================
+   TEXT
+================================ */
+
+.drawer-section p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e5e5e5;
+}
+
+.drawer-section .muted {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin-bottom: 6px;
+}
+
+/* ===============================
+   META INFO GRID
+================================ */
+
+.drawer-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* ===============================
+   RESUME BLOCK
+================================ */
+
+.resume-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    #151515,
+    #101010
+  );
+  border: 1px solid #262626;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.resume-pill::before {
+  content: "Resume";
+  font-size: 16px;
+}
+
+/* ===============================
+   STATUS ACTIONS
+================================ */
+
+.status-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.status-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.status-btn:hover {
+  border-color: #c4161c;
+  color: #c4161c;
+}
+
+.status-btn.active {
+  background: #c4161c;
+  border-color: #c4161c;
+  color: #ffffff;
+}
+
+/* ===============================
+   FOOTER ACTION SPACE (FUTURE)
+================================ */
+
+.drawer-footer {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #1f1f1f;
+}
+

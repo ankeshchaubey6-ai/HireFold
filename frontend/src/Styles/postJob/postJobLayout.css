@@ -1,0 +1,18 @@
+.postjob-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.postjob-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.postjob-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* spacing between sections */
+}

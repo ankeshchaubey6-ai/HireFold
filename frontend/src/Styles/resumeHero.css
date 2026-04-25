@@ -1,0 +1,16 @@
+.resume-hero {
+  max-width: 900px;
+  margin: 48px auto;
+  text-align: center;
+}
+
+.resume-hero h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.resume-hero p {
+  font-size: 16px;
+  opacity: 0.8;
+}

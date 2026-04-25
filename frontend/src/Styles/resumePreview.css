@@ -1,0 +1,186 @@
+/* ======================================================
+   PREVIEW CONTAINER (RIGHT PANEL)
+====================================================== */
+
+.resume-preview {
+  position: sticky;
+  top: 90px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ======================================================
+   TOOLBAR / HEADER
+====================================================== */
+
+.resume-preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.template-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.toolbar-actions button {
+  margin-left: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ======================================================
+   SCROLL AREA
+====================================================== */
+
+.resume-preview-canvas {
+  height: auto;
+  overflow-y: visible;
+  padding-right: 6px;
+}
+
+/* ======================================================
+   A4 PAPER — UNIVERSAL (REAL CV)
+====================================================== */
+
+.resume-paper {
+  width: 794px;              /* A4 width */
+  min-height: 1123px;        /* A4 height */
+
+  background: #ffffff;
+  color: #111827;
+
+  padding: 36px 38px;
+  box-sizing: border-box;
+
+  border-radius: 8px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+
+  margin: 0 auto;
+  overflow: hidden;
+
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* ======================================================
+   CARD PREVIEW MODE (TEMPLATE GRID + RIGHT PANEL)
+====================================================== */
+
+.resume-preview-card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* SCALE ONLY THE PAPER */
+.resume-preview-card .resume-paper {
+  transform: scale(0.65);
+  transform-origin: top center;
+}
+
+/* ======================================================
+   TEMPLATE CARD PREVIEW (MORE COMPRESSION)
+====================================================== */
+
+.template-preview .resume-paper {
+  transform: scale(0.52);
+  transform-origin: top center;
+}
+
+/* ------------------------------------------------------
+   COMPRESSION RULES — CARD ONLY (NOT REAL CV)
+------------------------------------------------------ */
+
+.template-preview .resume-section {
+  margin-bottom: 10px !important;
+}
+
+.template-preview .resume-item {
+  margin-bottom: 6px !important;
+}
+
+.template-preview ul {
+  padding-left: 14px !important;
+}
+
+.template-preview .resume-tags {
+  gap: 6px !important;
+}
+
+.template-preview .resume-tag {
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+}
+
+/* Prevent any right/bottom overflow */
+.template-preview *,
+.resume-preview-card * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* ======================================================
+   REMOVE ALL EXTRA WHITE LAYERS IN CARD MODE
+====================================================== */
+
+.template-preview .resume-paper,
+.template-preview .modern01,
+.template-preview .modern02,
+.template-preview .minimal01,
+.template-preview .ats01,
+.template-preview .creative01,
+.template-preview .executive01 {
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ======================================================
+   DARK MODE
+====================================================== */
+
+body.dark .resume-paper {
+  background: #0a0a0a;
+  color: #e5e7eb;
+  border-color: #2a2a2a;
+}
+
+/* ======================================================
+   PRINT MODE
+====================================================== */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .resume-paper,
+  .resume-paper * {
+    visibility: visible;
+  }
+
+  .resume-paper {
+    position: sticky;
+    left: 0;
+    top: 90px;
+    transform: scale(1) !important;
+    box-shadow: none;
+  }
+}
+  /*this file was empty durung problem solving i just added this code */

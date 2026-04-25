@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Rahul Mehta",
+    "role": "Frontend Developer",
+    "company": "TechNova",
+    "message": "HireFold helped me find a role that actually matched my skills."
+  },
+  {
+    "id": 2,
+    "name": "Ananya Singh",
+    "role": "HR Manager",
+    "company": "InnoSoft",
+    "message": "Bias-free hiring and structured interviews made recruitment faster."
+  },
+  {
+    "id": 3,
+    "name": "Kunal Verma",
+    "role": "Full Stack Engineer",
+    "company": "Acme Corp",
+    "message": "The job recommendations felt personalized and accurate."
+  }
+]

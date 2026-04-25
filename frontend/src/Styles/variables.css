@@ -1,0 +1,52 @@
+/* =========================================================
+   HIREFOLD THEME VARIABLES
+   Single source of truth for colors
+   ========================================================= */
+
+/* ---------- LIGHT MODE ---------- */
+:root {
+  /* Base */
+  --bg: #ffffff;
+  --text: #0b0b0b;
+  --muted-text: #5f5f5f;
+
+  /* Surfaces */
+  --card: #f5f5f5;
+  --card-hover: #eeeeee;
+
+  /* Borders & lines */
+  --border: #1a1a1a1a; /* subtle */
+
+  /* Brand */
+  --accent: #c4161c;
+  --accent-soft: rgba(196, 22, 28, 0.12);
+  --accent-glow: rgba(196, 22, 28, 0.35);
+
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- DARK MODE ---------- */
+body.dark {
+  /* Base */
+  --bg: #000000;
+  --text: #f5f5f5;
+  --muted-text: #b5b5b5;
+
+  /* Surfaces */
+  --card: #0f0f0f;
+  --card-hover: #181818;
+
+  /* Borders */
+  --border: #ffffff1a;
+
+  /* Brand */
+  --accent: #e50914;
+  --accent-soft: rgba(229, 9, 20, 0.42);
+  --accent-glow: rgba(229, 9, 20, 0.55);
+
+  /* Shadows */
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 14px 45px rgba(0, 0, 0, 0.8);
+}

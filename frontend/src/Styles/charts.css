@@ -1,0 +1,142 @@
+/* ADD TO src/Styles/charts.css OR resumeAnalysis.css */
+
+.ats-radial-chart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ats-radial-center {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.ats-score {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.ats-max {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+/* ADD TO src/Styles/resumeAnalysis.css */
+
+.section-score-card {
+  background: var(--surface-1);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.section-score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.section-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-score-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.section-status-badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.section-score-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.section-score-value .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.section-score-value .max {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.section-score-progress .progress-track {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+.section-score-progress .progress-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.section-score-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.section-score-footer .priority.high {
+  color: #991b1b;
+}
+
+.section-score-footer .priority.medium {
+  color: #92400e;
+}
+
+.section-score-footer .priority.low {
+  color: #166534;
+}
+
+/* ================= ATS RADIAL ================= */
+
+.ats-radial-chart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ats-radial-center {
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ats-score {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.ats-max {
+  font-size: 14px;
+  color: var(--muted-text);
+  margin-top: 2px;
+}
+
+/* DARK MODE SAFE */
+body.dark .ats-radial-chart circle:first-child {
+  stroke: rgba(255, 255, 255, 0.12);
+}

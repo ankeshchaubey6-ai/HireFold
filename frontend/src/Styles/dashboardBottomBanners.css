@@ -1,0 +1,249 @@
+﻿/* =========================================================
+   Dashboard Bottom Banners
+   ========================================================= */
+
+/* ================= GRID ================= */
+
+.dashboard-banners-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+
+  /* Prevent touching screen edges */
+  padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ================= COMMON BANNER ================= */
+
+.dashboard-banner {
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= TITLES ================= */
+
+.banner-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+/* =========================================================
+   LEFT BANNER â€” TRUST / EVALUATION
+   ========================================================= */
+
+.banner-trust {
+  background: linear-gradient(
+    180deg,
+    rgba(196, 22, 28, 0.10),
+    rgba(196, 22, 28, 0.04)
+  );
+}
+
+/* Evaluation image */
+
+.evaluation-image-wrapper {
+  width: 100%;
+  height: 140px;
+  max-height: 140px;
+  margin-bottom: 16px;
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  background: #ffffff;
+  position: relative;
+
+  /* Image padding */
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.evaluation-image {
+  width: 100%;
+  height: 100%;
+
+  /* Show the full image */
+  object-fit: contain;
+  object-position: center;
+
+  display: block;
+}
+
+/* Trust points */
+
+.banner-points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.banner-points li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 10px;
+
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.banner-points li::before {
+  content: "â€¢";
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  color: #c4161c;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* =========================================================
+   RIGHT BANNER â€” NEXT STOP
+   ========================================================= */
+
+.banner-cta {
+  background: linear-gradient(
+    180deg,
+    rgba(196, 22, 28, 0.08),
+    rgba(196, 22, 28, 0.03)
+  );
+}
+
+/* Image wrapper â€” HARD CONTAINMENT */
+
+.next-stop-image-wrapper {
+  width: 100%;
+  height: 160px;
+  max-height: 160px;
+  margin-bottom: 16px;
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  background: #ffffff;
+  position: relative;
+
+  /* Image padding */
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* Image â€” FULLY VISIBLE */
+
+.next-stop-image {
+  width: 100%;
+  height: 100%;
+
+  /* Show the full image */
+  object-fit: contain;
+  object-position: center;
+
+  display: block;
+}
+
+/* Description */
+
+.banner-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  opacity: 0.85;
+  margin-bottom: 18px;
+}
+
+/* Actions */
+
+.banner-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+/* Buttons */
+
+.btn-primary {
+  padding: 10px 18px;
+  border-radius: 10px;
+
+  background: #c4161c;
+  color: #ffffff;
+
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.btn-outline {
+  padding: 10px 18px;
+  border-radius: 10px;
+
+  border: 1px solid #c4161c;
+  color: #c4161c;
+
+  background: transparent;
+
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* =========================================================
+   DARK MODE â€” APPLIED ONLY WHEN body.dark EXISTS
+   ========================================================= */
+
+body.dark .banner-trust {
+  background: linear-gradient(
+    180deg,
+    rgba(229, 9, 20, 0.25),
+    rgba(0, 0, 0, 0.35)
+  );
+}
+
+body.dark .evaluation-image-wrapper {
+  background: #000;
+}
+
+body.dark .banner-cta {
+  background: linear-gradient(
+    180deg,
+    #020617,
+    #020617
+  );
+}
+
+body.dark .next-stop-image-wrapper {
+  background: #000;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .dashboard-banners-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  .banner-actions {
+    flex-direction: column;
+  }
+
+  .evaluation-image-wrapper,
+  .next-stop-image-wrapper {
+    height: 140px;
+    max-height: 140px;
+  }
+}
+

@@ -1,0 +1,174 @@
+/* =========================================================
+   EXECUTIVE 02 — CLEAN CORPORATE LEADERSHIP
+   Designed for senior roles & enterprises
+========================================================= */
+
+/* ================= ROOT ================= */
+.executive02 {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  align-items: stretch;
+
+  width: calc(100% + 96px);
+  min-height: 1123px;
+
+  margin-top: -40px;
+  margin-left: -48px;
+  margin-right: -48px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+/* ================= LEFT COLUMN ================= */
+.executive02-left {
+  background: #f8fafc;
+  border-right: 1px solid #e5e7eb;
+
+  padding: 36px 28px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  margin-top: 0;
+}
+
+/* ================= PROFILE ================= */
+.executive02-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.executive02-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.executive02-profile h1 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #020617;
+}
+
+.executive02-profile h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* ================= LEFT SECTIONS ================= */
+.executive02-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.executive02-left h3 {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #334155;
+  border-bottom: 1px solid #cbd5f5;
+  padding-bottom: 4px;
+}
+
+.executive02-left p,
+.executive02-left li {
+  font-size: 10.5px;
+  color: #334155;
+}
+
+.executive02-left ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+/* ================= RIGHT COLUMN ================= */
+.executive02-right {
+  padding: 38px 46px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  margin-top: 0;
+}
+
+/* ================= RIGHT SECTIONS ================= */
+.executive02-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.executive02-right h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #020617;
+
+  padding-bottom: 6px;
+  border-bottom: 2px solid #1e40af;
+}
+
+/* ================= TEXT ================= */
+.executive02-right p {
+  margin: 0;
+  font-size: 11px;
+  color: #374151;
+}
+
+/* ================= ITEMS ================= */
+.executive02-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.executive02-item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #020617;
+}
+
+.executive02-muted {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* ================= LISTS ================= */
+.executive02-right ul {
+  padding-left: 18px;
+  margin-top: 4px;
+}
+
+.executive02-right li {
+  margin-bottom: 4px;
+}
+
+/* ================= TAGS ================= */
+.executive02-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.executive02-tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  background: #eef2ff;
+  color: #1e40af;
+  font-weight: 500;
+}

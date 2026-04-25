@@ -1,0 +1,386 @@
+/* =========================================================
+   SKELETON LOADING — HIREFOLD PRODUCTION ANIMATIONS
+   Subtle, smooth, professional loading UI
+========================================================= */
+
+/* ================================================================
+   BASE SKELETON ANIMATION
+   - Soft pulse effect for professional feel
+   - Respects prefers-reduced-motion
+   - Lightweight and performant
+================================================================ */
+
+@keyframes skeletonPulse {
+  0% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ================================================================
+   BASE SKELETON ELEMENT
+   - Neutral theme color matching UI
+   - Rounded corners match real components
+   - Respects reduced motion
+================================================================ */
+
+.skeleton {
+  background-color: var(--border, #e5e7eb);
+  border-radius: 6px;
+  display: block;
+  width: 100%;
+  height: 16px;
+}
+
+/* ================================================================
+   ANIMATION STATE
+   - Only animate if not reduced-motion
+   - Subtle pulse: 1.4s cycle
+================================================================ */
+
+.skeleton--animated {
+  animation: skeletonPulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton fade-out when content loads */
+.skeleton.skeleton-fade-out {
+  animation: skeletonFadeOut var(--motion-duration-base) var(--motion-easing) forwards !important;
+}
+
+/* Content fade-in when skeleton leaves */
+.skeleton + *,
+[class*="loading"] .skeleton-fade-out ~ * {
+  animation: contentFadeIn var(--motion-duration-base) var(--motion-easing) forwards;
+}
+
+/* Respect accessibility preference */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton--animated {
+    animation: none;
+    opacity: 0.7;
+  }
+  
+  .skeleton.skeleton-fade-out,
+  .skeleton + *,
+  [class*="loading"] .skeleton-fade-out ~ * {
+    animation: none !important;
+  }
+}
+
+/* ================================================================
+   SKELETON VARIANTS
+   - Match final component shapes exactly
+================================================================ */
+
+/* TEXT SKELETON — single line of text */
+.skeleton--text {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton--text:last-child {
+  margin-bottom: 0;
+}
+
+/* CARD SKELETON — full card container */
+.skeleton--card {
+  height: 360px;
+  border-radius: 18px;
+  margin-bottom: 16px;
+}
+
+/* AVATAR SKELETON — circular profile photo */
+.skeleton--avatar {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* BUTTON SKELETON — clickable button size */
+.skeleton--button {
+  height: 40px;
+  border-radius: 8px;
+  width: auto;
+  min-width: 100px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* LINE SKELETON — flexible line for lists */
+.skeleton--line {
+  height: 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* CIRCLE SKELETON — round indicator */
+.skeleton--circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* TABLE ROW SKELETON — horizontal row layout */
+.skeleton--table-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px 0;
+  align-items: center;
+}
+
+.skeleton--table-row > * {
+  flex: 1;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.skeleton--table-row > *:first-child {
+  flex: 0 0 40px;
+  width: 40px;
+}
+
+/* ================================================================
+   SKELETON LAYOUTS
+   - Common patterns for cards, lists, headers
+================================================================ */
+
+/* CARD SKELETON CONTENT — matches card layout */
+.skeleton-card-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.skeleton-card-header .skeleton--avatar {
+  flex-shrink: 0;
+}
+
+.skeleton-card-header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-card-header-text .skeleton {
+  height: 14px;
+}
+
+.skeleton-card-body {
+  padding: 0 16px 16px;
+}
+
+.skeleton-card-body .skeleton {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card-body .skeleton:last-child {
+  margin-bottom: 0;
+}
+
+/* SKELETON LIST — stack of skeleton items */
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.skeleton-list .skeleton {
+  margin-bottom: 0;
+}
+
+/* SKELETON GRID — card grid layout */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.skeleton-grid .skeleton--card {
+  margin-bottom: 0;
+}
+
+/* ================================================================
+   RESPONSIVE SKELETON ADJUSTMENTS
+   - Adapt to mobile and tablet
+================================================================ */
+
+@media (max-width: 768px) {
+  .skeleton-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .skeleton--card {
+    height: auto;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-list {
+    gap: 12px;
+  }
+}
+
+/* ================================================================
+   SKELETON HEADER SECTION
+   - For page titles, section headers
+================================================================ */
+
+.skeleton-header {
+  margin-bottom: 24px;
+}
+
+.skeleton-header .skeleton {
+  height: 28px;
+  margin-bottom: 8px;
+}
+
+.skeleton-header .skeleton:last-child {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 0;
+}
+
+/* ================================================================
+   SKELETON TABLE
+   - For data tables
+================================================================ */
+
+.skeleton-table {
+  width: 100%;
+}
+
+.skeleton-table-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.skeleton-table-row:last-child {
+  border-bottom: none;
+}
+
+.skeleton-table-row .skeleton {
+  height: 16px;
+}
+
+/* ================================================================
+   SKELETON FOCUS STATES
+   - Prevent visual glitches when transitioning
+================================================================ */
+
+.skeleton {
+  box-shadow: none;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+/* When transitioning from skeleton to real content */
+.skeleton--fade-out {
+  animation: skeletonFadeOut 0.3s ease-out forwards;
+}
+
+@keyframes skeletonFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ================================================================
+   DARK MODE SKELETON
+   - Adapt to dark theme
+================================================================ */
+
+body.dark .skeleton {
+  background-color: var(--border, #374151);
+}
+
+/* ================================================================
+   UTILITY CLASSES
+   - Quick skeleton building
+================================================================ */
+
+/* Full-width skeleton blocks */
+.skeleton-block {
+  width: 100%;
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* Inline skeleton for mixed content */
+.skeleton-inline {
+  display: inline-block;
+  height: 16px;
+  margin: 0 4px;
+}
+
+/* Skeleton that takes up space like real content */
+.skeleton-wrapper {
+  width: 100%;
+  min-height: 100px;
+}
+
+/* ================================================================
+   RESPONSIVE SAFE SKELETON
+   - No overflow or layout shift
+================================================================ */
+
+.skeleton-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.skeleton-container .skeleton {
+  max-width: 100%;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* ================================================================
+   ACCESSIBILITY
+   - Announce to screen readers
+   - Could add aria-busy="true" in JSX
+   - Skeleton is temporary, so not critical for SR
+================================================================ */
+
+/* Prevent focus on skeletons */
+.skeleton:focus,
+.skeleton:focus-visible {
+  outline: none;
+}

@@ -1,0 +1,288 @@
+/* ================= SECTION ================= */
+
+.analysis-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ================= GRID ================= */
+
+.analysis-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+/* ================= CARD ================= */
+
+.analysis-overview-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.analysis-overview-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ================= HEADER ================= */
+
+.overview-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overview-card-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.overview-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ================= SCORE ================= */
+
+.overview-score {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.overview-score span {
+  font-size: 14px;
+  color: var(--muted-text);
+  margin-left: 2px;
+}
+
+/* ================= PROGRESS ================= */
+
+.overview-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.overview-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ================= NOTE ================= */
+
+.overview-note {
+  font-size: 13px;
+  color: var(--muted-text);
+  line-height: 1.45;
+}
+
+/* ================= PRIORITY ================= */
+
+.overview-priority {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.overview-priority.high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.overview-priority.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.overview-priority.low {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ================= DARK MODE FIX ================= */
+
+body.dark .analysis-overview-card {
+  background: #0b0b0b; /* TRUE BLACK */
+  border-color: #1f1f1f;
+}
+
+body.dark .overview-progress-track {
+  background: rgba(255, 255, 255, 0.12);
+}
+/* ===== URGENCY BADGE ===== */
+.overview-urgency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin: 8px 0 4px;
+  width: fit-content;
+}
+
+.overview-urgency-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== POSITIVES ===== */
+.overview-positives {
+  margin: 10px 0 4px;
+}
+
+.overview-positives-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #16a34a;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overview-positives-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.overview-positive-item {
+  font-size: 0.8rem;
+  color: #15803d;
+  padding-left: 4px;
+  border-left: 2px solid #16a34a;
+  padding-left: 8px;
+}
+
+/* ===== SUGGESTIONS LABEL ===== */
+.overview-suggestions-wrap {
+  margin: 10px 0 4px;
+}
+
+.overview-suggestions-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===== METRICS ===== */
+.overview-metrics {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--hf-text-secondary, #64748b);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 8px;
+}
+
+.dark .overview-metrics {
+  background: rgba(255,255,255,0.04);
+}/* ===== URGENCY BADGE ===== */
+.overview-urgency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin: 8px 0 4px;
+  width: fit-content;
+}
+
+.overview-urgency-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== POSITIVES ===== */
+.overview-positives {
+  margin: 10px 0 4px;
+}
+
+.overview-positives-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #16a34a;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overview-positives-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.overview-positive-item {
+  font-size: 0.8rem;
+  color: #15803d;
+  padding-left: 4px;
+  border-left: 2px solid #16a34a;
+  padding-left: 8px;
+}
+
+/* ===== SUGGESTIONS LABEL ===== */
+.overview-suggestions-wrap {
+  margin: 10px 0 4px;
+}
+
+.overview-suggestions-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===== METRICS ===== */
+.overview-metrics {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--hf-text-secondary, #64748b);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 8px;
+}
+
+.dark .overview-metrics {
+  background: rgba(255,255,255,0.04);
+}

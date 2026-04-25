@@ -1,0 +1,117 @@
+/* =========================================================
+   EXECUTIVE 01 — LEADERSHIP RESUME
+========================================================= */
+
+.executive01 {
+  width: 100%;
+  min-height: 1123px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 11.5px;
+  line-height: 1.65;
+
+  padding: 48px 54px;
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+.exec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+
+  border-bottom: 2px solid #111827;
+}
+
+.exec-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.exec-header h2 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+.exec-contact {
+  text-align: right;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+/* ================= SUMMARY ================= */
+.exec-summary {
+  font-size: 12px;
+  margin-bottom: 26px;
+}
+
+/* ================= SECTIONS ================= */
+.executive01 section {
+  margin-bottom: 26px;
+}
+
+.executive01 h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* ================= ITEMS ================= */
+.exec-item {
+  margin-bottom: 14px;
+}
+
+.exec-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.exec-item-header strong {
+  font-size: 12px;
+}
+
+.exec-item-header span {
+  font-size: 10.5px;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.muted {
+  font-size: 10.5px;
+  color: #4b5563;
+}
+
+/* ================= LISTS ================= */
+.executive01 ul {
+  padding-left: 20px;
+  margin-top: 6px;
+}
+
+.executive01 li {
+  margin-bottom: 5px;
+}
+
+/* ================= SKILLS ================= */
+.exec-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.exec-skills span {
+  padding: 4px 10px;
+  font-size: 10.5px;
+
+  border: 1px solid #111827;
+  border-radius: 999px;
+}

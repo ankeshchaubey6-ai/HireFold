@@ -1,0 +1,84 @@
+.simple03 {
+  display: grid;
+  grid-template-columns: 32% 68%;
+
+  width: 100%;
+  min-height: 1123px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* LEFT */
+.simple03-left {
+  padding: 36px 26px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.simple03-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.simple03-left h2 {
+  font-size: 12px;
+  color: #475569;
+}
+
+.simple03-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.simple03-left h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* RIGHT */
+.simple03-right {
+  padding: 36px 42px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.simple03-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.simple03-right h3 {
+  font-size: 13px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+.simple03-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.simple03-muted {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.simple03-right ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}

@@ -1,0 +1,51 @@
+{
+  "name": "hirefold-backend",
+  "version": "1.0.0",
+  "description": "HireFold Backend - Hybrid REST + ML Architecture",
+  "type": "module",
+  "main": "src/core/server.js",
+  "scripts": {
+    "dev": "nodemon src/core/server.js",
+    "start": "node src/core/server.js"
+  },
+  "keywords": [],
+  "author": "Ankesh",
+  "license": "ISC",
+  "dependencies": {
+    "@affinda/affinda": "^7.7.1",
+    "@google-cloud/vision": "^5.3.4",
+    "axios": "^1.13.5",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.70.0",
+    "canvas": "^3.2.1",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "form-data": "^4.0.5",
+    "fs-extra": "^11.3.3",
+    "google-auth-library": "^10.5.0",
+    "ioredis": "^5.9.3",
+    "joi": "^18.1.1",
+    "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.11.0",
+    "mongoose": "^9.2.0",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
+    "pdf-parse": "^1.1.4",
+    "pdf2pic": "^3.2.0",
+    "pdfjs-dist": "^5.4.624",
+    "streamifier": "^0.1.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "tesseract.js": "^7.0.0",
+    "tmp": "^0.2.5",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

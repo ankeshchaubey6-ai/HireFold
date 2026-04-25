@@ -1,0 +1,328 @@
+/* =========================================================
+   Roles That Fit You — MATCHING HIRING JOURNEY STYLE
+   White cards with consistent design
+========================================================= */
+
+/* ===================== GRID ===================== */
+
+.roles-fit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===================== CARD ===================== */
+
+.roles-fit-card {
+  display: block;
+  text-decoration: none;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.roles-fit-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.roles-fit-card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(229, 9, 20, 0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 18px;
+  z-index: 1;
+}
+
+/* ===================== IMAGE SECTION ===================== */
+
+.roles-fit-card__image-wrapper {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background: #f1f5f9;
+  position: relative;
+  z-index: 2;
+}
+
+.roles-fit-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.roles-fit-card__icon-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 6px 10px;
+  border-radius: 100px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+/* ===================== BODY ===================== */
+
+.roles-fit-card__body {
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.roles-fit-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  color: #0f172a;
+}
+
+.roles-fit-card__description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0 0 16px 0;
+}
+
+/* ===================== SKILLS ===================== */
+
+.roles-fit-card__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.roles-fit-card__skill-tag {
+  padding: 4px 10px;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* ===================== FOOTER ===================== */
+
+.roles-fit-card__footer {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.roles-fit-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e50914;
+  transition: gap 0.3s ease;
+}
+
+/* ===================== INTERACTIONS ===================== */
+
+.roles-fit-card:hover .roles-fit-card-inner {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(229, 9, 20, 0.35);
+}
+
+.roles-fit-card:hover .roles-fit-card-glow {
+  opacity: 1;
+}
+
+.roles-fit-card:hover .roles-fit-card__image {
+  transform: scale(1.06);
+}
+
+.roles-fit-card:hover .roles-fit-card__icon-badge {
+  transform: scale(1.05);
+}
+
+.roles-fit-card:hover .roles-fit-card__skill-tag {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.roles-fit-card:hover .roles-fit-card__cta {
+  gap: 10px;
+}
+
+.roles-fit-card:active .roles-fit-card-inner {
+  transform: scale(0.97);
+}
+
+/* =========================================================
+   TABLET (641px – 1024px)
+========================================================= */
+
+@media (max-width: 1024px) and (min-width: 641px) {
+  .roles-fit-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 14px;
+  }
+
+  .roles-fit-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .roles-fit-card {
+    flex: 0 0 260px;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .roles-fit-card-inner {
+    height: auto;
+  }
+
+  .roles-fit-card__image-wrapper {
+    height: 150px;
+  }
+
+  .roles-fit-card__body {
+    padding: 14px;
+  }
+
+  .roles-fit-card__title {
+    font-size: 16px;
+  }
+
+  .roles-fit-card__description {
+    font-size: 13px;
+  }
+
+  .roles-fit-card__skill-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+/* =========================================================
+   MOBILE (≤640px)
+========================================================= */
+
+@media (max-width: 640px) {
+  .roles-fit-grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+  }
+
+  .roles-fit-card {
+    flex: 0 0 220px;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .roles-fit-card__image-wrapper {
+    height: 120px;
+  }
+
+  .roles-fit-card__body {
+    padding: 12px;
+  }
+
+  .roles-fit-card__title {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .roles-fit-card__description {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .roles-fit-card__skills {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .roles-fit-card__skill-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .roles-fit-card__icon-badge {
+    padding: 4px 8px;
+    font-size: 14px;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .roles-fit-card__cta {
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   DARK MODE SUPPORT
+========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .roles-fit-card-inner {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  
+  .roles-fit-card__image-wrapper {
+    background: #1e293b;
+  }
+  
+  .roles-fit-card__title {
+    color: #f1f5f9;
+  }
+  
+  .roles-fit-card__description {
+    color: #cbd5e1;
+  }
+  
+  .roles-fit-card__footer {
+    border-top-color: #334155;
+  }
+  
+  .roles-fit-card__skill-tag {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  
+  .roles-fit-card:hover .roles-fit-card__skill-tag {
+    background: #475569;
+  }
+  
+  .roles-fit-card__icon-badge {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}

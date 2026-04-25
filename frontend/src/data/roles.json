@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Frontend Development",
+    "description": "UI engineering with React, performance optimization"
+  },
+  {
+    "id": 2,
+    "title": "Backend Development",
+    "description": "APIs, databases, and server-side logic"
+  },
+  {
+    "id": 3,
+    "title": "Full Stack",
+    "description": "Frontend + backend combined"
+  },
+  {
+    "id": 4,
+    "title": "DevOps",
+    "description": "CI/CD, cloud, and infrastructure"
+  }
+]

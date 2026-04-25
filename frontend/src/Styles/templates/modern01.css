@@ -1,0 +1,63 @@
+/* =========================================================
+   MODERN 01 — CLEAN CORPORATE
+   Inspired by Google / LinkedIn exports
+========================================================= */
+
+.modern01 {
+  --accent: #2563eb; /* blue */
+}
+
+/* ================= HEADER ================= */
+
+.modern01-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.modern01-title h1 {
+  color: #111827;
+}
+
+.modern01-title h2 {
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+.modern01-contact {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.modern01-contact .resume-muted {
+  text-align: right;
+}
+
+/* ================= SECTION HEADERS ================= */
+
+.modern01 .resume-section h3 {
+  color: var(--accent);
+}
+
+/* ================= TAGS ================= */
+
+.modern01 .resume-tag {
+  background: rgba(37, 99, 235, 0.08);
+  color: #1e40af;
+}
+
+/* ================= LINKS ================= */
+
+.modern01 a {
+  color: var(--accent);
+}
+
+/* ================= PHOTO ================= */
+
+.modern01 .resume-photo {
+  border-radius: 50%;
+}

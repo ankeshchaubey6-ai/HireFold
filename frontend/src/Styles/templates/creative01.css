@@ -1,0 +1,190 @@
+﻿/* =========================================================
+   CREATIVE 01 â€” MODERN SPLIT WITH SOFT COLOR PANEL
+   Startup / Design-led / Product companies
+========================================================= */
+
+/* ================= ROOT ================= */
+.creative01 {
+  display: grid;
+  grid-template-columns: 32% 68%;
+  align-items: stretch;
+}
+
+.creative01-left {
+  align-self: stretch;
+  min-height: 100%;
+}
+
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+.creative01-left {
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  color: #e5e7eb;
+
+  /* Match the right column spacing */
+  padding: 40px 28px 36px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+
+  align-items: flex-start;
+}
+
+/* ================= PROFILE BLOCK ================= */
+.creative01-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+
+/* Optional photo â€” NO reserved space */
+.creative01-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+/* Name */
+.creative01-profile h1 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Role */
+.creative01-profile h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #93c5fd;
+  margin: 0;
+}
+
+/* ================= LEFT SECTIONS ================= */
+.creative01-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.creative01-left h3 {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7dd3fc;
+  margin: 0 0 4px;
+}
+
+.creative01-left p,
+.creative01-left li {
+  font-size: 10.5px;
+  color: #e5e7eb;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.creative01-left ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+/* =========================================================
+   RIGHT CONTENT
+========================================================= */
+.creative01-right {
+  /* Match the left column top padding */
+  padding: 40px 46px 36px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* Remove the default top margin */
+.creative01-right > section:first-child {
+  margin-top: 0;
+}
+
+/* Sections */
+.creative01-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+/* Headings */
+.creative01-right h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+
+  padding-bottom: 6px;
+  margin: 0;
+  border-bottom: 2px solid #38bdf8;
+}
+
+/* Paragraphs */
+.creative01-right p {
+  margin: 0;
+  font-size: 11px;
+  color: #334155;
+}
+
+/* ================= ITEMS ================= */
+.creative01-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+}
+
+.creative01-item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #020617;
+}
+
+/* Muted text */
+.creative01-muted {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Lists */
+.creative01-right ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.creative01-right li {
+  margin-bottom: 4px;
+}
+
+/* ================= TAGS ================= */
+.creative01-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.creative01-tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 500;
+}
+
+
+

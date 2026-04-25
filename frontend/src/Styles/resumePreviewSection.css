@@ -1,0 +1,154 @@
+/* ======================================================
+   MODAL OVERLAY
+====================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+}
+
+/* ======================================================
+   MODAL CONTAINER
+====================================================== */
+
+.modal {
+  width: 420px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: var(--card);
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  padding: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+
+  animation: modalScaleIn 0.2s ease-out;
+}
+
+/* Mobile: Compact square dialog */
+@media (max-width: 640px) {
+  .modal {
+    width: auto;
+    max-width: calc(100vw - 32px);
+    max-height: 80vh;
+    padding: 18px;
+    border-radius: 14px;
+  }
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ======================================================
+   MODAL HEADER
+====================================================== */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--muted-text);
+}
+
+/* ======================================================
+   MODAL BODY
+====================================================== */
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+
+  cursor: pointer;
+}
+
+.modal-option:hover {
+  background: var(--hover);
+}
+
+/* ======================================================
+   DARK MODE SAFETY
+====================================================== */
+
+body.dark .modal {
+  background: #121212;
+  border-color: #2a2a2a;
+}
+/* =========================================================
+   TOOLBAR LAYOUT FIX (DO NOT TOUCH BUTTON DESIGN)
+   — Keeps original HireFold button styles intact
+========================================================= */
+
+.resume-preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ONLY handle spacing, NOT button styling */
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;          /* ⭐ clean spacing between buttons */
+  flex-wrap: wrap;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .resume-preview-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+}

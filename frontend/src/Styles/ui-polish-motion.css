@@ -1,0 +1,353 @@
+/**
+ * UI POLISH & MOTION SYSTEM
+ * Reusable motion utilities for premium, intentional feel
+ * CSS-only, performance-optimized
+ */
+
+/* ===================================================================
+   MOTION VARIABLES
+   =================================================================== */
+
+:root {
+  --motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-easing-subtle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --motion-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  --motion-duration-fast: 160ms;
+  --motion-duration-base: 240ms;
+  --motion-duration-slow: 360ms;
+  --motion-duration-reveal: 480ms;
+  --motion-duration-stagger: 60ms;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0ms !important;
+    --motion-duration-base: 0ms !important;
+    --motion-duration-slow: 0ms !important;
+    --motion-duration-reveal: 0ms !important;
+    --motion-duration-stagger: 0ms !important;
+  }
+}
+
+/* Mobile: reduce intensity by ~40% */
+@media (max-width: 640px) {
+  :root {
+    --motion-duration-fast: 120ms;
+    --motion-duration-base: 180ms;
+    --motion-duration-slow: 260ms;
+    --motion-duration-reveal: 340ms;
+  }
+}
+
+/* ===================================================================
+   PAGE ENTRY ANIMATION
+   Primary effect for all pages
+   =================================================================== */
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: scaleY(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageEnter var(--motion-duration-reveal) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* ===================================================================
+   SECTION REVEAL ANIMATION
+   For sections and surfaces
+   =================================================================== */
+
+@keyframes sectionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-enter {
+  animation: sectionEnter var(--motion-duration-slow) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* Stagger children with delay */
+.section-enter > * {
+  animation: sectionEnter var(--motion-duration-slow) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+.section-enter > :nth-child(1) { animation-delay: 0ms; }
+.section-enter > :nth-child(2) { animation-delay: var(--motion-duration-stagger); }
+.section-enter > :nth-child(3) { animation-delay: calc(var(--motion-duration-stagger) * 2); }
+.section-enter > :nth-child(4) { animation-delay: calc(var(--motion-duration-stagger) * 3); }
+.section-enter > :nth-child(5) { animation-delay: calc(var(--motion-duration-stagger) * 4); }
+.section-enter > :nth-child(n+6) { animation-delay: calc(var(--motion-duration-stagger) * 5); }
+
+/* ===================================================================
+   CARD ANIMATION
+   Apply to all card elements
+   =================================================================== */
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-enter {
+  animation: cardEnter var(--motion-duration-slow) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* Stagger cards per grid row (3-4 per row typically) */
+.card-enter:nth-child(1) { animation-delay: 0ms; }
+.card-enter:nth-child(2) { animation-delay: var(--motion-duration-stagger); }
+.card-enter:nth-child(3) { animation-delay: calc(var(--motion-duration-stagger) * 2); }
+.card-enter:nth-child(4) { animation-delay: calc(var(--motion-duration-stagger) * 3); }
+.card-enter:nth-child(5) { animation-delay: calc(var(--motion-duration-stagger) * 4); }
+.card-enter:nth-child(6) { animation-delay: calc(var(--motion-duration-stagger) * 5); }
+.card-enter:nth-child(n+7) { animation-delay: calc(var(--motion-duration-stagger) * 5); }
+
+/* Card hover: very subtle lift + border intensify */
+.card-enter:hover {
+  transform: translateY(-2px);
+  transition: transform var(--motion-duration-fast) var(--motion-easing-subtle),
+              border-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-subtle);
+}
+
+/* ===================================================================
+   FADE ENTER
+   Simple opacity reveal
+   =================================================================== */
+
+@keyframes fadeEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-enter {
+  animation: fadeEnter var(--motion-duration-base) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* ===================================================================
+   INTERACTIVE
+   Hover / Focus micro-interaction
+   =================================================================== */
+
+@keyframes interactiveHover {
+  to {
+    transform: translateY(-1px);
+  }
+}
+
+.interactive {
+  transition: color var(--motion-duration-fast) var(--motion-easing-subtle),
+              background-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              border-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              transform var(--motion-duration-fast) var(--motion-easing-subtle),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-subtle);
+}
+
+.interactive:hover,
+.interactive:focus-visible {
+  transform: translateY(-1px);
+}
+
+/* ===================================================================
+   SKELETON FADE-IN
+   When skeleton transitions to content
+   =================================================================== */
+
+@keyframes skeletonFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.skeleton-fade-out {
+  animation: skeletonFadeOut var(--motion-duration-base) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.content-fade-in {
+  animation: contentFadeIn var(--motion-duration-base) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* ===================================================================
+   DROPDOWN / MENU REVEAL
+   For dropdowns, menus, modals
+   =================================================================== */
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-enter {
+  animation: dropdownEnter var(--motion-duration-fast) var(--motion-easing) forwards;
+  animation-fill-mode: both;
+}
+
+/* ===================================================================
+   STAGGER UTILITIES
+   Apply delay to children
+   =================================================================== */
+
+.stagger-1 > * { animation-delay: calc(var(--motion-duration-stagger) * 1) !important; }
+.stagger-2 > * { animation-delay: calc(var(--motion-duration-stagger) * 2) !important; }
+.stagger-3 > * { animation-delay: calc(var(--motion-duration-stagger) * 3) !important; }
+.stagger-4 > * { animation-delay: calc(var(--motion-duration-stagger) * 4) !important; }
+.stagger-5 > * { animation-delay: calc(var(--motion-duration-stagger) * 5) !important; }
+
+/* ===================================================================
+   HERO / BANNER STAGGER
+   1. Background
+   2. Heading
+   3. Subtext
+   4. CTA
+   =================================================================== */
+
+@keyframes heroSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-background {
+  animation: fadeEnter var(--motion-duration-slow) var(--motion-easing) forwards;
+}
+
+.hero-heading {
+  animation: heroSlideUp var(--motion-duration-slow) var(--motion-easing) 60ms forwards;
+}
+
+.hero-subtext {
+  animation: heroSlideUp var(--motion-duration-slow) var(--motion-easing) 120ms forwards;
+}
+
+.hero-cta {
+  animation: heroSlideUp var(--motion-duration-slow) var(--motion-easing) 180ms forwards;
+}
+
+/* ===================================================================
+   BUTTON / LINK POLISH
+   Consistent interaction feel
+   =================================================================== */
+
+button,
+a[href],
+[role="button"],
+.interactive-element {
+  position: relative;
+}
+
+button:hover,
+a[href]:hover,
+[role="button"]:hover,
+.interactive-element:hover {
+  transition: transform var(--motion-duration-fast) var(--motion-easing-subtle),
+              background-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              color var(--motion-duration-fast) var(--motion-easing-subtle),
+              border-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-subtle);
+}
+
+button:focus-visible,
+a[href]:focus-visible,
+[role="button"]:focus-visible,
+.interactive-element:focus-visible {
+  outline: none;
+  transition: transform var(--motion-duration-fast) var(--motion-easing-subtle),
+              background-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              color var(--motion-duration-fast) var(--motion-easing-subtle),
+              border-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-subtle);
+}
+
+/* ===================================================================
+   INPUT FOCUS POLISH
+   Subtle feedback on input interactions
+   =================================================================== */
+
+input:focus,
+textarea:focus,
+select:focus {
+  transition: border-color var(--motion-duration-fast) var(--motion-easing-subtle),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-subtle),
+              background-color var(--motion-duration-fast) var(--motion-easing-subtle);
+}
+
+/* ===================================================================
+   VISIBILITY TIMING
+   Ensure proper reveal order
+   =================================================================== */
+
+[hidden] {
+  display: none !important;
+}
+
+/* Prevent CLS during animations */
+.page-enter,
+.section-enter,
+.card-enter,
+.fade-enter {
+  will-change: opacity, transform;
+}
+
+/* Clean up after animation completes */
+.page-enter,
+.section-enter,
+.card-enter,
+.fade-enter {
+  will-change: auto;
+  /* Set after animation via JS if needed, or let it auto-clear */
+}

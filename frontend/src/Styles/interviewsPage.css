@@ -1,0 +1,937 @@
+/* Add to interviewsPage.css - Modern Candidate Styles */
+
+/* =====================================================
+   CANDIDATE INTERVIEWS PAGE - MODERN DESIGN
+===================================================== */
+
+.candidate-interviews-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* =====================================================
+   COMPACT HERO SECTION (replaces large centered hero)
+===================================================== */
+
+.candidate-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .candidate-hero {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.candidate-hero-left {
+  flex: 1;
+}
+
+.candidate-hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+}
+
+.dark .candidate-hero-title {
+  color: #ffffff;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.candidate-hero-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.dark .candidate-hero-subtitle {
+  color: #9ca3af;
+}
+
+/* Compact Stats Row (inline with hero) */
+.candidate-stats-grid {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.candidate-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.dark .candidate-stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.candidate-stat-card:hover {
+  background: rgba(229, 9, 20, 0.05);
+  border-color: rgba(229, 9, 20, 0.2);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.stat-icon {
+  font-size: 1.25rem;
+  display: block;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.stat-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #e50914;
+  font-family: 'Syne', sans-serif;
+  margin-bottom: 0.125rem;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.dark .stat-label {
+  color: #9ca3af;
+}
+
+/* =====================================================
+   SECTION STYLES
+===================================================== */
+
+.candidate-section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(229, 9, 20, 0.1);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+}
+
+.dark .section-title {
+  color: #ffffff;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.section-badge {
+  padding: 0.5rem 1rem;
+  background: rgba(229, 9, 20, 0.1);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e50914;
+}
+
+/* =====================================================
+   INTERVIEW GRID
+===================================================== */
+
+.candidate-interviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+/* =====================================================
+   MODERN INTERVIEW CARD
+===================================================== */
+
+.candidate-interview-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dark .candidate-interview-card {
+  background: #0d0d1a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.candidate-interview-card:hover {
+  transform: translateY(-4px);
+  border-color: #e50914;
+  box-shadow: 0 12px 24px rgba(229, 9, 20, 0.12);
+}
+
+.candidate-interview-card.expanded {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Accent */
+.card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #e50914, #ff6b35);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.candidate-interview-card:hover .card-accent {
+  transform: scaleX(1);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 0 1.25rem;
+}
+
+.card-avatar {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+  font-family: 'Syne', sans-serif;
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 2px solid #ffffff;
+}
+
+.dark .avatar-badge {
+  background: #0d0d1a;
+  border-color: #0d0d1a;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+}
+
+.dark .card-title {
+  color: #ffffff;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+}
+
+.company-name {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.meta-dot {
+  color: #d1d5db;
+}
+
+.interview-type-badge {
+  padding: 0.25rem 0.5rem;
+  background: rgba(229, 9, 20, 0.1);
+  border-radius: 100px;
+  color: #e50914;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Status Badge */
+.status-badge-candidate {
+  padding: 0.375rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+
+.status-badge-candidate.scheduled {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-badge-candidate.completed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-badge-candidate.cancelled {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Card Details */
+.card-details {
+  padding: 1rem 1.25rem;
+}
+
+.schedule-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.dark .schedule-info {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.schedule-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.schedule-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.schedule-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dark .schedule-value {
+  color: #ffffff;
+}
+
+/* Recruiter Info */
+.recruiter-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+}
+
+.dark .recruiter-info {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.recruiter-icon {
+  font-size: 1.125rem;
+}
+
+.recruiter-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.recruiter-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.dark .recruiter-name {
+  color: #e5e7eb;
+}
+
+/* Expanded Feedback */
+.expanded-feedback {
+  padding: 1rem 1.25rem;
+  background: rgba(229, 9, 20, 0.03);
+  border-top: 1px solid rgba(229, 9, 20, 0.1);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e50914;
+  margin-bottom: 0.75rem;
+}
+
+.feedback-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #4b5563;
+  margin: 0 0 0.75rem 0;
+}
+
+.dark .feedback-text {
+  color: #9ca3af;
+}
+
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rating-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star {
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
+
+.star.filled {
+  color: #f59e0b;
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .card-footer {
+  background: rgba(255, 255, 255, 0.03);
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+.expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+
+.expand-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #e50914;
+}
+
+.join-btn,
+.feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  border: none;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.join-btn:hover,
+.feedback-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+}
+
+.feedback-btn {
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-state-card {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 20px;
+  border: 2px dashed rgba(229, 9, 20, 0.2);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.empty-state-card h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.dark .empty-state-card h4 {
+  color: #ffffff;
+}
+
+.empty-state-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* =====================================================
+   GUIDELINES SECTION
+===================================================== */
+
+.guidelines-section {
+  margin-top: 3rem;
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.05), rgba(255, 107, 53, 0.05));
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+.guidelines-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.guidelines-image-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.guidelines-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.guidelines-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+}
+
+.dark .guidelines-content h3 {
+  color: #ffffff;
+}
+
+.guidelines-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guidelines-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  font-size: 0.875rem;
+  color: #4b5563;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .guidelines-list li {
+  color: #9ca3af;
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.guidelines-list li:last-child {
+  border-bottom: none;
+}
+
+.guideline-icon {
+  font-size: 1rem;
+}
+
+/* =====================================================
+   TAB NAVIGATION
+===================================================== */
+
+.tabs-container-candidate {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0.25rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.dark .tabs-container-candidate {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn-candidate {
+  padding: 0.625rem 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+}
+
+.tab-btn-candidate:hover {
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.05);
+}
+
+.tab-btn-candidate.active {
+  background: #ffffff;
+  color: #e50914;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dark .tab-btn-candidate.active {
+  background: #0d0d1a;
+  color: #e50914;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tab-badge-candidate {
+  padding: 0.125rem 0.375rem;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.dark .tab-badge-candidate {
+  background: rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+}
+
+.tab-btn-candidate.active .tab-badge-candidate {
+  background: rgba(229, 9, 20, 0.1);
+  color: #e50914;
+}
+
+/* =====================================================
+   COLLAPSIBLE GUIDELINES
+===================================================== */
+
+.guidelines-collapsible-candidate {
+  margin-top: 2rem;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.dark .guidelines-collapsible-candidate {
+  background: #0d0d1a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.guidelines-summary-candidate {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #111827;
+  list-style: none;
+  background: rgba(229, 9, 20, 0.03);
+  transition: all 0.2s ease;
+}
+
+.dark .guidelines-summary-candidate {
+  color: #ffffff;
+  background: rgba(229, 9, 20, 0.05);
+}
+
+.guidelines-summary-candidate::-webkit-details-marker {
+  display: none;
+}
+
+.guidelines-summary-candidate:hover {
+  background: rgba(229, 9, 20, 0.08);
+}
+
+.summary-icon {
+  font-size: 1.125rem;
+}
+
+.summary-arrow {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+details[open] .summary-arrow {
+  transform: rotate(180deg);
+}
+
+.guidelines-content-wrapper {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .guidelines-content-wrapper {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.guidelines-container-candidate {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.guidelines-content-candidate {
+  flex: 1;
+}
+
+.guidelines-list-candidate {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guidelines-list-candidate li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  font-size: 0.875rem;
+  color: #4b5563;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .guidelines-list-candidate li {
+  color: #9ca3af;
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.guidelines-list-candidate li:last-child {
+  border-bottom: none;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+  .candidate-interviews-page {
+    padding: 1rem;
+  }
+
+  .candidate-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .candidate-stats-grid {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .candidate-stat-card {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .candidate-interviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-info {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .guidelines-container {
+    grid-template-columns: 1fr;
+  }
+
+  .guidelines-image-wrapper {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .card-header {
+    flex-wrap: wrap;
+  }
+
+  .status-badge-candidate {
+    margin-left: auto;
+  }
+
+  .tabs-container-candidate {
+    width: 100%;
+  }
+
+  .tab-btn-candidate {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .guidelines-container-candidate {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .guidelines-content-wrapper {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .candidate-stats-grid {
+    gap: 0.5rem;
+  }
+
+  .candidate-stat-card {
+    padding: 0.375rem 0.75rem;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .expand-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .join-btn,
+  .feedback-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tab-btn-candidate {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .guidelines-summary-candidate {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}

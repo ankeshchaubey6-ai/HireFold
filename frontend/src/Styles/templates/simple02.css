@@ -1,0 +1,50 @@
+.simple02 {
+  min-height: 1123px;
+  padding: 42px 54px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+  background: #ffffff;
+  color: #0f172a;
+
+  border-top: 8px solid #2563eb;
+}
+
+/* Header */
+.simple02 header {
+  margin-bottom: 26px;
+}
+
+.simple02 h1 {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.simple02 h2 {
+  font-size: 13px;
+  color: #2563eb;
+  margin-top: 2px;
+}
+
+.simple02 header p {
+  font-size: 10.5px;
+  color: #334155;
+  margin-top: 6px;
+}
+
+/* Section titles */
+.simple02 h3 {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 6px;
+}
+
+/* Items */
+.simple02 section {
+  margin-bottom: 20px;
+}
+
+.simple02 ul {
+  padding-left: 18px;
+}

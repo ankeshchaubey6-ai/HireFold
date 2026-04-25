@@ -1,0 +1,509 @@
+/* =====================================================
+   CANDIDATE NAVBAR
+   ===================================================== */
+
+.candidate-navbar {
+  width: 100%;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.candidate-navbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+/* ---------------- LEFT ---------------- */
+.candidate-navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.candidate-navbar__hamburger {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.candidate-navbar__logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e50914;
+  text-decoration: none;
+}
+
+/* ---------------- CENTER ---------------- */
+.candidate-navbar__center {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.candidate-navbar__center a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.candidate-navbar__center a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e50914;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+/* Active state: persistent underline */
+.candidate-navbar__center a.active {
+  color: #e50914;
+}
+
+.candidate-navbar__center a.active::after {
+  transform: scaleX(1);
+}
+
+/* Hover state: only for non-active items */
+@media (hover: hover) {
+  .candidate-navbar__center a:not(.active):hover,
+  .candidate-navbar__center a:not(.active):focus-visible {
+    color: #e50914;
+  }
+
+  .candidate-navbar__center a:not(.active):hover::after,
+  .candidate-navbar__center a:not(.active):focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ---------------- RIGHT ---------------- */
+.candidate-navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* SEARCH */
+.candidate-navbar__search {
+  position: relative;
+}
+
+.candidate-navbar__search input {
+  width: 200px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.candidate-navbar__search input:focus {
+  border-color: #e50914;
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+}
+
+/* Search Suggestions Dropdown */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: searchDropdownSlide 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.search-suggestion-item {
+  padding: 10px 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+  background-color: var(--bg);
+  color: #e50914;
+}
+
+.search-no-results {
+  padding: 16px 14px;
+  color: #888;
+  text-align: center;
+  font-size: 13px;
+  font-style: italic;
+}
+
+@keyframes searchDropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.candidate-navbar__search input::placeholder {
+  color: #888;
+}
+
+.candidate-navbar__search input:focus {
+  border-color: #e50914;
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+}
+
+/* NOTIFICATION */
+.candidate-navbar__icon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* THEME TOGGLE */
+.candidate-navbar__theme {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* =====================================================
+   DRAWER
+   ===================================================== */
+
+.candidate-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  display: flex;
+}
+
+.candidate-drawer {
+  width: 280px;
+  height: 100%;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  color: var(--text);
+
+  transform: translateX(-100%);
+  animation: candidateDrawerSlideIn 0.3s ease forwards;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.candidate-drawer h4 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e50914;
+  text-transform: uppercase;
+}
+
+.candidate-drawer a {
+  display: block;
+  padding: 8px 6px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.candidate-drawer a:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+/* PRIMARY NAV (always visible) */
+.candidate-drawer-nav-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.candidate-drawer-nav-main a {
+  display: block;
+  padding: 12px 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.candidate-drawer-nav-main a:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+/* COLLAPSIBLE SECTIONS */
+.candidate-drawer-section {
+  margin-bottom: 8px;
+}
+
+.candidate-drawer-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 10px 8px;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.candidate-drawer-toggle:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+.candidate-drawer-toggle-icon {
+  font-weight: bold;
+  font-size: 18px;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+/* EXPANDED ITEMS */
+.candidate-drawer-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+  margin-bottom: 4px;
+  animation: slideDown 0.2s ease forwards;
+}
+
+.candidate-drawer-items a {
+  display: block;
+  padding: 10px 8px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.candidate-drawer-items a:hover {
+  background: var(--card);
+  color: #e50914;
+  padding-left: 12px;
+}
+
+/* LOGOUT BUTTON */
+.candidate-drawer-logout {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.candidate-drawer-logout-btn {
+  width: 100%;
+  padding: 12px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.candidate-drawer-logout-btn:hover {
+  background: var(--card);
+  color: #e50914;
+  border-color: #e50914;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+@keyframes candidateDrawerSlideIn {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+@media (max-width: 900px) {
+  .candidate-navbar__center,
+  .candidate-navbar__search {
+    display: none;
+  }
+}
+
+/* ===== Notification Icon Fix ===== */
+.candidate-navbar__icon,
+.recruiter-navbar__icon {
+  text-decoration: none;
+  border-bottom: none;
+  outline: none;
+}
+
+.candidate-navbar__icon:hover,
+.candidate-navbar__icon:focus,
+.recruiter-navbar__icon:hover,
+.recruiter-navbar__icon:focus {
+  text-decoration: none;
+}
+
+/* =====================================================
+   INTENTIONAL MOBILE & TABLET REDESIGN
+========================================================= */
+
+/* MOBILE (≤640px): Compact header */
+@media (max-width: 640px) {
+  .candidate-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .candidate-navbar__inner {
+    max-width: 100%;
+    padding: 8px 10px;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+  }
+
+  /* Compact hamburger */
+  .candidate-navbar__hamburger {
+    font-size: 20px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .candidate-navbar__hamburger:active {
+    background: rgba(229, 9, 20, 0.1);
+  }
+
+  /* Logo compact */
+  .candidate-navbar__logo {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* Menu drawer — half-screen */
+  .candidate-drawer {
+    width: 65vw;
+    max-width: 65vw;
+    height: 100vh;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  /* Hide center & search */
+  .candidate-navbar__center,
+  .candidate-navbar__search {
+    display: none;
+  }
+
+  /* Icon compact */
+  .candidate-navbar__icon {
+    font-size: 18px;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* TABLET (641px to 1024px): Balanced */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .candidate-navbar__inner {
+    max-width: 100%;
+    padding: 10px 14px;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .candidate-navbar__center {
+    gap: 14px;
+  }
+
+  .candidate-navbar__center a {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .candidate-navbar__search input {
+    width: 140px;
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .candidate-navbar__hamburger {
+    display: none;
+  }
+
+  .candidate-navbar__logo {
+    font-size: 16px;
+  }
+
+  .candidate-navbar__icon {
+    font-size: 18px;
+  }
+}

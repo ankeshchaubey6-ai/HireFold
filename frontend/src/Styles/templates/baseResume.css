@@ -1,0 +1,193 @@
+﻿/* =========================================================
+   Base Resume Styles
+   Used by ALL resume templates (HireFold)
+   PURPOSE: Layout + Typography ONLY
+   COLORS: Controlled by templates + color picker ONLY
+========================================================= */
+
+/* ================= GLOBAL WRAPPER (NEUTRAL ONLY) ================= */
+
+.resume-theme-wrapper {
+  /* Neutral fallback (NOT blue, NOT accent forced) */
+  --accent-color: #111827;
+  --resume-accent: var(--accent-color);
+  --resume-accent-light: rgba(0, 0, 0, 0.06);
+  --resume-accent-border: rgba(0, 0, 0, 0.2);
+}
+
+/* Keep template color choices intact. */
+/* Removed all global h3, a, section color overrides */
+/* Templates must control their own design */
+
+/* ================= ROOT ================= */
+
+.resume-root {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #111827; /* Neutral text */
+  background: #ffffff;
+}
+
+/* ================= HEADINGS (NO COLOR FORCING) ================= */
+
+.resume-root h1,
+.resume-root h2,
+.resume-root h3,
+.resume-root h4 {
+  margin: 0;
+  font-weight: 600;
+  color: inherit;
+}
+
+.resume-root h1 {
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.resume-root h2 {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.resume-root h3 {
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  /* NO COLOR HERE */
+}
+
+.resume-root h4 {
+  font-size: 11.5px;
+}
+
+/* ================= TEXT ================= */
+
+.resume-root p {
+  margin: 4px 0 0;
+}
+
+.resume-muted {
+  color: #6b7280;
+  font-size: 10.8px;
+}
+
+/* ================= SECTIONS ================= */
+
+.resume-section {
+  margin-bottom: 14px;
+}
+
+.resume-section:last-child {
+  margin-bottom: 0;
+}
+
+/* ================= ITEMS ================= */
+
+.resume-item {
+  margin-bottom: 8px;
+}
+
+.resume-item:last-child {
+  margin-bottom: 0;
+}
+
+.resume-item strong {
+  display: block;
+  font-weight: 600;
+  font-size: 11.5px;
+}
+
+/* ================= LISTS ================= */
+
+.resume-list {
+  margin: 6px 0 0;
+  padding-left: 16px;
+}
+
+.resume-list li {
+  list-style: disc;
+  margin-bottom: 4px;
+}
+
+.resume-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* ================= TAGS (NEUTRAL â€” NOT ACCENT FORCED) ================= */
+
+.resume-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.resume-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06); /* neutral */
+  color: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ================= GRID HELPERS ================= */
+
+.resume-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.resume-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.resume-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ================= LINKS (NO ACCENT FORCING) ================= */
+
+.resume-root a {
+  text-decoration: none;
+  word-break: break-all;
+  color: inherit;
+}
+
+/* ================= IMAGES ================= */
+
+.resume-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* ================= DIVIDER (NEUTRAL) ================= */
+
+.resume-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.12);
+  margin: 10px 0;
+}
+
+/* ================= PRINT ================= */
+
+@media print {
+  .resume-root {
+    color: #000;
+    background: #fff;
+  }
+
+  .resume-tag {
+    background: #ddd;
+    border: 1px solid #bbb;
+    color: #000;
+  }
+}
+

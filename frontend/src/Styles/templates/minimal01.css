@@ -1,0 +1,99 @@
+/* =========================================================
+   MINIMAL 01 — SWISS / NOTION STYLE
+========================================================= */
+
+.minimal01 {
+  width: 100%;
+  min-height: 1123px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+
+  padding: 40px 48px;
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+.minimal01-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.minimal01-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.minimal01-header h2 {
+  font-size: 13px;
+  font-weight: 400;
+  color: #475569;
+  margin-top: 4px;
+}
+
+/* Contact inline */
+.minimal01-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 10.5px;
+  color: #334155;
+  text-align: right;
+}
+
+/* ================= SECTIONS ================= */
+.minimal01 section {
+  margin-bottom: 22px;
+}
+
+.minimal01 h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* ================= SUMMARY ================= */
+.minimal01-summary {
+  font-size: 11.5px;
+  color: #1f2937;
+}
+
+/* ================= ITEMS ================= */
+.minimal01-item {
+  margin-bottom: 14px;
+}
+
+.minimal01-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.minimal01 ul {
+  padding-left: 18px;
+  margin-top: 6px;
+}
+
+.minimal01 li {
+  margin-bottom: 4px;
+}
+
+/* ================= INLINE TEXT ================= */
+.minimal01-inline {
+  font-size: 11px;
+  color: #1f2937;
+}
+
+/* ================= MUTED ================= */
+.minimal01-muted {
+  font-size: 10px;
+  color: #64748b;
+}

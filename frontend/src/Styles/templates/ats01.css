@@ -1,0 +1,78 @@
+/* =========================================================
+   ATS 01 — CLASSIC RECRUITER SCAN
+========================================================= */
+
+.ats01 {
+  width: 100%;
+  min-height: 1123px;
+  padding: 40px 48px;
+
+  background: #ffffff;
+  color: #000000;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ================= HEADER ================= */
+.ats01-header {
+  margin-bottom: 22px;
+}
+
+.ats01 h1 {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.ats01 h2 {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.ats01 .contact {
+  margin-top: 8px;
+  font-size: 10.5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ================= SECTIONS ================= */
+.ats01 section {
+  margin-top: 22px;
+}
+
+.ats01 h3 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #000;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+/* ================= ITEMS ================= */
+.ats01 .item {
+  margin-bottom: 14px;
+}
+
+.ats01 .item strong {
+  font-weight: 700;
+}
+
+.ats01 .muted {
+  font-size: 10px;
+  color: #222;
+}
+
+/* ================= LISTS ================= */
+.ats01 ul {
+  padding-left: 18px;
+  margin-top: 6px;
+}
+
+.ats01 li {
+  margin-bottom: 4px;
+}

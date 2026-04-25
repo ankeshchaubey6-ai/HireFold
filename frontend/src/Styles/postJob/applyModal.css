@@ -1,0 +1,67 @@
+.apply-modal {
+  width: 100%;
+  max-width: 520px;
+}
+
+.apply-modal-header {
+  margin-bottom: 24px;
+}
+
+.apply-modal-header h2 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.apply-options {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.apply-option-card {
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apply-option-card:hover {
+  border-color: #c4161c;
+}
+
+.apply-option-card.active {
+  border-color: #c4161c;
+  background: rgba(196, 22, 28, 0.05);
+}
+
+.apply-option-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.apply-option-card p {
+  font-size: 13px;
+  color: #666;
+}
+
+.apply-option-card input {
+  margin-top: 10px;
+}
+
+.apply-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* DARK MODE */
+body.dark .apply-option-card {
+  background: #151515;
+  border-color: #2a2a2a;
+}
+
+body.dark .apply-option-card.active {
+  background: rgba(196, 22, 28, 0.12);
+}

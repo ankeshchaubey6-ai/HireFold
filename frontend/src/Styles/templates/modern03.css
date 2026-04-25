@@ -1,0 +1,176 @@
+﻿/* =========================================================
+   MODERN 03 â€” EXECUTIVE / CONSULTING RESUME
+   Inspired by McKinsey / BCG / Deloitte layouts
+========================================================= */
+
+/* ================= ROOT ================= */
+.modern03 {
+  display: grid;
+  grid-template-columns: 30% 70%; /* narrower sidebar */
+
+  width: 100%;
+  min-height: 1123px; /* A4 */
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ================= LEFT SIDEBAR ================= */
+.modern03-left {
+  background: #f1f5f9;
+  border-right: 1px solid #e5e7eb;
+
+  padding: 32px 22px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* Name block */
+.modern03-left .profile h1 {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.modern03-left .profile h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* Sidebar sections */
+.modern03-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Sidebar headings */
+.modern03-left h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+
+/* Sidebar text */
+.modern03-left li,
+.modern03-left .contact {
+  font-size: 10.5px;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+/* Sidebar lists */
+.modern03-left ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+/* Profile photo (optional) */
+.modern03 .resume-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 14px;
+}
+
+/* ================= RIGHT CONTENT ================= */
+.modern03-right {
+  padding: 36px 44px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Main sections */
+.modern03-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Section headings */
+.modern03-right h3 {
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #0f172a;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Paragraphs */
+.modern03-right p {
+  margin: 0;
+  font-size: 11px;
+  color: #334155;
+}
+
+/* Resume items */
+.modern03-right .item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Item title */
+.modern03-right .item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Muted meta */
+.modern03-right .muted {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Bullet lists */
+.modern03-right ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.modern03-right li {
+  margin-bottom: 4px;
+}
+
+/* ================= TAGS (SKILLS / LANGUAGES) ================= */
+.modern03 .resume-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.modern03 .resume-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 500;
+}
+
+/* ================= SAFETY ================= */
+.modern03 * {
+  box-sizing: border-box;
+  max-width: 100%;
+  word-break: break-word;
+}
+

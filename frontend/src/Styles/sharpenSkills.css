@@ -1,0 +1,383 @@
+/* =========================================================
+   Sharpen Your Skills — MODERN WHITE CARD DESIGN
+   Matching Hiring Journey and Roles That Fit cards
+========================================================= */
+
+/* ===================== GRID ===================== */
+
+.sharpen-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===================== CARD ===================== */
+
+.sharpen-skills-card {
+  display: block;
+  text-decoration: none;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sharpen-skills-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.sharpen-skills-card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(229, 9, 20, 0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 18px;
+  z-index: 1;
+}
+
+/* ===================== IMAGE SECTION ===================== */
+
+.sharpen-skills-card__image-wrapper {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background: #f1f5f9;
+  position: relative;
+  z-index: 2;
+}
+
+.sharpen-skills-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Badges */
+.sharpen-skills-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+.sharpen-skills-card__badge span {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(8px);
+}
+
+.badge-popular {
+  background: rgba(229, 9, 20, 0.9);
+  color: white;
+}
+
+.badge-new {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+}
+
+.badge-recommended {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.sharpen-skills-card__icon-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 6px 10px;
+  border-radius: 100px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+/* ===================== BODY ===================== */
+
+.sharpen-skills-card__body {
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.sharpen-skills-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sharpen-skills-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+  color: #0f172a;
+}
+
+.sharpen-skills-card__duration {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 100px;
+  white-space: nowrap;
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+}
+
+.sharpen-skills-card__description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0 0 16px 0;
+}
+
+/* ===================== FOOTER ===================== */
+
+.sharpen-skills-card__footer {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.sharpen-skills-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e50914;
+  transition: gap 0.3s ease;
+}
+
+/* ===================== INTERACTIONS ===================== */
+
+.sharpen-skills-card:hover .sharpen-skills-card-inner {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(229, 9, 20, 0.35);
+}
+
+.sharpen-skills-card:hover .sharpen-skills-card-glow {
+  opacity: 1;
+}
+
+.sharpen-skills-card:hover .sharpen-skills-card__image {
+  transform: scale(1.06);
+}
+
+.sharpen-skills-card:hover .sharpen-skills-card__icon-badge {
+  transform: scale(1.05);
+}
+
+.sharpen-skills-card:hover .sharpen-skills-card__cta {
+  gap: 10px;
+}
+
+.sharpen-skills-card:active .sharpen-skills-card-inner {
+  transform: scale(0.97);
+}
+
+/* ===================== DURATION COLOR VARIATIONS ===================== */
+
+.sharpen-skills-card:nth-child(1) .sharpen-skills-card__duration {
+  background: rgba(229, 9, 20, 0.1);
+  color: #e50914;
+}
+
+.sharpen-skills-card:nth-child(2) .sharpen-skills-card__duration {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.sharpen-skills-card:nth-child(3) .sharpen-skills-card__duration {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+/* =========================================================
+   TABLET (641px – 1024px)
+========================================================= */
+
+@media (max-width: 1024px) and (min-width: 641px) {
+  .sharpen-skills-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 14px;
+  }
+
+  .sharpen-skills-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sharpen-skills-card {
+    flex: 0 0 260px;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .sharpen-skills-card-inner {
+    height: auto;
+  }
+
+  .sharpen-skills-card__image-wrapper {
+    height: 150px;
+  }
+
+  .sharpen-skills-card__body {
+    padding: 14px;
+  }
+
+  .sharpen-skills-card__title {
+    font-size: 16px;
+  }
+
+  .sharpen-skills-card__description {
+    font-size: 13px;
+  }
+
+  .sharpen-skills-card__duration {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   MOBILE (≤640px)
+========================================================= */
+
+@media (max-width: 640px) {
+  .sharpen-skills-grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+  }
+
+  .sharpen-skills-card {
+    flex: 0 0 220px;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .sharpen-skills-card__image-wrapper {
+    height: 120px;
+  }
+
+  .sharpen-skills-card__body {
+    padding: 12px;
+  }
+
+  .sharpen-skills-card__title {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .sharpen-skills-card__description {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .sharpen-skills-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .sharpen-skills-card__duration {
+    font-size: 10px;
+  }
+
+  .sharpen-skills-card__icon-badge {
+    padding: 4px 8px;
+    font-size: 14px;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .sharpen-skills-card__badge span {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .sharpen-skills-card__cta {
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   DARK MODE SUPPORT
+========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .sharpen-skills-card-inner {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  
+  .sharpen-skills-card__image-wrapper {
+    background: #1e293b;
+  }
+  
+  .sharpen-skills-card__title {
+    color: #f1f5f9;
+  }
+  
+  .sharpen-skills-card__description {
+    color: #cbd5e1;
+  }
+  
+  .sharpen-skills-card__footer {
+    border-top-color: #334155;
+  }
+  
+  .sharpen-skills-card__icon-badge {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .sharpen-skills-card:nth-child(1) .sharpen-skills-card__duration {
+    background: rgba(229, 9, 20, 0.2);
+    color: #f87171;
+  }
+  
+  .sharpen-skills-card:nth-child(2) .sharpen-skills-card__duration {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+  }
+  
+  .sharpen-skills-card:nth-child(3) .sharpen-skills-card__duration {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+  }
+}

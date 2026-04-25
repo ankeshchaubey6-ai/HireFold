@@ -1,0 +1,11 @@
+.resume-tips-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.resume-tips-list li {
+  padding: 8px 0;
+  font-size: 14px;
+  opacity: 0.85;
+}

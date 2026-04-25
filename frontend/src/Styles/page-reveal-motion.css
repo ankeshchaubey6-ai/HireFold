@@ -1,0 +1,416 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * PAGE REVEAL MOTION SYSTEM
+ * Subtle but visible page-entry animations
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   KEYFRAME DEFINITIONS
+───────────────────────────────────────────────────────────────────────────── */
+
+/* PAGE ENTRY: Unfold effect — page appears from compressed state */
+@keyframes pageUnfold {
+  from {
+    opacity: 0;
+    transform: scaleY(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* SECTION REVEAL: Sections slide up and fade in */
+@keyframes sectionRevealUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CARD ASSEMBLY: Cards settle into place with scale */
+@keyframes cardSettle {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* TEXT REVEAL: Text fades in with subtle upward motion */
+@keyframes textFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ANIMATION UTILITY CLASSES
+───────────────────────────────────────────────────────────────────────────── */
+
+/* PAGE REVEAL: Applied to main.page and content containers */
+.page-reveal {
+  animation: pageUnfold 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+  transform-origin: top center;
+}
+
+/* SECTION REVEAL: Applied to sections with staggered timing */
+.section-reveal {
+  animation: sectionRevealUp 540ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: transform, opacity;
+}
+
+/* CARD REVEAL: Applied to individual cards with stagger */
+.card-reveal {
+  animation: cardSettle 420ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: transform, opacity;
+}
+
+/* TEXT REVEAL: Applied to headings and text */
+.text-reveal {
+  animation: textFadeUp 480ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: opacity, transform;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   AUTOMATIC APPLICATION TO STANDARD ELEMENTS
+───────────────────────────────────────────────────────────────────────────── */
+
+/* Page containers get the page unfold effect */
+main.page,
+main.content-area,
+div.page {
+  animation: pageUnfold 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+  transform-origin: top center;
+}
+
+/* Section surfaces reveal with stagger */
+section.section-surface {
+  animation: sectionRevealUp 540ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Apply stagger to sections using :nth-child */
+section.section-surface:nth-child(1) {
+  animation-delay: 80ms;
+}
+
+section.section-surface:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+section.section-surface:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+section.section-surface:nth-child(4) {
+  animation-delay: 260ms;
+}
+
+section.section-surface:nth-child(5) {
+  animation-delay: 320ms;
+}
+
+section.section-surface:nth-child(6) {
+  animation-delay: 380ms;
+}
+
+/* Card grids: Cards settle into place with stagger */
+.explore-domains-grid > *,
+.hiring-model-dashboard-grid > *,
+.card-grid > *,
+.roles-fit-grid > *,
+.hs-card,
+.candidate-match-card,
+.evaluation-tool-card,
+.opportunity-card,
+.create-resume-card,
+.in-demand-role-card,
+.hiring-journey-card,
+.hiring-without-bias-banner {
+  animation: cardSettle 420ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Stagger each card in the grid using :nth-child */
+.explore-domains-grid > *:nth-child(1),
+.hiring-model-dashboard-grid > *:nth-child(1),
+.card-grid > *:nth-child(1),
+.roles-fit-grid > *:nth-child(1) {
+  animation-delay: 140ms;
+}
+
+.explore-domains-grid > *:nth-child(2),
+.hiring-model-dashboard-grid > *:nth-child(2),
+.card-grid > *:nth-child(2),
+.roles-fit-grid > *:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.explore-domains-grid > *:nth-child(3),
+.hiring-model-dashboard-grid > *:nth-child(3),
+.card-grid > *:nth-child(3),
+.roles-fit-grid > *:nth-child(3) {
+  animation-delay: 260ms;
+}
+
+.explore-domains-grid > *:nth-child(4),
+.hiring-model-dashboard-grid > *:nth-child(4),
+.card-grid > *:nth-child(4),
+.roles-fit-grid > *:nth-child(4) {
+  animation-delay: 320ms;
+}
+
+/* Section titles fade in */
+.section-title,
+h1,
+h2 {
+  animation: textFadeUp 480ms cubic-bezier(0.23, 1, 0.320, 1) both;
+  will-change: opacity, transform;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE ADJUSTMENTS
+───────────────────────────────────────────────────────────────────────────── */
+
+/* Tablet: Reduce animation duration slightly */
+@media (max-width: 1024px) {
+  main.page,
+  main.content-area,
+  div.page {
+    animation-duration: 420ms;
+  }
+
+  section.section-surface {
+    animation-duration: 460ms;
+  }
+
+  .card-reveal,
+  .explore-domains-grid > *,
+  .hiring-model-dashboard-grid > *,
+  .card-grid > *,
+  .roles-fit-grid > *,
+  .hs-card,
+  .candidate-match-card,
+  .evaluation-tool-card,
+  .opportunity-card,
+  .create-resume-card,
+  .in-demand-role-card,
+  .hiring-journey-card,
+  .hiring-without-bias-banner {
+    animation-duration: 360ms;
+  }
+
+  section.section-surface:nth-child(2) {
+    animation-delay: 100ms;
+  }
+
+  section.section-surface:nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  section.section-surface:nth-child(4) {
+    animation-delay: 220ms;
+  }
+
+  section.section-surface:nth-child(5) {
+    animation-delay: 280ms;
+  }
+
+  section.section-surface:nth-child(6) {
+    animation-delay: 340ms;
+  }
+}
+
+/* Mobile: Significantly reduce animation duration and distance */
+@media (max-width: 768px) {
+  @keyframes pageUnfold {
+    from {
+      opacity: 0;
+      transform: scaleY(0.98) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1) translateY(0);
+    }
+  }
+
+  @keyframes sectionRevealUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes cardSettle {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  main.page,
+  main.content-area,
+  div.page {
+    animation-duration: 360ms;
+  }
+
+  section.section-surface {
+    animation-duration: 360ms;
+  }
+
+  section.section-surface:nth-child(1) {
+    animation-delay: 60ms;
+  }
+
+  section.section-surface:nth-child(2) {
+    animation-delay: 110ms;
+  }
+
+  section.section-surface:nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  section.section-surface:nth-child(4) {
+    animation-delay: 210ms;
+  }
+
+  section.section-surface:nth-child(5) {
+    animation-delay: 260ms;
+  }
+
+  section.section-surface:nth-child(6) {
+    animation-delay: 310ms;
+  }
+
+  .card-reveal,
+  .explore-domains-grid > *,
+  .hiring-model-dashboard-grid > *,
+  .card-grid > *,
+  .roles-fit-grid > *,
+  .hs-card,
+  .candidate-match-card,
+  .evaluation-tool-card,
+  .opportunity-card,
+  .create-resume-card,
+  .in-demand-role-card,
+  .hiring-journey-card,
+  .hiring-without-bias-banner {
+    animation-duration: 300ms;
+  }
+
+  .explore-domains-grid > *:nth-child(1),
+  .hiring-model-dashboard-grid > *:nth-child(1),
+  .card-grid > *:nth-child(1),
+  .roles-fit-grid > *:nth-child(1) {
+    animation-delay: 90ms;
+  }
+
+  .explore-domains-grid > *:nth-child(2),
+  .hiring-model-dashboard-grid > *:nth-child(2),
+  .card-grid > *:nth-child(2),
+  .roles-fit-grid > *:nth-child(2) {
+    animation-delay: 140ms;
+  }
+
+  .explore-domains-grid > *:nth-child(3),
+  .hiring-model-dashboard-grid > *:nth-child(3),
+  .card-grid > *:nth-child(3),
+  .roles-fit-grid > *:nth-child(3) {
+    animation-delay: 190ms;
+  }
+
+  .explore-domains-grid > *:nth-child(4),
+  .hiring-model-dashboard-grid > *:nth-child(4),
+  .card-grid > *:nth-child(4),
+  .roles-fit-grid > *:nth-child(4) {
+    animation-delay: 240ms;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ACCESSIBILITY: Respect user motion preferences
+───────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  main.page,
+  main.content-area,
+  div.page,
+  section.section-surface,
+  .page-reveal,
+  .section-reveal,
+  .card-reveal,
+  .text-reveal,
+  .explore-domains-grid > *,
+  .hiring-model-dashboard-grid > *,
+  .card-grid > *,
+  .roles-fit-grid > *,
+  .hs-card,
+  .candidate-match-card,
+  .evaluation-tool-card,
+  .opportunity-card,
+  .create-resume-card,
+  .in-demand-role-card,
+  .hiring-journey-card,
+  .hiring-without-bias-banner,
+  .section-title,
+  h1,
+  h2 {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PERFORMANCE OPTIMIZATION
+───────────────────────────────────────────────────────────────────────────── */
+
+/* Enable GPU acceleration for animated elements */
+main.page,
+main.content-area,
+div.page,
+section.section-surface,
+.page-reveal,
+.section-reveal,
+.card-reveal,
+.text-reveal,
+.explore-domains-grid > *,
+.hiring-model-dashboard-grid > *,
+.card-grid > *,
+.roles-fit-grid > *,
+.hs-card,
+.candidate-match-card,
+.evaluation-tool-card,
+.opportunity-card,
+.create-resume-card,
+.in-demand-role-card,
+.hiring-journey-card,
+.hiring-without-bias-banner {
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

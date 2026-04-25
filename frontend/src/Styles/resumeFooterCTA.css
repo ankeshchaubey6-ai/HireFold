@@ -1,0 +1,37 @@
+.resume-footer-cta {
+  max-width: 900px;
+  margin: 64px auto;
+  padding: 48px;
+  text-align: center;
+
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(196, 22, 28, 0.14),
+    rgba(196, 22, 28, 0.05)
+  );
+}
+
+.resume-footer-cta h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.resume-footer-cta p {
+  font-size: 15px;
+  opacity: 0.8;
+  margin-bottom: 24px;
+}
+
+.resume-footer-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+@media (max-width: 540px) {
+  .resume-footer-actions {
+    flex-direction: column;
+  }
+}

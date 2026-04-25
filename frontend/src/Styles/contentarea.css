@@ -1,0 +1,14 @@
+﻿/* =========================================================
+   CONTENT AREA
+   Main flex child container (Recruiter / Candidate layouts)
+   ========================================================= */
+
+.content-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+
+  padding: 32px 0;
+  box-sizing: border-box;
+}
+

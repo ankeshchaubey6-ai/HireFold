@@ -1,0 +1,181 @@
+﻿/* =========================================================
+   CREATIVE 02 â€” EDITORIAL SPLIT RESUME
+   Premium â€¢ Balanced â€¢ Recruiter-Friendly
+========================================================= */
+
+/* ================= ROOT ================= */
+.creative02 {
+  display: grid;
+  grid-template-columns: 28% 72%;
+  align-items: stretch;
+}
+
+.creative02-left {
+  align-self: stretch;
+  min-height: 100%;
+}
+
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+.creative02-left {
+  background: linear-gradient(180deg, #0f766e, #115e59);
+  color: #ecfeff;
+
+  /* Match the right column spacing */
+  padding: 40px 28px 36px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+
+  align-items: flex-start;
+}
+
+/* ================= PROFILE ================= */
+.creative02-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.creative02-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.creative02-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.creative02-left h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #99f6e4;
+  margin: 0;
+}
+
+/* Left sections */
+.creative02-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.creative02-left h3 {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ccfbf1;
+  margin: 0 0 4px;
+}
+
+.creative02-left p,
+.creative02-left li {
+  font-size: 10.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.creative02-left ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+/* =========================================================
+   RIGHT CONTENT
+========================================================= */
+.creative02-right {
+  /* Match the left column top padding */
+  padding: 40px 46px 36px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Alignment block */
+.creative02-aligner {
+  height: 148px;        /* MUST match left profile block */
+  flex-shrink: 0;
+}
+
+/* Sections */
+.creative02-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.creative02-right h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f766e;
+
+  padding-bottom: 6px;
+  margin: 0;
+  border-bottom: 2px solid #99f6e4;
+}
+
+.creative02-right p {
+  margin: 0;
+  font-size: 11px;
+  color: #334155;
+}
+
+/* Items */
+.creative02-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.creative02-item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.creative02-muted {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Lists */
+.creative02-right ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.creative02-right li {
+  margin-bottom: 4px;
+}
+
+/* =========================================================
+   TAGS
+========================================================= */
+.creative02-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.creative02-tag {
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ccfbf1;
+  color: #115e59;
+  font-weight: 500;
+}
+

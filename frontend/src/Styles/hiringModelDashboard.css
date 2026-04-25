@@ -1,0 +1,151 @@
+﻿.hiring-model-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(420px, 1fr));
+  gap: 32px;                                            /* â¬† space between cards */
+  padding: 8px 0;                                       /* breathing room */
+}
+
+@media (max-width: 900px) {
+  .hiring-model-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   COMPREHENSIVE RESPONSIVE RULES
+========================================================= */
+
+/* TABLET: 1024px and below */
+@media (max-width: 1024px) {
+  .hiring-model-dashboard-grid {
+    gap: 20px;
+    padding: 4px 0;
+  }
+
+  .hiring-model-dashboard-grid .action-card {
+    padding: 20px 24px;
+    gap: 16px;
+  }
+
+  .hiring-model-dashboard-grid .action-card-image {
+    width: 120px;
+    height: 120px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .hiring-model-dashboard-grid .action-card h3 {
+    font-size: 16px;
+  }
+
+  .hiring-model-dashboard-grid .action-card p {
+    font-size: 13px;
+  }
+}
+
+/* MOBILE+: 768px and below */
+@media (max-width: 768px) {
+  .hiring-model-dashboard-grid {
+    gap: 16px;
+  }
+
+  .hiring-model-dashboard-grid .action-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .hiring-model-dashboard-grid .action-card-image {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    align-self: center;
+  }
+
+  .hiring-model-dashboard-grid .action-card-content {
+    width: 100%;
+  }
+
+  .hiring-model-dashboard-grid .action-card h3 {
+    font-size: 15px;
+  }
+
+  .hiring-model-dashboard-grid .action-card p {
+    font-size: 12px;
+  }
+
+  .hiring-model-dashboard-grid .action-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* SMALL MOBILE: 640px and below */
+@media (max-width: 640px) {
+  .hiring-model-dashboard-grid {
+    gap: 12px;
+  }
+
+  .hiring-model-dashboard-grid .action-card {
+    padding: 12px;
+  }
+
+  .hiring-model-dashboard-grid .action-card-image {
+    width: 80px;
+    height: 80px;
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  .hiring-model-dashboard-grid .action-card h3 {
+    font-size: 14px;
+  }
+
+  .hiring-model-dashboard-grid .action-card p {
+    font-size: 11px;
+  }
+}
+
+.hiring-model-dashboard-grid .action-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 24px 28px;
+
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hiring-model-dashboard-grid .action-card-image {
+  width: 150px;               /* safe size */
+  height: 150px;
+
+  max-width: 150px;
+  max-height: 150px;
+
+  object-fit: contain;
+  display: block;
+
+  flex-shrink: 0;
+}
+.hiring-model-dashboard-grid .action-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  min-width: 0;
+}
+
+

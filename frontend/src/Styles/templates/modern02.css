@@ -1,0 +1,152 @@
+﻿/* =========================================================
+   MODERN 02 â€” CORPORATE SIDEBAR RESUME
+========================================================= */
+
+/* ================= ROOT ================= */
+.modern02 {
+  display: grid;
+  grid-template-columns: 34% 66%; /* slightly wider left */
+
+  width: 100%;
+  min-height: 1123px; /* A4 */
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ================= LEFT SIDEBAR ================= */
+.modern02-left {
+  background: #121212;
+  color: #e5e7eb;
+
+  padding: 32px 24px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Header block */
+.modern02-left .profile {
+  text-align: left;
+}
+
+.modern02-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.modern02-left h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+/* Sidebar sections */
+.modern02-left section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Sidebar headings */
+.modern02-left h3 {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c7d2fe;
+  margin-bottom: 4px;
+}
+
+/* Sidebar text */
+.modern02-left .contact,
+.modern02-left li {
+  font-size: 10.5px;
+  color: #e5e7eb;
+  line-height: 1.6;
+}
+
+/* Sidebar lists */
+.modern02-left ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+/* Profile image */
+.resume-photo {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+/* ================= RIGHT CONTENT ================= */
+.modern02-right {
+  padding: 36px 42px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* Main sections */
+.modern02-right section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Section headings */
+.modern02-right h3 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Paragraph text */
+.modern02-right p {
+  margin: 0;
+  font-size: 11px;
+  color: #374151;
+}
+
+/* Resume item */
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Item title */
+.item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* Muted text */
+.muted {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+/* Bullet lists */
+.modern02-right ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.modern02-right li {
+  margin-bottom: 4px;
+}
+

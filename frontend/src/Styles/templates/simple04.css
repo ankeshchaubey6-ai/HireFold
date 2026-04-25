@@ -1,0 +1,116 @@
+/* =========================================================
+   SIMPLE 04 — CLEAN CONSULTING / ATS RESUME
+========================================================= */
+
+.simple04 {
+  width: 100%;
+  min-height: 1123px;
+
+  padding: 42px 48px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.65;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ================= HEADER ================= */
+.simple04-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.simple04-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.simple04-header h2 {
+  font-size: 13px;
+  font-weight: 400;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.simple04-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10.5px;
+  color: #334155;
+  text-align: right;
+}
+
+/* ================= SECTIONS ================= */
+.simple04 section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.simple04 h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+/* ================= ITEMS ================= */
+.simple04-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.simple04-item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.simple04 ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.simple04 li {
+  margin-bottom: 4px;
+}
+
+/* ================= SKILLS ================= */
+.simple04-skill-group strong {
+  font-size: 10.5px;
+  color: #334155;
+}
+
+.simple04-skill-group ul {
+  margin-top: 4px;
+}
+
+/* ================= INLINE LIST ================= */
+.simple04-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-left: 0;
+}
+
+.simple04-inline li {
+  list-style: none;
+}
+
+/* ================= MUTED ================= */
+.muted {
+  font-size: 10px;
+  color: #64748b;
+}

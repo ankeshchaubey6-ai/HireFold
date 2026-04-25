@@ -1,0 +1,297 @@
+﻿/* =========================================================
+   AUTH â€“ COLORFUL + INTERACTIVE (HIREFOLD)
+   ========================================================= */
+
+.auth-page {
+  
+
+  padding: 70px;
+}
+
+.auth-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 900px;
+  display: block;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+/* LEFT PANEL */
+.auth-visual {
+  padding: 48px;
+  background: linear-gradient(
+    135deg,
+    #e50914,
+    #ff4d4d,
+    #ff7a7a
+  );
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-visual h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.auth-visual p {
+  font-size: 15px;
+  opacity: 0.95;
+}
+
+/* RIGHT FORM */
+.auth-form-container {
+  padding: 48px;
+}
+
+.auth-form-container h1 {
+  margin-bottom: 28px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* FORM */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* FLOATING FIELD */
+.auth-field {
+  position: relative;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-field label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #888;
+  pointer-events: none;
+  transition: 0.2s ease;
+  background: var(--bg);
+  padding: 0 6px;
+}
+
+.auth-field input:focus,
+.auth-field input:not(:placeholder-shown) {
+  border-color: #e50914;
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+}
+
+.auth-field input:focus + label,
+.auth-field input:not(:placeholder-shown) + label {
+  top: -6px;
+  font-size: 11px;
+  color: #e50914;
+}
+
+/* PASSWORD TOGGLE */
+.password-field {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #e50914;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* PASSWORD STRENGTH */
+.password-strength {
+  height: 6px;
+  border-radius: 6px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.password-strength span {
+  display: block;
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.password-strength.weak span {
+  width: 33%;
+  background: #dc2626;
+}
+
+.password-strength.medium span {
+  width: 66%;
+  background: #f59e0b;
+}
+
+.password-strength.strong span {
+  width: 100%;
+  background: #16a34a;
+}
+
+/* SUBMIT */
+.auth-submit {
+  margin-top: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e50914, #ff4d4d);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(229, 9, 20, 0.35);
+}
+
+
+.auth-submit + .auth-submit {
+  background: var(--card);
+  color: var(--text);
+}
+/* =========================================================
+   Auth Mobile and Tablet Layout
+   
+   
+========================================================= */
+
+/* ---------- Mobile (<=640px) ---------- */
+@media (max-width: 640px) {
+  .auth-page {
+    padding: 32px 16px;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+  }
+
+  .auth-wrapper {
+    /* Reset layout behavior */
+    display: block;
+    width: 100%;
+    max-width: 420px;
+
+    margin: 0 auto;
+    border-radius: 14px;
+  }
+
+  .auth-visual {
+    display: none;
+  }
+
+  .auth-form-container {
+    width: 100%;
+    padding: 28px 20px;
+
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------- Tablet (641px - 1024px) ---------- */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .auth-page {
+    padding: 48px 24px;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+  }
+
+  .auth-wrapper {
+    /* Reset layout behavior */
+    display: block;
+    width: 100%;
+    max-width: 720px;
+
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .auth-form-container {
+    width: 100%;
+    padding: 36px;
+
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
+/* =========================================================
+   Auth Form Column Reset
+========================================================= */
+
+@media (max-width: 1024px) {
+  .auth-form-container {
+    /* Keep the form column full width on smaller screens. */
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    align-self: center !important;
+  }
+}
+/* =========================================================
+   AUTH â€” DESKTOP GRID ONLY
+========================================================= */
+
+@media (min-width: 1025px) {
+  .auth-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .auth-visual {
+    display: flex;
+  }
+}
+/* =========================================================
+   AUTH â€” FIX BORDER COLLISION (FINAL)
+========================================================= */
+
+/* Apply correct box model everywhere inside auth */
+.auth-wrapper,
+.auth-form-container,
+.auth-form,
+.auth-field,
+.auth-field input {
+  box-sizing: border-box;
+}
+
+
+
+

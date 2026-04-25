@@ -1,0 +1,155 @@
+﻿/* ROOT FOOTER */
+.hf-footer {
+  background: #ffffff;
+  color: #111;
+  margin-top: 80px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+/* DARK MODE */
+.dark .hf-footer {
+  background: #0b0b0b;
+  color: #f5f5f5;
+}
+
+/* TOP DIVIDER */
+.hf-footer-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e11d48, transparent);
+}
+
+/* GRID */
+.hf-footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 48px;
+}
+
+/* SECTION */
+.hf-footer-section h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+.dark .hf-footer-section h4 {
+  color: #aaa;
+}
+
+/* LINKS */
+.hf-footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hf-footer-section li {
+  margin-bottom: 10px;
+}
+
+.hf-footer-section a {
+  text-decoration: none;
+  color: #111;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.hf-footer-section a:hover {
+  color: #e11d48;
+}
+
+.dark .hf-footer-section a {
+  color: #e5e5e5;
+}
+
+/* BOTTOM BAR */
+.hf-footer-bottom {
+  border-top: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.dark .hf-footer-bottom {
+  border-top: 1px solid #222;
+  color: #aaa;
+}
+
+.hf-footer-bottom strong {
+  color: #e11d48;
+}
+
+/* =========================================================
+   MOBILE & TABLET RESPONSIVE (MAINTAIN HORIZONTAL LAYOUT)
+========================================================= */
+
+/* MOBILE (â‰¤640px) */
+@media (max-width: 640px) {
+  .hf-footer-grid {
+    padding: 32px 16px;
+    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hf-footer-section h4 {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .hf-footer-section li {
+    margin-bottom: 8px;
+  }
+
+  .hf-footer-section a {
+    font-size: 12px;
+  }
+
+  .hf-footer-bottom {
+    padding: 16px 12px;
+    font-size: 11px;
+  }
+}
+
+/* TABLET (641px to 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hf-footer-grid {
+    padding: 48px 20px;
+    gap: 40px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hf-footer-section h4 {
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+
+  .hf-footer-section li {
+    margin-bottom: 9px;
+  }
+
+  .hf-footer-section a {
+    font-size: 13px;
+  }
+
+  .hf-footer-bottom {
+    padding: 18px 16px;
+    font-size: 12px;
+  }
+}
+
+
+/* ===== FORCE FOOTER TO BOTTOM ===== */
+.hf-footer {
+  margin-top: auto !important;
+  position: static !important;
+  height: auto !important;
+  min-height: auto !important;
+}
+
+

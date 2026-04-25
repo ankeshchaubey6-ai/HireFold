@@ -1,0 +1,785 @@
+﻿/* =====================================================
+   RECRUITER HOME â€” PREMIUM EDITORIAL DESIGN
+   Dark Â· Syne + Figtree Â· Talent Acquisition Focused
+   Transparent backgrounds matching explore domains
+   ===================================================== */
+
+/* â”€â”€ IMPORT FONTS â”€â”€ */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600;700&display=swap');
+
+/* â”€â”€ ROOT TOKENS (Matching premium design) â”€â”€ */
+:root {
+  --bg:            #07070f;
+  --surface:       #0e0e1a;
+  --surface-2:     #131325;
+  --border:        rgba(255,255,255,0.07);
+  --border-accent: rgba(229,9,20,0.35);
+  --text:          #eeeef8;
+  --text-muted:    #6868a0;
+  --text-dim:      #2e2e50;
+  --accent:        #e50914;
+  --accent-2:      #ff6b35;
+  --accent-green:  #22d3a0;
+  --accent-amber:  #f5c842;
+  --accent-blue:   #3b82f6;
+  --glow:          rgba(229,9,20,0.14);
+
+  --font-display:  'Syne', sans-serif;
+  --font-body:     'Figtree', sans-serif;
+
+  --r-sm:  14px;
+  --r-md:  20px;
+  --r-lg:  28px;
+  --r-xl:  40px;
+
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-back:   cubic-bezier(0.34, 1.2, 0.64, 1);
+
+  --shadow-card:       0 2px 16px rgba(0,0,0,0.35);
+  --shadow-card-hover: 0 24px 56px -12px rgba(229,9,20,0.22), 0 0 0 1px rgba(229,9,20,0.14);
+}
+
+/* â”€â”€ BASE â”€â”€ */
+.recruiter-landing {
+  min-height: 100vh;
+  background: transparent;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Subtle noise layer - keeps global page texture */
+.recruiter-landing::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* â”€â”€ CONTAINER â”€â”€ */
+.recruiter-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* =====================================================
+   SECTION SURFACE - MATCHING EXPLORE DOMAINS
+   ===================================================== */
+.section-surface {
+  max-width: 1280px;
+  margin: 60px auto;
+  padding: 0 24px;
+  position: relative;
+}
+
+/* =====================================================
+   ROTATING KEYWORDS
+   ===================================================== */
+.rotating-keywords-wrapper {
+  background: linear-gradient(90deg, rgba(229,9,20,0.08), transparent);
+  padding: 1rem 0;
+  overflow: hidden;
+  position: relative;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* =====================================================
+   SECTIONS - TRANSPARENT BACKGROUNDS
+   ===================================================== */
+.recruiter-section {
+  position: relative;
+  padding: 5rem 0;
+  background: transparent;
+}
+
+.recruiter-section--alt {
+  background: linear-gradient(180deg, rgba(229,9,20,0.02) 0%, transparent 100%);
+  position: relative;
+}
+
+.recruiter-section--alt::before,
+.recruiter-section--alt::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(229,9,20,0.2), transparent);
+}
+
+.recruiter-section--alt::before {
+  top: 0;
+}
+
+.recruiter-section--alt::after {
+  bottom: 0;
+}
+
+/* =====================================================
+   SECTION HEADER
+   ===================================================== */
+.recruiter-section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.recruiter-section-header--left {
+  text-align: left;
+}
+
+.recruiter-section-header__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(229,9,20,0.1);
+  border: 1px solid rgba(229,9,20,0.2);
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+}
+
+.recruiter-section-header__badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.recruiter-section-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.recruiter-section-header__title .gradient-text {
+  background: linear-gradient(110deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+.recruiter-section-header__subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* =====================================================
+   GRID LAYOUT - MATCHING EXPLORE DOMAINS
+   ===================================================== */
+.recruiter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* =====================================================
+   HIRING MODEL GRID - 2 COLUMN LAYOUT
+   ===================================================== */
+.hiring-model-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* =====================================================
+   CARD STYLES - MATCHING EXPLORE DOMAINS
+   ===================================================== */
+/* Base card styles that all cards should use */
+.recruiter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.recruiter-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Spotlight effect */
+.recruiter-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.recruiter-card:hover::before {
+  opacity: 1;
+}
+
+/* Bottom progress line */
+.recruiter-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s var(--ease-spring);
+}
+
+.recruiter-card:hover::after {
+  width: 100%;
+}
+
+/* =====================================================
+   HIRING SNAPSHOT CARD STYLES
+   ===================================================== */
+.hiring-snapshot-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+}
+
+.hiring-snapshot-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.hiring-snapshot-card__image {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.hiring-snapshot-card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.hiring-snapshot-card__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(110deg, #fff, var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
+/* Bottom progress line */
+.hiring-snapshot-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s var(--ease-spring);
+}
+
+.hiring-snapshot-card:hover::after {
+  width: 100%;
+}
+
+/* Spotlight effect */
+.hiring-snapshot-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.hiring-snapshot-card:hover::before {
+  opacity: 1;
+}
+
+/* =====================================================
+   CANDIDATE MATCH CARD STYLES
+   ===================================================== */
+.candidate-match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+}
+
+.candidate-match-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.candidate-match-card__image {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.candidate-match-card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.candidate-match-card__score {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(110deg, #fff, var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
+/* Bottom progress line */
+.candidate-match-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s var(--ease-spring);
+}
+
+.candidate-match-card:hover::after {
+  width: 100%;
+}
+
+/* Spotlight effect */
+.candidate-match-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.candidate-match-card:hover::before {
+  opacity: 1;
+}
+
+/* =====================================================
+   EVALUATION TOOL CARD STYLES
+   ===================================================== */
+.evaluation-tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+}
+
+.evaluation-tool-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.evaluation-tool-card__image {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.evaluation-tool-card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.evaluation-tool-card__description {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Bottom progress line */
+.evaluation-tool-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s var(--ease-spring);
+}
+
+.evaluation-tool-card:hover::after {
+  width: 100%;
+}
+
+/* Spotlight effect */
+.evaluation-tool-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.evaluation-tool-card:hover::before {
+  opacity: 1;
+}
+
+/* =====================================================
+   HIRING MODEL CARD STYLES
+   ===================================================== */
+.hiring-model-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hiring-model-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.hiring-model-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hiring-model-card__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.hiring-model-card__price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(110deg, #fff, var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.hiring-model-card__features {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.hiring-model-card__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.hiring-model-card__feature::before {
+  content: 'âœ“';
+  color: var(--accent-green);
+  font-weight: bold;
+}
+
+.hiring-model-card__cta {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: none;
+  border-radius: 100px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.hiring-model-card__cta:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(229,9,20,0.4);
+}
+
+/* Bottom progress line */
+.hiring-model-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s var(--ease-spring);
+}
+
+.hiring-model-card:hover::after {
+  width: 100%;
+}
+
+/* Spotlight effect */
+.hiring-model-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(229,9,20,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.hiring-model-card:hover::before {
+  opacity: 1;
+}
+
+/* =====================================================
+   BANNER WRAPPER
+   ===================================================== */
+.recruiter-banner-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 1200px) {
+  .recruiter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .hiring-model-grid {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .recruiter-container {
+    padding: 0 1.5rem;
+  }
+  
+  .section-surface {
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recruiter-section {
+    padding: 3rem 0;
+  }
+
+  .recruiter-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hiring-model-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recruiter-section-header__title {
+    font-size: 1.8rem;
+  }
+
+  .recruiter-section-header__subtitle {
+    font-size: 0.9rem;
+  }
+
+  .recruiter-banner-wrapper {
+    margin-bottom: 2rem;
+  }
+  
+  .hiring-model-card {
+    padding: 1.5rem;
+  }
+  
+  .hiring-model-card__title {
+    font-size: 1.25rem;
+  }
+  
+  .section-surface {
+    margin: 30px auto;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recruiter-container {
+    padding: 0 1rem;
+  }
+  
+  .hiring-snapshot-card,
+  .candidate-match-card,
+  .evaluation-tool-card {
+    padding: 1rem;
+  }
+  
+  .hiring-snapshot-card__image,
+  .candidate-match-card__image,
+  .evaluation-tool-card__image {
+    height: 100px;
+  }
+  
+  .section-surface {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+}
+
+/* =====================================================
+   ANIMATIONS - MATCHING EXPLORE DOMAINS
+   ===================================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.recruiter-card,
+.hiring-snapshot-card,
+.candidate-match-card,
+.evaluation-tool-card,
+.hiring-model-card {
+  animation: fadeUp 0.6s var(--ease-spring) forwards;
+  opacity: 0;
+}
+
+/* Staggered animations for grid items */
+.recruiter-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.recruiter-grid > *:nth-child(2) { animation-delay: 0.1s; }
+.recruiter-grid > *:nth-child(3) { animation-delay: 0.15s; }
+.recruiter-grid > *:nth-child(4) { animation-delay: 0.2s; }
+.hiring-model-grid > *:nth-child(1) { animation-delay: 0.1s; }
+.hiring-model-grid > *:nth-child(2) { animation-delay: 0.15s; }
+
+/* =====================================================
+   DARK MODE ADAPTATION
+   ===================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #07070f;
+    --surface: #0e0e1a;
+  }
+  
+  .recruiter-landing {
+    background: transparent;
+  }
+}
+
+/* =====================================================
+   ACCESSIBILITY
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================
+   PRINT STYLES
+   ===================================================== */
+@media print {
+  .rotating-keywords-wrapper,
+  .recruiter-banner-wrapper,
+  .recruiter-section--alt::before,
+  .recruiter-section--alt::after {
+    display: none;
+  }
+  
+  .hiring-snapshot-card,
+  .candidate-match-card,
+  .evaluation-tool-card,
+  .hiring-model-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

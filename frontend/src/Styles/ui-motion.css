@@ -1,0 +1,311 @@
+/* =========================================================
+   UI MOTION UTILITIES — HIREFOLD SaaS ANIMATIONS
+   Subtle, professional, performance-optimized
+========================================================= */
+
+/* ---- UTILITY CLASSES FOR COMPONENT ENHANCEMENTS ---- */
+
+/* ================================================================
+   CARD HOVER EFFECTS
+   - Subtle lift on hover (translateY: -2 to -4px)
+   - Soft shadow increase
+   - Touch-friendly (no hover on mobile)
+================================================================ */
+
+.card-hover {
+  transition:
+    transform 0.2s cubic-bezier(0.23, 1, 0.320, 1),
+    box-shadow 0.2s cubic-bezier(0.23, 1, 0.320, 1),
+    border-color 0.2s ease;
+}
+
+/* Only apply hover on non-touch devices */
+@media (hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-hover:active {
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   BUTTON MICRO-INTERACTIONS
+   - Hover: background fade + border color transition
+   - Active: slight scale down (0.98)
+   - Short transitions (150–250ms)
+================================================================ */
+
+.btn-interactive {
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+@media (hover: hover) {
+  .btn-interactive:hover {
+    filter: brightness(1.08);
+  }
+}
+
+.btn-interactive:active {
+  transform: scale(0.98);
+}
+
+/* ================================================================
+   SECTION / CONTAINER FADE-IN + SLIDE UP
+   - Fade in + upward motion on mount
+   - Uses opacity + transform only
+   - Safe for production layout
+================================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-animate-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+/* Stagger children animations for sections */
+.section-animate-in > * {
+  animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+.section-animate-in > *:nth-child(1) { animation-delay: 0.05s; }
+.section-animate-in > *:nth-child(2) { animation-delay: 0.1s; }
+.section-animate-in > *:nth-child(3) { animation-delay: 0.15s; }
+.section-animate-in > *:nth-child(4) { animation-delay: 0.2s; }
+.section-animate-in > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* ================================================================
+   NAVIGATION ACTIVE STATE UNDERLINE
+   - Smooth underline transition on active links
+   - No menu bouncing or sliding
+================================================================ */
+
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent, #c4161c);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ================================================================
+   SMOOTH SCROLL BASELINE
+   - CSS-based smooth scrolling
+   - Already in global.css but reinforced here
+================================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ================================================================
+   LOADING / PULSE EFFECT (SUBTLE)
+   - For skeleton loaders or pending states
+================================================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ================================================================
+   FORM INPUT FOCUS ENHANCEMENT
+   - Smooth focus ring animation
+   - Border color transition
+================================================================ */
+
+.input-interactive {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.input-interactive:focus {
+  border-color: var(--accent, #c4161c);
+  box-shadow: 0 0 0 2px rgba(196, 22, 28, 0.12);
+}
+
+/* ================================================================
+   DROPDOWN / MENU FADE
+   - Simple opacity transition for dropdowns
+================================================================ */
+
+.menu-fade-in {
+  animation: fadeInUp 0.25s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-enter {
+  animation: fadeInDown 0.25s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+/* ================================================================
+   GPU ACCELERATION — USE SPARINGLY
+   - For heavy animations only
+   - Applied via .hf-anim-gpu (see global.css)
+================================================================ */
+
+/* Already defined in global.css:
+.hf-anim-gpu {
+  will-change: transform, opacity;
+}
+*/
+
+/* ================================================================
+   PREFERS-REDUCED-MOTION — DISABLE ALL ANIMATIONS
+   - Respect user accessibility preferences
+   - Already in global.css but reinforced here
+================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ================================================================
+   MOBILE / TOUCH ADJUSTMENTS
+   - Disable hover-only effects on touch devices
+   - Remove animations that cause jank on mobile
+================================================================ */
+
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .section-animate-in > * {
+    animation-delay: 0 !important;
+  }
+
+  /* Keep card hover simple or disable on small devices */
+  @media (hover: none) {
+    .card-hover:hover {
+      transform: none;
+    }
+
+    .btn-interactive:hover {
+      filter: none;
+    }
+  }
+}
+
+/* ================================================================
+   SMOOTH SELECTION FEEDBACK
+   - For interactive elements that need visual feedback
+================================================================ */
+
+.selection-feedback {
+  transition: background 0.15s ease;
+}
+
+.selection-feedback:active {
+  background: rgba(196, 22, 28, 0.1);
+}
+
+/* ================================================================
+   CARD BORDER ANIMATION
+   - Smooth border color transition on hover
+================================================================ */
+
+.card-border-animate {
+  transition: border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .card-border-animate:hover {
+    border-color: var(--accent, #c4161c);
+  }
+}
+
+/* ================================================================
+   BACKDROP FADE
+   - For modals and overlays
+================================================================ */
+
+@keyframes backdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.backdrop-fade {
+  animation: backdropFade 0.2s ease forwards;
+}
+
+/* ================================================================
+   STAGGER LIST ANIMATION
+   - For animating list items in sequence
+================================================================ */
+
+.list-stagger > * {
+  animation: fadeInUp 0.4s cubic-bezier(0.23, 1, 0.320, 1) forwards;
+}
+
+.list-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.list-stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.list-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.list-stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.list-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.list-stagger > *:nth-child(6) { animation-delay: 0.3s; }
+.list-stagger > *:nth-child(n+7) { animation-delay: 0.3s; }

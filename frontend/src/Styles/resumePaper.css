@@ -1,0 +1,25 @@
+.resume-paper {
+  width: 794px;
+  min-height: 1123px;
+  background: #ffffff;
+
+  padding: 40px 48px;
+  box-sizing: border-box;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #0f172a;
+  
+  margin: 0 auto;
+}
+
+.resume-paper.preview {
+  height: 1123px;
+  overflow: hidden;
+}
+
+.resume-paper.full {
+  height: auto;
+  overflow: visible;
+}

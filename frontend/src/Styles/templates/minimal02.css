@@ -1,0 +1,108 @@
+﻿/* =========================================================
+   MINIMAL 02 â€” ACCENT LINE RESUME
+========================================================= */
+
+.minimal02 {
+  width: 100%;
+  min-height: 1123px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+
+  padding: 42px 48px;
+  box-sizing: border-box;
+
+  border-top: 6px solid #2563eb;
+}
+
+/* ================= HEADER ================= */
+.minimal02-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.minimal02-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.minimal02-header h2 {
+  font-size: 13px;
+  font-weight: 400;
+  color: #2563eb;
+  margin-top: 4px;
+}
+
+/* Contact */
+.minimal02-contact {
+  font-size: 10.5px;
+  color: #334155;
+  text-align: right;
+}
+
+/* ================= SECTIONS ================= */
+.minimal02 section {
+  margin-bottom: 22px;
+}
+
+.minimal02 h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+/* ================= ITEMS ================= */
+.minimal02-item {
+  margin-bottom: 14px;
+}
+
+.minimal02-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ================= TAGS ================= */
+.minimal02-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.minimal02-tag {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+/* ================= TEXT ================= */
+.minimal02 p {
+  margin: 0;
+}
+
+.minimal02 ul {
+  padding-left: 18px;
+  margin-top: 6px;
+}
+
+.minimal02 li {
+  margin-bottom: 4px;
+}
+
+.muted {
+  font-size: 10px;
+  color: #64748b;
+}
+

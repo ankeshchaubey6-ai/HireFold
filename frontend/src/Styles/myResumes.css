@@ -1,0 +1,165 @@
+/* =========================================================
+   MY RESUMES – HIREFOLD PRO GRID DESIGN
+========================================================= */
+
+.my-resumes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.my-resumes-subtitle {
+  color: var(--text-secondary, #6b7280);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.resume-count-badge {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ===== GRID LAYOUT (RESPONSIVE & CLEAN) ===== */
+.resume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 10px;
+}
+
+/* ===== CARD (PRODUCTION STYLE) ===== */
+.resume-card-pro {
+  position: relative;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-light, #e5e7eb);
+  border-radius: 16px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.resume-card-pro:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+/* ===== TOP ===== */
+.resume-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.resume-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  line-height: 1.3;
+}
+
+/* ===== ATS BADGE ===== */
+.ats-badge {
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ===== META ===== */
+.resume-meta {
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.resume-label {
+  color: #6b7280;
+  margin-right: 6px;
+}
+
+.resume-status {
+  font-weight: 600;
+}
+
+/* ===== FOOTER ===== */
+.resume-footer {
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  justify-content: space-between;
+}
+
+.resume-date {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* ===== HOVER OVERLAY ===== */
+.resume-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.08),
+    rgba(99, 102, 241, 0.08)
+  );
+  opacity: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  font-weight: 600;
+  color: #0ea5e9;
+  transition: opacity 0.25s ease;
+}
+
+.resume-card-pro:hover .resume-hover-overlay {
+  opacity: 1;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-resume-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.empty-resume-state h3 {
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+/* ===== SKELETON ===== */
+.resume-grid-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.skeleton {
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 25%,
+    #e5e7eb 37%,
+    #f3f4f6 63%
+  );
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}

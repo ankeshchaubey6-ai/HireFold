@@ -1,0 +1,471 @@
+/* =====================================================
+   RECRUITER NAVBAR
+   ===================================================== */
+
+.recruiter-navbar {
+  width: 100%;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.recruiter-navbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+/* ---------------- LEFT ---------------- */
+.recruiter-navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.recruiter-navbar__hamburger {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.recruiter-navbar__logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e50914;
+  text-decoration: none;
+}
+
+/* ---------------- CENTER ---------------- */
+.recruiter-navbar__center {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.recruiter-navbar__center a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.recruiter-navbar__center a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e50914;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+/* Hover state: only on hover/focus */
+@media (hover: hover) {
+  .recruiter-navbar__center a:hover,
+  .recruiter-navbar__center a:focus-visible {
+    color: #e50914;
+  }
+
+  .recruiter-navbar__center a:hover::after,
+  .recruiter-navbar__center a:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ---------------- RIGHT ---------------- */
+.recruiter-navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* SEARCH */
+.recruiter-navbar__search {
+  position: relative;
+}
+
+.recruiter-navbar__search input {
+  width: 220px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.recruiter-navbar__search input::placeholder {
+  color: #888;
+}
+
+.recruiter-navbar__search input:focus {
+  border-color: #e50914;
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+}
+
+/* Search Suggestions Dropdown */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: searchDropdownSlide 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.search-suggestion-item {
+  padding: 10px 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+  background-color: var(--bg);
+  color: #e50914;
+}
+
+.search-no-results {
+  padding: 16px 14px;
+  color: #888;
+  text-align: center;
+  font-size: 13px;
+  font-style: italic;
+}
+
+@keyframes searchDropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* NOTIFICATION */
+.recruiter-navbar__icon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* THEME TOGGLE */
+.recruiter-navbar__theme {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* =====================================================
+   DRAWER
+   ===================================================== */
+
+.recruiter-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  display: flex;
+}
+
+.recruiter-drawer {
+  width: 280px;
+  height: 100%;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  color: var(--text);
+
+  transform: translateX(-100%);
+  animation: recruiterDrawerSlideIn 0.3s ease forwards;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.recruiter-drawer h4 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e50914;
+  text-transform: uppercase;
+}
+
+.recruiter-drawer a {
+  display: block;
+  padding: 8px 6px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.recruiter-drawer a:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+/* PRIMARY NAV (always visible) */
+.recruiter-drawer-nav-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.recruiter-drawer-nav-main a {
+  display: block;
+  padding: 12px 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.recruiter-drawer-nav-main a:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+/* COLLAPSIBLE SECTIONS */
+.recruiter-drawer-section {
+  margin-bottom: 8px;
+}
+
+.recruiter-drawer-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 10px 8px;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.recruiter-drawer-toggle:hover {
+  background: var(--card);
+  color: #e50914;
+}
+
+.recruiter-drawer-toggle-icon {
+  font-weight: bold;
+  font-size: 18px;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+/* EXPANDED ITEMS */
+.recruiter-drawer-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+  margin-bottom: 4px;
+  animation: slideDown 0.2s ease forwards;
+}
+
+.recruiter-drawer-items a {
+  display: block;
+  padding: 10px 8px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.recruiter-drawer-items a:hover {
+  background: var(--card);
+  color: #e50914;
+  padding-left: 12px;
+}
+
+/* LOGOUT BUTTON */
+.recruiter-drawer-logout {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.recruiter-drawer-logout-btn {
+  width: 100%;
+  padding: 12px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.recruiter-drawer-logout-btn:hover {
+  background: var(--card);
+  color: #e50914;
+  border-color: #e50914;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+
+@keyframes recruiterDrawerSlideIn {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+@media (max-width: 900px) {
+  .recruiter-navbar__center,
+  .recruiter-navbar__search {
+    display: none;
+  }
+}
+
+/* ===== Notification Icon Fix ===== */
+.candidate-navbar__icon,
+.recruiter-navbar__icon {
+  text-decoration: none;
+  border-bottom: none;
+  outline: none;
+}
+
+.candidate-navbar__icon:hover,
+.candidate-navbar__icon:focus,
+.recruiter-navbar__icon:hover,
+.recruiter-navbar__icon:focus {
+  text-decoration: none;
+}
+
+/* =====================================================
+   INTENTIONAL MOBILE & TABLET REDESIGN
+   ===================================================== */
+
+/* MOBILE (≤640px): Compact */
+@media (max-width: 640px) {
+  .recruiter-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .recruiter-navbar__inner {
+    max-width: 100%;
+    padding: 8px 10px;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+  }
+
+  .recruiter-navbar__hamburger {
+    font-size: 20px;
+    padding: 6px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .recruiter-navbar__logo {
+    font-size: 15px;
+  }
+
+  .recruiter-drawer {
+    width: 65vw;
+    max-width: 65vw;
+    height: 100vh;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .recruiter-navbar__center,
+  .recruiter-navbar__search {
+    display: none;
+  }
+
+  .recruiter-navbar__icon {
+    font-size: 18px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+}
+
+/* TABLET (641px to 1024px): Balanced */
+/* TABLET (641px to 1024px): Balanced */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .recruiter-navbar__inner {
+    max-width: 100%;
+    padding: 10px 14px;
+  }
+
+  .recruiter-navbar__center {
+    gap: 14px;
+  }
+
+  .recruiter-navbar__center a {
+    font-size: 13px;
+  }
+
+  .recruiter-navbar__search input {
+    width: 130px;
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .recruiter-navbar__hamburger {
+    display: none;
+  }
+
+  .recruiter-navbar__logo {
+    font-size: 16px;
+  }
+}

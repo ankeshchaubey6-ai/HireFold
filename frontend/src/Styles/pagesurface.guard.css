@@ -1,0 +1,96 @@
+/* =========================================================
+   PAGE SURFACE — LIGHT THEME ONLY
+   HIREFOLD
+   Fixes hero & section-surface contrast issues
+========================================================= */
+
+/* Apply ONLY when NOT dark mode */
+body:not(.dark)::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    /* Soft red glow (top-left) */
+    radial-gradient(
+      1100px 600px at 12% -6%,
+      rgba(196, 22, 28, 0.12),
+      transparent 60%
+    ),
+
+    /* Soft blue glow (top-right) */
+    radial-gradient(
+      900px 520px at 88% 14%,
+      rgba(59, 130, 246, 0.14),
+      transparent 55%
+    ),
+
+    /* Base light canvas */
+    linear-gradient(
+      180deg,
+      #f9fafb 0%,
+      #f3f4f6 45%,
+      #ffffff 100%
+    );
+}
+
+/* ---------------------------------------------------------
+   LIGHT MODE AMBIENT MOTION (VERY SUBTLE)
+--------------------------------------------------------- */
+
+body:not(.dark)::after {
+  content: "";
+  position: fixed;
+  inset: -35%;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 28% 22%,
+      rgba(196, 22, 28, 0.18),
+      transparent 65%
+    ),
+    radial-gradient(
+      circle at 78% 78%,
+      rgba(59, 130, 246, 0.16),
+      transparent 70%
+    );
+
+  filter: blur(140px);
+  opacity: 0.55;
+
+  animation: light-bg-drift 48s linear infinite;
+}
+
+@keyframes light-bg-drift {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------
+   HERO & SECTION SAFETY (LIGHT MODE)
+--------------------------------------------------------- */
+
+body:not(.dark) .hero,
+body:not(.dark) .section-surface {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+}
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.dark)::after {
+    animation: none;
+  }
+}

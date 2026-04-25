@@ -1,0 +1,1055 @@
+﻿/* =========================================================
+   HIREFOLD UNIFIED DESIGN SYSTEM v3.1
+   Enhanced Light Mode â€¢ Premium Aesthetics â€¢ Perfect Compatibility
+========================================================= */
+
+/* ---------------------------------------------------------
+   CSS VARIABLES â€“ HARMONIZED COLOR SYSTEM
+--------------------------------------------------------- */
+
+:root {
+  /* ==================== BRAND CORE ==================== */
+  --hf-red-primary: #c4161c;
+  --hf-red-dark: #9e1217;
+  --hf-red-light: #ff4d4d;
+  --hf-red-glow: rgba(196, 22, 28, 0.2);
+  --hf-red-soft: rgba(196, 22, 28, 0.08);
+  
+  /* Accent Colors - Harmonized with brand red */
+  --hf-blue-primary: #3b82f6;
+  --hf-blue-dark: #2563eb;
+  --hf-blue-light: #60a5fa;
+  --hf-blue-glow: rgba(59, 130, 246, 0.2);
+  --hf-blue-soft: rgba(59, 130, 246, 0.06);
+  
+  --hf-purple-primary: #8b5cf6;
+  --hf-purple-dark: #7c3aed;
+  --hf-purple-light: #a78bfa;
+  --hf-purple-glow: rgba(139, 92, 246, 0.15);
+  --hf-purple-soft: rgba(139, 92, 246, 0.05);
+  
+  --hf-gold-primary: #f59e0b;
+  --hf-gold-dark: #d97706;
+  --hf-gold-light: #fbbf24;
+  --hf-gold-glow: rgba(245, 158, 11, 0.12);
+  --hf-gold-soft: rgba(245, 158, 11, 0.04);
+  
+  /* ==================== LIGHT MODE NEUTRALS - ENHANCED ==================== */
+  --hf-bg-primary: #ffffff;
+  --hf-bg-secondary: #fefefe;
+  --hf-bg-tertiary: #faf9fe;
+  --hf-bg-card: rgba(255, 255, 255, 0.85);
+  --hf-bg-card-solid: #ffffff;
+  --hf-text-primary: #0f172a;
+  --hf-text-secondary: #334155;
+  --hf-text-tertiary: #64748b;
+  --hf-text-muted: #94a3b8;
+  --hf-border-light: #eef2ff;
+  --hf-border-medium: #e2e8f0;
+  --hf-border-strong: #cbd5e1;
+  
+  /* ==================== DARK MODE NEUTRALS ==================== */
+  --hf-bg-primary-dark: #030409;
+  --hf-bg-secondary-dark: #0a0c15;
+  --hf-bg-tertiary-dark: #11131f;
+  --hf-bg-card-dark: rgba(17, 19, 31, 0.85);
+  --hf-text-primary-dark: #f1f5f9;
+  --hf-text-secondary-dark: #cbd5e1;
+  --hf-text-tertiary-dark: #94a3b8;
+  --hf-border-dark: #1e293b;
+  
+  /* ==================== SEMANTIC COLORS ==================== */
+  --hf-success: #10b981;
+  --hf-success-soft: rgba(16, 185, 129, 0.08);
+  --hf-warning: #f59e0b;
+  --hf-warning-soft: rgba(245, 158, 11, 0.08);
+  --hf-error: #ef4444;
+  --hf-error-soft: rgba(239, 68, 68, 0.08);
+  --hf-info: #3b82f6;
+  --hf-info-soft: rgba(59, 130, 246, 0.08);
+  
+  /* ==================== GRADIENTS - ENHANCED FOR LIGHT MODE ==================== */
+  --hf-gradient-primary: linear-gradient(135deg, var(--hf-red-primary), var(--hf-red-dark));
+  --hf-gradient-primary-soft: linear-gradient(135deg, var(--hf-red-soft), var(--hf-purple-soft));
+  --hf-gradient-accent: linear-gradient(135deg, var(--hf-red-primary), var(--hf-purple-primary));
+  --hf-gradient-gold: linear-gradient(135deg, var(--hf-gold-primary), var(--hf-red-primary));
+  --hf-gradient-blue: linear-gradient(135deg, var(--hf-blue-primary), var(--hf-purple-primary));
+  
+  /* ==================== SHADOWS - REFINED FOR LIGHT MODE ==================== */
+  --hf-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02), 0 1px 1px rgba(0, 0, 0, 0.01);
+  --hf-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --hf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --hf-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  --hf-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  --hf-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+  
+  --hf-shadow-glow: 0 0 20px rgba(196, 22, 28, 0.12);
+  --hf-shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.1);
+  --hf-shadow-glow-purple: 0 0 20px rgba(139, 92, 246, 0.08);
+  
+  /* ==================== ANIMATIONS ==================== */
+  --hf-duration-fast: 200ms;
+  --hf-duration-normal: 300ms;
+  --hf-duration-slow: 500ms;
+  --hf-ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --hf-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hf-ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* =========================================================
+   DARK MODE OVERRIDES
+========================================================= */
+
+.dark {
+  --hf-bg-primary: #030409;
+  --hf-bg-secondary: #0a0c15;
+  --hf-bg-tertiary: #11131f;
+  --hf-bg-card: rgba(17, 19, 31, 0.85);
+  --hf-bg-card-solid: #11131f;
+  --hf-text-primary: #f1f5f9;
+  --hf-text-secondary: #cbd5e1;
+  --hf-text-tertiary: #94a3b8;
+  --hf-text-muted: #64748b;
+  --hf-border-light: #1e293b;
+  --hf-border-medium: #334155;
+  --hf-border-strong: #475569;
+  
+  --hf-red-glow: rgba(196, 22, 28, 0.35);
+  --hf-red-soft: rgba(196, 22, 28, 0.12);
+  --hf-blue-glow: rgba(59, 130, 246, 0.3);
+  --hf-blue-soft: rgba(59, 130, 246, 0.1);
+  --hf-purple-glow: rgba(139, 92, 246, 0.25);
+  --hf-purple-soft: rgba(139, 92, 246, 0.08);
+  --hf-gold-glow: rgba(245, 158, 11, 0.2);
+  --hf-gold-soft: rgba(245, 158, 11, 0.06);
+  
+  --hf-gradient-primary-soft: linear-gradient(135deg, rgba(196, 22, 28, 0.15), rgba(139, 92, 246, 0.1));
+  
+  --hf-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --hf-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --hf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+  --hf-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+  --hf-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.6);
+  
+  --hf-shadow-glow: 0 0 20px rgba(196, 22, 28, 0.25);
+  --hf-shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.2);
+  --hf-shadow-glow-purple: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+/* =========================================================
+   BODY BACKGROUND â€“ ENHANCED LIGHT MODE
+========================================================= */
+
+body {
+  background: var(--hf-bg-secondary);
+  transition: background-color var(--hf-duration-normal) var(--hf-ease-smooth);
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  
+  background: 
+    /* Base gradient - softer for light mode */
+    radial-gradient(
+      ellipse at 30% 40%,
+      var(--hf-bg-primary) 0%,
+      var(--hf-bg-secondary) 60%,
+      var(--hf-bg-tertiary) 100%
+    ),
+    /* Red energy field - very subtle */
+    radial-gradient(
+      1000px 700px at 8% 15%,
+      var(--hf-red-glow),
+      transparent 70%
+    ),
+    /* Blue energy field - subtle */
+    radial-gradient(
+      900px 600px at 92% 75%,
+      var(--hf-blue-glow),
+      transparent 75%
+    ),
+    /* Purple accent - very subtle */
+    radial-gradient(
+      700px 500px at 45% 85%,
+      var(--hf-purple-glow),
+      transparent 80%
+    );
+  
+  background-blend-mode: normal, overlay, overlay, normal;
+  opacity: 0.5;
+}
+
+.dark body::before {
+  background: 
+    radial-gradient(
+      ellipse at 30% 40%,
+      var(--hf-bg-primary) 0%,
+      var(--hf-bg-secondary) 60%,
+      var(--hf-bg-tertiary) 100%
+    ),
+    radial-gradient(
+      1200px 800px at 8% 15%,
+      var(--hf-red-glow),
+      transparent 70%
+    ),
+    radial-gradient(
+      1000px 700px at 92% 75%,
+      var(--hf-blue-glow),
+      transparent 75%
+    ),
+    radial-gradient(
+      800px 600px at 45% 85%,
+      var(--hf-purple-glow),
+      transparent 80%
+    );
+  
+  opacity: 0.8;
+}
+
+/* =========================================================
+   ORGANIC WAVE PATTERN â€“ LIGHT MODE OPTIMIZED
+========================================================= */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 60px,
+      rgba(196, 22, 28, 0.02) 60px,
+      rgba(196, 22, 28, 0.02) 120px
+    ),
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 80px,
+      rgba(59, 130, 246, 0.015) 80px,
+      rgba(59, 130, 246, 0.015) 160px
+    );
+  
+  animation: waveFlow 25s var(--hf-ease-gentle) infinite alternate;
+}
+
+@keyframes waveFlow {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 200px 100px, -150px 80px;
+  }
+}
+
+.dark body::after {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 60px,
+      rgba(196, 22, 28, 0.06) 60px,
+      rgba(196, 22, 28, 0.06) 120px
+    ),
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 80px,
+      rgba(59, 130, 246, 0.04) 80px,
+      rgba(59, 130, 246, 0.04) 160px
+    );
+}
+
+/* =========================================================
+   SECTION SURFACE â€“ PREMIUM GLASS EFFECT
+   ðŸ”¥ Removed `isolation: isolate` so child elements receive pointer events normally.
+========================================================= */
+
+.section-surface {
+  position: relative;
+  z-index: 2;
+  /* isolation removed â€” children now receive events normally */
+  background: var(--hf-bg-card);
+  backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  border: 1px solid var(--hf-border-light);
+  transition: all var(--hf-duration-normal) var(--hf-ease-smooth);
+  box-shadow: var(--hf-shadow-sm);
+}
+
+.dark .section-surface {
+  background: var(--hf-bg-card-dark);
+  border-color: var(--hf-border-dark);
+  box-shadow: var(--hf-shadow-md);
+}
+
+/* Elegant hover effect - refined for light mode */
+.section-surface:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hf-shadow-lg);
+  border-color: var(--hf-red-primary) / 0.2;
+}
+
+/* Subtle gradient border - enhanced (already has pointer-events: none) */
+.section-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--hf-red-primary),
+    var(--hf-purple-primary),
+    transparent
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.3;
+  transition: opacity var(--hf-duration-normal) var(--hf-ease-smooth);
+}
+
+.section-surface:hover::before {
+  opacity: 0.6;
+}
+
+/* =========================================================
+   ENERGY FIELD â€“ BREATHING GLOW (NO SPINNING)
+========================================================= */
+
+.section-surface::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  
+  background: 
+    radial-gradient(
+      circle at 20% 30%,
+      var(--hf-red-glow) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      var(--hf-blue-glow) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      var(--hf-purple-glow) 0%,
+      transparent 60%
+    );
+  
+  filter: blur(60px);
+  opacity: 0.2;
+  animation: breatheGlow 8s var(--hf-ease-gentle) infinite alternate;
+}
+
+@keyframes breatheGlow {
+  0% {
+    opacity: 0.15;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+.dark .section-surface::after {
+  opacity: 0.4;
+}
+
+/* =========================================================
+   CARD SYSTEM â€“ HARMONIZED & ENHANCED
+========================================================= */
+
+.section-card {
+  position: relative;
+  background: var(--hf-bg-card);
+  backdrop-filter: blur(8px);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 1px solid var(--hf-border-light);
+  transition: all var(--hf-duration-normal) var(--hf-ease-smooth);
+  overflow: hidden;
+  box-shadow: var(--hf-shadow-xs);
+  z-index: 50;
+}
+
+.dark .section-card {
+  background: var(--hf-bg-card-dark);
+  border-color: var(--hf-border-dark);
+  box-shadow: var(--hf-shadow-sm);
+}
+
+/* Card hover effect - refined */
+.section-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--hf-red-primary);
+  box-shadow: var(--hf-shadow-xl);
+}
+
+/* Card accent line - smoother animation */
+.section-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--hf-gradient-primary);
+  transition: width var(--hf-duration-normal) var(--hf-ease-smooth);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.section-card:hover::before {
+  width: 100%;
+}
+
+/* Card icon - enhanced with subtle animation */
+.section-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 1rem;
+  background: var(--hf-gradient-primary-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--hf-red-primary);
+  font-size: 24px;
+  border: 1px solid var(--hf-border-light);
+  transition: all var(--hf-duration-normal) var(--hf-ease-bounce);
+}
+
+.section-card:hover .section-card-icon {
+  transform: scale(1.05);
+  background: var(--hf-gradient-primary);
+  color: white;
+  box-shadow: var(--hf-shadow-glow);
+  border-color: transparent;
+}
+
+/* Card title */
+.section-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--hf-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* Card description */
+.section-card-description {
+  color: var(--hf-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Card link - with underline animation */
+.section-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--hf-red-primary);
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.section-card-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--hf-gradient-primary);
+  transition: width var(--hf-duration-normal) var(--hf-ease-smooth);
+}
+
+.section-card-link:hover::after {
+  width: 100%;
+}
+
+.section-card-link:hover {
+  gap: 0.75rem;
+}
+
+/* =========================================================
+   CARD GRID â€“ STAGGERED ANIMATION
+========================================================= */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-grid > * {
+    opacity: 0;
+    animation: fadeUp 0.5s var(--hf-ease-smooth) forwards;
+  }
+  
+  .card-grid > *:nth-child(1) { animation-delay: 0s; }
+  .card-grid > *:nth-child(2) { animation-delay: 0.05s; }
+  .card-grid > *:nth-child(3) { animation-delay: 0.1s; }
+  .card-grid > *:nth-child(4) { animation-delay: 0.15s; }
+  .card-grid > *:nth-child(5) { animation-delay: 0.2s; }
+  .card-grid > *:nth-child(6) { animation-delay: 0.25s; }
+}
+
+/* =========================================================
+   CARD VARIANTS
+========================================================= */
+
+/* Featured card */
+.section-card.featured {
+  grid-column: span 2;
+  background: var(--hf-gradient-primary-soft);
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.section-card.featured::before {
+  background: var(--hf-gradient-gold);
+  height: 4px;
+}
+
+.section-card.featured .section-card-icon {
+  background: var(--hf-gradient-gold);
+  color: white;
+  border-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .section-card.featured {
+    grid-column: span 1;
+  }
+}
+
+/* Glass card */
+.section-card.glass {
+  background: var(--hf-bg-card) / 0.6;
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--hf-border-light);
+}
+
+.dark .section-card.glass {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Minimal card */
+.section-card.minimal {
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  padding: 1.5rem;
+}
+
+.section-card.minimal:hover {
+  background: var(--hf-bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--hf-border-light);
+  transform: translateY(-4px);
+}
+
+/* =========================================================
+   BUTTON SYSTEM â€“ PREMIUM
+========================================================= */
+
+.section-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 9999px;
+  transition: all var(--hf-duration-normal) var(--hf-ease-smooth);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* Primary button */
+.section-btn-primary {
+  background: var(--hf-gradient-primary);
+  color: white;
+  box-shadow: var(--hf-shadow-sm);
+}
+
+.section-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transition: left 0.5s var(--hf-ease-smooth);
+  pointer-events: none;
+}
+
+.section-btn-primary:hover::before {
+  left: 100%;
+}
+
+.section-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hf-shadow-glow);
+}
+
+/* Secondary button */
+.section-btn-secondary {
+  background: transparent;
+  color: var(--hf-red-primary);
+  border: 1.5px solid var(--hf-red-primary);
+}
+
+.section-btn-secondary:hover {
+  background: var(--hf-red-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--hf-shadow-glow);
+}
+
+/* Ghost button */
+.section-btn-ghost {
+  background: transparent;
+  color: var(--hf-text-secondary);
+}
+
+.section-btn-ghost:hover {
+  background: var(--hf-red-soft);
+  color: var(--hf-red-primary);
+  transform: translateY(-2px);
+}
+
+/* Button sizes */
+.section-btn-sm {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+}
+
+.section-btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+/* =========================================================
+   TYPOGRAPHY SYSTEM
+========================================================= */
+
+/* Section title */
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  background: var(--hf-gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  display: inline-block;
+}
+
+/* Animated underline */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--hf-gradient-primary);
+  border-radius: 3px;
+  animation: underlinePulse 4s var(--hf-ease-gentle) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes underlinePulse {
+  0% {
+    width: 60px;
+    opacity: 0.5;
+  }
+  100% {
+    width: 100px;
+    opacity: 1;
+  }
+}
+
+/* Section subtitle */
+.section-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--hf-text-secondary);
+  max-width: 800px;
+  margin-bottom: 3rem;
+}
+
+/* Section label with accent bar */
+.section-label {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hf-red-primary);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.section-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--hf-gradient-primary);
+  transform: translateY(-50%);
+  animation: labelGlow 3s var(--hf-ease-gentle) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes labelGlow {
+  0% {
+    width: 1.25rem;
+    opacity: 0.6;
+  }
+  100% {
+    width: 2rem;
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   BADGE SYSTEM
+========================================================= */
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background: var(--hf-bg-tertiary);
+  color: var(--hf-text-secondary);
+  border: 1px solid var(--hf-border-light);
+  transition: all var(--hf-duration-fast) var(--hf-ease-smooth);
+}
+
+.section-badge-primary {
+  background: var(--hf-red-soft);
+  color: var(--hf-red-primary);
+  border-color: var(--hf-red-primary);
+}
+
+.section-badge-success {
+  background: var(--hf-success-soft);
+  color: var(--hf-success);
+  border-color: var(--hf-success);
+}
+
+.section-badge-warning {
+  background: var(--hf-warning-soft);
+  color: var(--hf-warning);
+  border-color: var(--hf-warning);
+}
+
+/* =========================================================
+   STATS SECTION
+========================================================= */
+
+.section-stat {
+  text-align: center;
+  padding: 1.75rem;
+  background: var(--hf-bg-card);
+  border-radius: 1.5rem;
+  border: 1px solid var(--hf-border-light);
+  transition: all var(--hf-duration-normal) var(--hf-ease-smooth);
+  box-shadow: var(--hf-shadow-xs);
+}
+
+.section-stat:hover {
+  transform: translateY(-4px);
+  border-color: var(--hf-red-primary);
+  box-shadow: var(--hf-shadow-lg);
+}
+
+.section-stat-number {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  background: var(--hf-gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.section-stat-label {
+  color: var(--hf-text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   DIVIDER SYSTEM
+========================================================= */
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--hf-border-light),
+    var(--hf-red-primary) 50%,
+    var(--hf-border-light),
+    transparent
+  );
+  margin: 2rem 0;
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: var(--hf-red-primary);
+  border-radius: 50%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.dark .section-divider {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--hf-border-dark),
+    var(--hf-red-primary) 50%,
+    var(--hf-border-dark),
+    transparent
+  );
+}
+
+/* =========================================================
+   SCROLLBAR â€“ HARMONIZED
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--hf-bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hf-gradient-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hf-gradient-accent);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 1024px) {
+  .card-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-card {
+    padding: 1.5rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section-btn {
+    padding: 0.6rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-surface {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+  
+  .section-card {
+    padding: 1.25rem;
+  }
+  
+  .section-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .section-card-title {
+    font-size: 1.25rem;
+  }
+  
+  .section-stat {
+    padding: 1.25rem;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY & REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .section-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--hf-red-primary);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+/* =========================================================
+   CLICK FIXES â€” ENSURE CONTENT IS CLICKABLE
+========================================================= */
+
+/* Ensure content is clickable */
+.section-surface > * {
+  position: relative;
+  z-index: 20;
+}
+
+/* Disable overlay pointer events */
+.section-surface::before,
+.section-surface::after {
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* Ensure action cards have high z-index */
+.action-card {
+  position: relative;
+  z-index: 50;
+}
+
+/* =========================================================
+   UTILITY CLASSES
+========================================================= */
+
+.text-gradient {
+  background: var(--hf-gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hf-glow-text {
+  text-shadow: 0 0 20px var(--hf-red-glow);
+}
+
+.hf-glow-border {
+  box-shadow: 0 0 0 1px var(--hf-red-primary), 0 0 0 3px var(--hf-red-glow);
+}
+
+.hf-glass-effect {
+  backdrop-filter: blur(12px);
+  background: var(--hf-bg-card);
+  border: 1px solid var(--hf-border-light);
+}
+
+.animate-float {
+  animation: float 6s var(--hf-ease-gentle) infinite alternate;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-8px);
+  }
+}
+
+/* =========================================================
+   END OF ENHANCED DESIGN SYSTEM
+========================================================= */

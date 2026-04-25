@@ -1,0 +1,341 @@
+﻿/* ---------------------------------------------------------
+   Work Mode Toggle Buttons
+--------------------------------------------------------- */
+
+.form-subsection {
+  margin-top: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.workmode-toggle {
+  display: flex;
+  gap: 12px;
+}
+
+.toggle-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: var(--card-hover);
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+/* Spinner inside buttons */
+.spinner {
+  width: 20px;
+  height: 20px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+
+  animation: spin 0.8s linear infinite;
+}
+
+/* Dark mode safety */
+body.dark .spinner {
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+
+/* =========================================================
+   COMPENSATION TOGGLES LAYOUT
+========================================================= */
+/* =========================================================
+   HIREFOLD SWITCH (ISOLATED â€“ NO COLLISION)
+========================================================= */
+
+.hf-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hf-switch-input {
+  display: none;
+}
+
+.hf-switch-track {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  transition: background 0.25s ease;
+}
+
+/* THUMB */
+.hf-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+
+  width: 18px;
+  height: 18px;
+
+  background: #ffffff;
+  border-radius: 50%;
+
+  transition: transform 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* ACTIVE */
+.hf-switch-thumb--on {
+  transform: translateX(22px);
+  background: var(--accent);
+}
+
+/* DARK MODE */
+body.dark .hf-switch-track {
+  background: #374151;
+}
+
+
+/* =========================================================
+   Compensation Toggles (BOTTOM)
+========================================================= */
+
+.compensation-toggle-row {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 14px;
+  color: var(--text);
+}
+
+
+/* =========================================================
+   JOB FORM â€“ SECTION STACK
+========================================================= */
+
+.job-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* space between form sections */
+}
+
+/* Each form section */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Section header */
+.form-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.job-form {
+  padding-bottom: 96px; /* height of footer */
+}
+/* =========================================================
+   WORK MODE + COMPANY LOGO SIDE-BY-SIDE (HIREFOLD LAYOUT)
+========================================================= */
+
+.workmode-logo-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* responsive safety */
+}
+
+/* Left block (Work Mode) */
+.workmode-block {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* Right block (Company Logo) */
+.company-logo-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+/* Inline upload layout */
+.company-logo-upload-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo preview box */
+.logo-preview-inline {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.logo-preview-inline:hover {
+  border-color: var(--accent);
+}
+
+.logo-preview-inline img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-preview-inline span {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  text-align: center;
+  padding: 4px;
+}
+
+/* Upload button (HireFold style aligned) */
+.upload-logo-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-logo-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* =========================================================
+   JOB FORM WIZARD â€” PROFESSIONAL NAVIGATION (LIKE RESUME BUILDER)
+========================================================= */
+
+.job-form-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  min-height: 600px;
+}
+
+/* =========================================================
+   JOB FORM NAVIGATION â€” RESUME BUILDER STYLE (FIXED)
+   (NOT STICKY, PROPER LEFT/RIGHT ALIGNMENT)
+========================================================= */
+
+.job-form-navigation {
+  display: flex;
+  justify-content: space-between; /* Back = left, Next = right */
+  align-items: center;
+
+  margin-top: 24px;
+  padding-top: 16px;
+
+  border-top: 1px solid var(--border); /* subtle separation */
+  background: transparent;
+  position: relative; /* NOT sticky */
+}
+
+/* LEFT SIDE (BACK BUTTON) */
+.job-form-nav-left {
+  display: flex;
+  align-items: center;
+}
+
+/* RIGHT SIDE (NEXT / POST BUTTON) */
+.job-form-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* CONSISTENT BUTTON STYLE (MATCH RESUME BUILDER) */
+.job-form-navigation .btn-primary,
+.job-form-navigation .btn-outline,
+.job-form-navigation button {
+  min-height: 40px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  width: auto !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* Primary CTA emphasis */
+.job-form-navigation .btn-primary {
+  min-width: 140px;
+}
+
+/* Mobile Responsive (stack clean, not sticky) */
+@media (max-width: 768px) {
+  .job-form-navigation {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .job-form-nav-left,
+  .job-form-nav-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .job-form-navigation button {
+    width: auto !important;
+  }
+}
+

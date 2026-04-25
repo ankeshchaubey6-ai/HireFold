@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Frontend Developer",
+    "company": "Acme Corp",
+    "location": "Remote"
+  },
+  {
+    "id": 2,
+    "title": "Backend Developer",
+    "company": "TechNova",
+    "location": "Bangalore"
+  },
+  {
+    "id": 3,
+    "title": "Full Stack Engineer",
+    "company": "InnoSoft",
+    "location": "Hyderabad"
+  },
+  {
+    "id": 4,
+    "title": "React Engineer",
+    "company": "HireFold",
+    "location": "Remote"
+  }
+]

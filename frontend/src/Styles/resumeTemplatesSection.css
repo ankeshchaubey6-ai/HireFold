@@ -1,0 +1,315 @@
+/* =========================================================
+   ROOT
+========================================================= */
+.resume-templates {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.resume-templates h3 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+.template-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   PREVIEW AREA (THIS IS THE KEY)
+========================================================= */
+.template-preview {
+  height: 420px;
+  width: 100%;
+  overflow: hidden;
+
+  /* IMPORTANT: DO NOT CENTER */
+  display: block;
+
+  background: #f4f4f4;
+}
+
+/* =========================================================
+   FORCE RESUME TO FILL CARD WIDTH
+========================================================= */
+.template-preview > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* =========================================================
+   COMPRESS CONTENT (MAKE IT LOOK LIKE CV)
+========================================================= */
+.template-preview h1 {
+  font-size: 18px !important;
+  margin-bottom: 4px !important;
+}
+
+.template-preview h2 {
+  font-size: 13px !important;
+  margin-bottom: 4px !important;
+}
+
+.template-preview h3 {
+  font-size: 12px !important;
+  margin-bottom: 6px !important;
+}
+
+.template-preview p,
+.template-preview li,
+.template-preview span {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.template-preview ul {
+  padding-left: 14px !important;
+  margin: 4px 0 !important;
+}
+
+.template-preview li {
+  margin-bottom: 2px !important;
+}
+
+/* =========================================================
+   REMOVE HORIZONTAL OVERFLOW (CRITICAL)
+========================================================= */
+.template-preview * {
+  box-sizing: border-box;
+  max-width: 100% !important;
+  word-break: break-word;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.template-footer {
+  padding: 14px 16px;
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-footer span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.template-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Ensure resume sticks to left inside card */
+.template-card .resume-paper {
+  margin: 0 !important;
+}
+
+
+
+
+/* =========================================================
+   EXPLORE MORE CARD
+========================================================= */
+.explore-more-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.explore-more-card:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.explore-more-content {
+  text-align: center;
+}
+
+.explore-more-content h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.explore-more-content p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* =========================================================
+   RESPONSIVE MEDIA QUERIES
+========================================================= */
+
+/* TABLET: 1024px and below */
+@media (max-width: 1024px) {
+  .template-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .template-preview {
+    height: 380px;
+  }
+
+  .template-preview h1 {
+    font-size: 16px !important;
+  }
+
+  .template-preview h2 {
+    font-size: 12px !important;
+  }
+
+  .template-preview p,
+  .template-preview li,
+  .template-preview span {
+    font-size: 10px !important;
+  }
+}
+
+/* MOBILE+: 768px and below */
+@media (max-width: 768px) {
+  .resume-templates {
+    gap: 16px;
+  }
+
+  .resume-templates h3 {
+    font-size: 18px;
+  }
+
+  .template-grid {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    gap: 16px;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .template-card {
+    flex: 0 0 calc(100vw - 56px);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .template-preview {
+    height: 320px;
+  }
+
+  .template-preview h1 {
+    font-size: 14px !important;
+  }
+
+  .template-preview h2 {
+    font-size: 11px !important;
+  }
+
+  .template-preview h3 {
+    font-size: 10px !important;
+  }
+
+  .template-preview p,
+  .template-preview li,
+  .template-preview span {
+    font-size: 9px !important;
+  }
+
+  .template-footer {
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .template-footer span {
+    font-size: 12px;
+  }
+
+  .template-actions {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .template-actions button {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px 12px;
+    height: 36px;
+  }
+}
+
+/* SMALL MOBILE: 640px and below */
+@media (max-width: 640px) {
+  .resume-templates h3 {
+    font-size: 16px;
+  }
+
+  .template-card {
+    flex: 0 0 calc(100vw - 48px);
+  }
+
+  .template-preview {
+    height: 280px;
+  }
+
+  .template-preview h1 {
+    font-size: 13px !important;
+  }
+
+  .template-preview h2 {
+    font-size: 10px !important;
+  }
+
+  .template-preview h3 {
+    font-size: 9px !important;
+  }
+
+  .template-preview p,
+  .template-preview li,
+  .template-preview span {
+    font-size: 8px !important;
+  }
+
+  .template-footer {
+    padding: 8px 10px;
+  }
+
+  .template-footer span {
+    font-size: 11px;
+  }
+
+  .template-actions button {
+    font-size: 11px;
+    padding: 6px 10px;
+    height: 32px;
+  }
+}

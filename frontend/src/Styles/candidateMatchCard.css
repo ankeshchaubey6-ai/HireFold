@@ -1,0 +1,638 @@
+﻿/* =========================================================
+   Candidate Match Card
+   Compact and balanced proportions
+========================================================= */
+
+/* ===================== CARD ===================== */
+
+.cm-card {
+  display: block;
+  text-decoration: none;
+  animation: fadeScaleUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) backwards;
+  position: relative;
+}
+
+@keyframes fadeScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===================== INNER ===================== */
+
+.cm-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* AI-inspired gradient border on hover */
+.cm-card-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, 
+    #e50914, 
+    #f43f5e, 
+    #a855f7, 
+    #e50914);
+  background-size: 300% 300%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Glow effect */
+.cm-card-glow {
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(circle at 70% 20%, rgba(229, 9, 20, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  border-radius: 22px;
+  z-index: 0;
+  filter: blur(6px);
+}
+
+/* ===================== IMAGE SECTION ===================== */
+
+.cm-card-image-wrapper {
+  position: relative;
+  height: 140px;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  position: relative;
+  z-index: 2;
+}
+
+/* AI scan line effect */
+.cm-card-image-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(229, 9, 20, 0.1), 
+    transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cm-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+/* Match Score Badge */
+.cm-card-match-score {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #e50914, #b91c1c);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(229, 9, 20, 0.3);
+}
+
+.cm-card-match-score-value {
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+
+.cm-card-match-score-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* AI Badge */
+.cm-card-ai-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 3px 8px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+  font-size: 9px;
+  font-weight: 600;
+  color: white;
+}
+
+.cm-card-ai-badge span {
+  font-size: 10px;
+}
+
+/* ===================== BODY ===================== */
+
+.cm-card-body {
+  padding: 14px 16px 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.cm-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Match indicator dots */
+.cm-card-match-indicator {
+  display: flex;
+  gap: 3px;
+}
+
+.cm-card-match-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.cm-card-match-dot.active {
+  background: #e50914;
+  box-shadow: 0 0 0 1px rgba(229, 9, 20, 0.2);
+}
+
+.cm-card-description {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #475569;
+  margin: 0 0 10px 0;
+}
+
+/* Skills Section */
+.cm-card-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 8px 0;
+}
+
+.cm-card-skill {
+  padding: 3px 8px;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+/* AI Insight */
+.cm-card-ai-insight {
+  background: linear-gradient(135deg, #fef3f2, #fff5f5);
+  border-left: 2px solid #e50914;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.cm-card-ai-insight-text {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #334155;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.cm-card-ai-insight-text::before {
+  content: 'AI';
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.cm-card-divider {
+  height: 1px;
+  background: linear-gradient(90deg, #e2e8f0, transparent);
+  margin: 10px 0;
+}
+
+.cm-card-subtext {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #64748b;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cm-card-subtext::before {
+  content: 'Fit';
+  font-size: 10px;
+}
+
+/* ===================== ACTION ===================== */
+
+.cm-card-actions {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cm-card-btn {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  letter-spacing: 0.03em;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cm-card-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.cm-card-btn:hover::before {
+  left: 100%;
+}
+
+.cm-card-btn:active {
+  transform: scale(0.96);
+}
+
+.cm-card-meta {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cm-card-meta::before {
+  content: 'Team';
+  font-size: 10px;
+}
+
+/* ===================== HOVER EFFECTS ===================== */
+
+@media (hover: hover) {
+  .cm-card:hover .cm-card-inner {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px -12px rgba(229, 9, 20, 0.2);
+    border-color: rgba(229, 9, 20, 0.2);
+  }
+  
+  .cm-card:hover .cm-card-inner::before {
+    opacity: 1;
+  }
+  
+  .cm-card:hover .cm-card-glow {
+    opacity: 1;
+  }
+  
+  .cm-card:hover .cm-card-image {
+    transform: scale(1.05);
+  }
+  
+  .cm-card:hover .cm-card-image-wrapper::before {
+    transform: translateX(100%);
+  }
+  
+  .cm-card:hover .cm-card-skill {
+    background: #e50914;
+    color: white;
+    transform: translateY(-1px);
+  }
+  
+  .cm-card:hover .cm-card-btn {
+    background: linear-gradient(135deg, #e50914, #b91c1c);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.3);
+  }
+}
+
+.cm-card:active .cm-card-inner {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* =========================================================
+   TABLET (641px â€“ 1024px)
+========================================================= */
+
+@media (max-width: 1024px) and (min-width: 641px) {
+  .cm-card {
+    height: auto;
+  }
+
+  .cm-card-inner {
+    height: auto;
+  }
+
+  .cm-card-image-wrapper {
+    height: 130px;
+  }
+
+  .cm-card-body {
+    padding: 12px 14px 14px;
+  }
+
+  .cm-card-title {
+    font-size: 15px;
+  }
+
+  .cm-card-description {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .cm-card-skills {
+    margin: 6px 0;
+  }
+
+  .cm-card-skill {
+    padding: 2px 7px;
+    font-size: 8px;
+  }
+
+  .cm-card-ai-insight {
+    padding: 6px 8px;
+    margin: 6px 0;
+  }
+
+  .cm-card-ai-insight-text {
+    font-size: 9px;
+  }
+
+  .cm-card-subtext {
+    font-size: 9px;
+    margin-bottom: 8px;
+  }
+
+  .cm-card-divider {
+    margin: 8px 0;
+  }
+
+  .cm-card-btn {
+    padding: 5px 12px;
+    font-size: 10px;
+  }
+
+  .cm-card-meta {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+}
+
+/* =========================================================
+   MOBILE (â‰¤640px)
+========================================================= */
+
+@media (max-width: 640px) {
+  .cm-card-image-wrapper {
+    height: 120px;
+  }
+
+  .cm-card-body {
+    padding: 10px 12px 12px;
+  }
+
+  .cm-card-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .cm-card-description {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .cm-card-skills {
+    margin: 6px 0;
+    gap: 4px;
+  }
+
+  .cm-card-skill {
+    padding: 2px 6px;
+    font-size: 8px;
+  }
+
+  .cm-card-ai-insight {
+    padding: 6px 8px;
+    margin: 6px 0;
+  }
+
+  .cm-card-ai-insight-text {
+    font-size: 9px;
+  }
+
+  .cm-card-ai-insight-text::before {
+    font-size: 9px;
+  }
+
+  .cm-card-subtext {
+    font-size: 9px;
+    margin-bottom: 8px;
+  }
+
+  .cm-card-divider {
+    margin: 8px 0;
+  }
+
+  .cm-card-actions {
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cm-card-btn {
+    padding: 6px 12px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .cm-card-meta {
+    padding: 4px 8px;
+    font-size: 9px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .cm-card-match-score {
+    padding: 3px 8px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .cm-card-match-score-value {
+    font-size: 11px;
+  }
+
+  .cm-card-match-score-label {
+    font-size: 7px;
+  }
+
+  .cm-card-ai-badge {
+    padding: 2px 6px;
+    font-size: 8px;
+    bottom: 8px;
+    left: 8px;
+  }
+  
+  .cm-card-ai-badge span {
+    font-size: 9px;
+  }
+  
+  .cm-card-match-indicator {
+    gap: 2px;
+  }
+  
+  .cm-card-match-dot {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* =========================================================
+   DARK MODE SUPPORT
+========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .cm-card-inner {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .cm-card-image-wrapper {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+  }
+  
+  .cm-card-title {
+    color: #f1f5f9;
+  }
+  
+  .cm-card-description {
+    color: #94a3b8;
+  }
+  
+  .cm-card-skill {
+    background: #334155;
+    color: #cbd5e1;
+  }
+  
+  .cm-card-ai-insight {
+    background: linear-gradient(135deg, #2d2e3a, #252632);
+  }
+  
+  .cm-card-ai-insight-text {
+    color: #cbd5e1;
+  }
+  
+  .cm-card-subtext {
+    color: #94a3b8;
+  }
+  
+  .cm-card-divider {
+    background: linear-gradient(90deg, #334155, transparent);
+  }
+  
+  .cm-card-meta {
+    background: #334155;
+    color: #cbd5e1;
+  }
+  
+  .cm-card-btn {
+    background: linear-gradient(135deg, #334155, #1e293b);
+  }
+  
+  .cm-card:hover .cm-card-btn {
+    background: linear-gradient(135deg, #e50914, #b91c1c);
+  }
+  
+  .cm-card-match-score {
+    background: linear-gradient(135deg, #e50914, #b91c1c);
+  }
+  
+  .cm-card-ai-badge {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .cm-card-glow {
+    background: radial-gradient(circle at 70% 20%, rgba(229, 9, 20, 0.2), transparent 70%);
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.cm-card:focus-visible {
+  outline: none;
+}
+
+.cm-card:focus-visible .cm-card-inner {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
+  border-radius: 20px;
+}

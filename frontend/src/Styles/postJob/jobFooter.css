@@ -1,0 +1,209 @@
+/* =========================================================
+   POST JOB FORM FOOTER
+========================================================= */
+
+.postjob-form-footer {
+  margin-top: 48px;
+  padding: 24px 24px 0;
+
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  border-top: 1px solid var(--border);
+}
+
+/* LEFT */
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Label */
+.footer-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+/* ---------------------------
+   DATE INPUT (STYLED NATIVE)
+--------------------------- */
+
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hf-date-input {
+  appearance: none;
+  -webkit-appearance: none;
+
+  height: 40px;
+  padding: 0 40px 0 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  cursor: pointer;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 12px;
+  pointer-events: none; /* visual only */
+  opacity: 0.6;
+}
+
+/* Hover / focus */
+.hf-date-input:hover {
+  border-color: var(--accent);
+}
+
+.hf-date-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Dark mode */
+body.dark .hf-date-input {
+  background: #0f0f0f;
+}
+
+/* ---------------------------
+   ACTION BUTTONS
+--------------------------- */
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------------------------
+   MOBILE
+--------------------------- */
+
+@media (max-width: 768px) {
+  .postjob-form-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .footer-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+/* Date display (replaces native input) */
+.hf-date-display {
+  height: 40px;
+  min-width: 140px;
+  padding: 0 12px;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  cursor: pointer;
+}
+
+/* Make icon clickable */
+.calendar-icon.clickable {
+  cursor: pointer;
+}
+
+/* Calendar popover */
+.calendar-popover {
+  position: absolute;
+  top: 48px;
+  right: 0;
+
+  z-index: 200;
+
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* MUI dark-mode safety */
+body.dark .calendar-popover {
+  background: #0f0f0f;
+}
+/* Footer */
+.postjob-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  overflow: visible;
+}
+
+/* Date trigger */
+.date-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* Overlay (BREAKS OUT OF ALL CONTAINERS) */
+.calendar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Calendar container */
+.calendar-popover {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark mode */
+body.dark .calendar-popover {
+  background: #111;
+}
+

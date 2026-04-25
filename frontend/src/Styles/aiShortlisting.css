@@ -1,0 +1,520 @@
+/* ===============================
+   AI SHORTLISTING – HIRE FOLD
+   Premium Dark + Red AI Accent
+================================ */
+
+.ai-shortlisting {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* =====================================================
+   CRITERIA PANEL
+===================================================== */
+
+.ai-criteria {
+  padding: 22px 24px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #111, #0c0c0c);
+  border: 1px solid #1f1f1f;
+  box-shadow:
+    0 0 0 1px rgba(255, 59, 59, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.ai-criteria h3 {
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #ff3b3b;
+  text-transform: uppercase;
+}
+
+/* =============================================
+   HORIZONTAL SCROLL CRITERIA (TRAIN STYLE)
+============================================= */
+
+.criteria-scroll {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-behavior: smooth;
+}
+
+.criteria-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.criteria-scroll::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 999px;
+}
+
+.criteria-item {
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.criteria-item label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.criteria-item input,
+.criteria-item select {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.criteria-item input:focus,
+.criteria-item select:focus {
+  outline: none;
+  border-color: #c4161c;
+  box-shadow: 0 0 0 3px rgba(196, 22, 28, 0.25);
+}
+
+/* Fix for direct inputs in criteria-scroll */
+.criteria-scroll input,
+.criteria-scroll select {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.criteria-scroll input:focus,
+.criteria-scroll select:focus {
+  outline: none;
+  border-color: #c4161c;
+  box-shadow: 0 0 0 3px rgba(196, 22, 28, 0.25);
+}
+
+.criteria-scroll input::placeholder {
+  color: #666;
+}
+
+/* =====================================================
+   ACTION BAR (Select Job + Upload + Run AI)
+===================================================== */
+
+.ai-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #151515, #101010);
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+  flex-wrap: wrap;
+}
+
+.ai-action-bar select {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  min-width: 240px;
+  transition: border 0.2s ease;
+  cursor: pointer;
+}
+
+.ai-action-bar select:focus {
+  outline: none;
+  border-color: #c4161c;
+}
+
+.ai-action-bar select option {
+  background: #0f0f0f;
+  color: #fff;
+}
+
+/* Upload */
+.upload-button {
+  background: #111;
+  border: 1px dashed #333;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #bbb;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.upload-button:hover {
+  border-color: #c4161c;
+  background: #141414;
+  color: #fff;
+}
+
+/* Run AI Button */
+.ai-action-bar button {
+  background: linear-gradient(135deg, #c4161c, #ff3b3b);
+  border: none;
+  color: #fff;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ai-action-bar button:hover:not(:disabled) {
+  box-shadow: 0 0 18px rgba(255, 59, 59, 0.5);
+  transform: translateY(-2px);
+}
+
+.ai-action-bar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* =====================================================
+   SUMMARY PILLS
+===================================================== */
+
+.ai-summary {
+  display: flex;
+  gap: 14px;
+  margin: 20px 0 16px 0;
+}
+
+.ai-summary .pill {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid transparent;
+}
+
+.pill.shortlist {
+  background: rgba(0, 208, 132, 0.12);
+  color: #00d084;
+  border-color: rgba(0, 208, 132, 0.4);
+}
+
+.pill.review {
+  background: rgba(255, 193, 7, 0.12);
+  color: #ffc107;
+  border-color: rgba(255, 193, 7, 0.4);
+}
+
+.pill.reject {
+  background: rgba(255, 59, 59, 0.12);
+  color: #ff3b3b;
+  border-color: rgba(255, 59, 59, 0.4);
+}
+
+/* Alternative summary styling without pill class */
+.ai-summary > div {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.ai-summary > div:first-child {
+  background: rgba(0, 208, 132, 0.12);
+  color: #00d084;
+  border: 1px solid rgba(0, 208, 132, 0.4);
+}
+
+.ai-summary > div:nth-child(2) {
+  background: rgba(255, 193, 7, 0.12);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.ai-summary > div:nth-child(3) {
+  background: rgba(255, 59, 59, 0.12);
+  color: #ff3b3b;
+  border: 1px solid rgba(255, 59, 59, 0.4);
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.ai-table {
+  background: linear-gradient(145deg, #0c0c0c, #090909);
+  border: 1px solid #1f1f1f;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+
+.ai-table-head {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 140px 150px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8f8f8f;
+  border-bottom: 1px solid #1f1f1f;
+  background: linear-gradient(145deg, #0c0c0c, #090909);
+  letter-spacing: 0.5px;
+}
+
+/* =====================================================
+   ROW DESIGN - NO HOVER EFFECT
+===================================================== */
+
+.ai-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 140px 150px;
+  align-items: center;
+  gap: 14px;
+  height: 56px;
+  padding: 0 18px;
+  font-size: 14px;
+  color: #eaeaea;
+  border-bottom: 1px solid #1f1f1f;
+  box-sizing: border-box;
+  background: #0c0c0c;
+}
+
+/* REMOVED hover effect - no background change on hover */
+.ai-row:hover {
+  background: #0c0c0c;
+}
+
+/* Ensure all text elements in row inherit proper color */
+.ai-row div,
+.ai-row .file,
+.ai-row .score,
+.ai-row .verdict,
+.ai-row .row-id {
+  color: #eaeaea;
+}
+
+.ai-row .file {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #eaeaea;
+  font-weight: 500;
+}
+
+.ai-row .score {
+  font-weight: 700;
+  position: relative;
+  color: #ff6b6b;
+}
+
+.ai-row .score::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 8px;
+  background: rgba(196, 22, 28, 0.12);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Keep the score highlight effect on hover if you want */
+.ai-row:hover .score::after {
+  opacity: 1;
+}
+
+.ai-row .verdict {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.verdict.shortlist {
+  color: #00d084;
+}
+
+.verdict.review {
+  color: #ffc107;
+}
+
+.verdict.reject {
+  color: #ff3b3b;
+}
+
+/* =====================================================
+   ACTION BUTTON
+===================================================== */
+
+.ai-row .secondary-btn {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  color: #ddd;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ai-row .secondary-btn:hover {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #3a3a3a;
+}
+
+.ai-row .secondary-btn.hf-premium {
+  border-color: #c4161c;
+  color: #ff3b3b;
+}
+
+.ai-row .secondary-btn.hf-premium:hover {
+  background: rgba(196, 22, 28, 0.15);
+  box-shadow: 0 0 12px rgba(255, 59, 59, 0.3);
+  color: #ff6b6b;
+}
+
+/* =====================================================
+   FOOTER ACTIONS
+===================================================== */
+
+.ai-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* =====================================================
+   VIRTUAL LIST CONTAINER
+===================================================== */
+
+.ai-table .virtual-list-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.ai-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+/* =====================================================
+   LOADING STATE
+===================================================== */
+
+.ai-loading {
+  padding: 40px;
+  text-align: center;
+  color: #ff3b3b;
+  font-size: 14px;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 1024px) {
+  .ai-table-head,
+  .ai-row {
+    grid-template-columns: 50px 1fr 100px 120px 130px;
+    gap: 10px;
+  }
+  
+  .ai-row .secondary-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ai-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .ai-action-bar select,
+  .upload-button,
+  .ai-action-bar button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .ai-table-head,
+  .ai-row {
+    grid-template-columns: 40px 1fr 80px 100px 110px;
+    gap: 8px;
+    font-size: 12px;
+  }
+  
+  .ai-row .secondary-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  .ai-summary {
+    flex-wrap: wrap;
+  }
+  
+  .criteria-scroll {
+    flex-direction: column;
+  }
+  
+  .criteria-scroll input,
+  .criteria-scroll select {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   SCROLLBAR STYLING
+===================================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c4161c;
+}

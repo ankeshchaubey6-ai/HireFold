@@ -1,0 +1,664 @@
+/* =====================================================
+   RESPONSIVE REDESIGN — MOBILE & TABLET FOCUS
+   Desktop UI locked and unchanged
+   ===================================================== */
+
+/* =====================================================
+   GLOBAL MOBILE (≤640px)
+   ===================================================== */
+
+@media (max-width: 640px) {
+  /* Core font & spacing */
+  html, body {
+    font-size: 14px;
+  }
+
+  h1 { font-size: 22px !important; line-height: 1.3 !important; }
+  h2 { font-size: 18px !important; line-height: 1.3 !important; }
+  h3 { font-size: 16px !important; line-height: 1.3 !important; }
+  h4 { font-size: 14px !important; }
+  p { font-size: 13px !important; line-height: 1.5 !important; }
+
+  /* Touch-friendly buttons */
+  button,
+  a.btn,
+  .btn-outline {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  /* Section spacing */
+  .section-surface {
+    max-width: 100%;
+    margin: 20px 0 !important;
+    padding: 20px 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .section-title {
+    font-size: 16px !important;
+    margin: 16px 0 12px !important;
+    padding: 0 12px !important;
+  }
+
+  /* Hero/Banner */
+  .hero {
+    margin-bottom: 20px !important;
+    border-radius: 12px !important;
+  }
+
+  .hero__container {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 24px 12px !important;
+  }
+
+  .hero__title {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero__subtitle {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero__image {
+    display: none;
+  }
+
+  .hero__actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .hero__btn {
+    width: 100% !important;
+    min-height: 40px;
+  }
+
+  /* Grid cards → horizontal scroll carousel */
+  .template-grid,
+  [class*="grid"]:not(.no-responsive) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 12px !important;
+    padding: 0 12px !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .template-grid::-webkit-scrollbar,
+  [class*="grid"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Carousel cards */
+  .template-card,
+  [class*="card"]:not([class*="explored"]) {
+    flex: 0 0 calc(100vw - 56px) !important;
+    max-width: 100%;
+    scroll-snap-align: start;
+    border-radius: 12px !important;
+  }
+
+  .template-preview {
+    height: 200px !important;
+  }
+
+  .template-footer {
+    padding: 12px !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .template-footer span {
+    font-size: 12px !important;
+  }
+
+  .template-actions {
+    width: 100% !important;
+  }
+
+  .template-actions button {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px 12px;
+    min-height: 40px;
+  }
+
+  /* Hide desktop-only elements */
+  .desktop-only,
+  [data-mobile="hide"] {
+    display: none !important;
+  }
+
+  /* Full-width inputs */
+  input,
+  textarea,
+  select {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Reduce animations for mobile perf */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* Resume builder mobile */
+  .resume-builder-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 0 12px 16px !important;
+  }
+
+  .resume-builder-left,
+  .resume-builder-right {
+    padding: 12px !important;
+  }
+
+  .builder-top-bar {
+    padding: 0 12px !important;
+    height: 48px;
+  }
+
+  .builder-top-bar button {
+    width: 100%;
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  /* Card density */
+  .card {
+    padding: 14px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Flex stacking */
+  .flex-row {
+    flex-direction: column !important;
+  }
+
+  /* Prevent horizontal scroll */
+  * {
+    max-width: 100%;
+  }
+}
+
+/* =====================================================
+   GLOBAL TABLET (641px to 1024px)
+   ===================================================== */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  h1 { font-size: 26px !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 18px !important; }
+  h4 { font-size: 16px !important; }
+  p { font-size: 14px !important; }
+
+  button,
+  a.btn {
+    min-height: 40px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .section-surface {
+    max-width: 100%;
+    margin: 32px auto !important;
+    padding: 32px 20px !important;
+    border-radius: 14px !important;
+  }
+
+  .section-title {
+    font-size: 18px !important;
+    margin: 28px auto 12px !important;
+    padding: 0 20px !important;
+  }
+
+  .hero {
+    margin-bottom: 32px !important;
+    border-radius: 14px !important;
+  }
+
+  .hero__container {
+    grid-template-columns: 1.2fr 0.8fr !important;
+    gap: 24px !important;
+    padding: 36px 20px !important;
+  }
+
+  .hero__title {
+    font-size: 26px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero__subtitle {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero__actions {
+    gap: 12px !important;
+  }
+
+  /* Grid 2-column */
+  .template-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    padding: 0 !important;
+  }
+
+  .template-preview {
+    height: 280px !important;
+  }
+
+  .template-footer {
+    padding: 12px !important;
+  }
+
+  .template-actions button {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  /* Resume builder */
+  .resume-builder-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 0 20px 20px !important;
+  }
+
+  .resume-builder-left,
+  .resume-builder-right {
+    padding: 16px !important;
+  }
+
+  .builder-top-bar {
+    padding: 0 20px !important;
+  }
+
+  .card {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* =====================================================
+   MOBILE-FIRST ENHANCEMENTS (≤768px)
+   Images scaled, content visible, spacing added
+   ===================================================== */
+
+@media (max-width: 768px) {
+  /* ===== PAGE LAYOUT ===== */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* ===== HERO / BANNER ===== */
+  .hero {
+    margin-bottom: 24px !important;
+  }
+
+  .hero__container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 32px 16px !important;
+  }
+
+  .hero__title {
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero__subtitle {
+    font-size: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero__image-wrapper {
+    max-width: 100%;
+  }
+
+  .hero__image {
+    max-height: 200px;
+    object-fit: contain;
+  }
+
+  .hero__actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .hero__btn {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    text-align: center;
+  }
+
+  /* ===== SECTION SPACING ===== */
+  .section-surface {
+    margin: 24px 0 !important;
+    padding: 16px 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .section-title {
+    font-size: 16px !important;
+    margin: 16px 0 12px !important;
+    padding: 0 0 !important;
+  }
+
+  /* ===== GRID CARDS → HORIZONTAL SCROLL ===== */
+  .grid,
+  [class*="grid"]:not(.no-responsive),
+  .explore-domains-grid,
+  .in-demand-grid,
+  .opportunities-grid,
+  .roles-fit-grid,
+  .sharpen-skills-grid,
+  .hiring-journey-grid,
+  .template-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 12px !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-right: 0 !important;
+  }
+
+  .grid::-webkit-scrollbar,
+  [class*="grid"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ===== CARD BASE (FLEXIBLE HEIGHT) ===== */
+  [class*="card"]:not([class*="explored"]):not([class*="applicant"]) {
+    flex: 0 0 calc(100vw - 56px) !important;
+    max-width: 100%;
+    height: auto !important;
+    scroll-snap-align: start;
+    border-radius: 12px !important;
+  }
+
+  /* ===== CARD IMAGE SCALING ===== */
+  [class*="card"] [class*="image"],
+  [class*="card"] [class*="wrapper"] {
+    max-height: 160px !important;
+    object-fit: cover;
+  }
+
+  .template-preview {
+    height: 200px !important;
+    max-width: 100%;
+  }
+
+  /* ===== CARD CONTENT ===== */
+  [class*="card"] [class*="body"],
+  [class*="card"] [class*="content"],
+  [class*="card"] [class*="info"] {
+    padding: 12px !important;
+  }
+
+  [class*="card"] h2,
+  [class*="card"] h3,
+  [class*="card"] h4 {
+    font-size: 13px !important;
+    margin-bottom: 4px !important;
+  }
+
+  [class*="card"] p {
+    font-size: 12px !important;
+  }
+
+  /* ===== FILTERS ===== */
+  .jobs-filters-horizontal,
+  [class*="filter"] {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .jobs-filters-horizontal > *,
+  [class*="filter"] > * {
+    flex: 0 0 auto;
+    min-width: 140px !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* ===== JOB CARD COMPACT ===== */
+  .job-card {
+    grid-template-columns: 48px 1fr !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .job-card-logo {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .job-card-title {
+    font-size: 13px !important;
+  }
+
+  /* ===== FORM INPUTS ===== */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+    width: 100% !important;
+  }
+
+  /* ===== BUTTONS ===== */
+  button,
+  a.btn,
+  .btn-outline {
+    min-height: 40px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* ===== HIDE DESKTOP ONLY ===== */
+  .desktop-only,
+  [data-mobile="hide"] {
+    display: none !important;
+  }
+}
+
+/* =====================================================
+   EXTRA SMALL MOBILE (≤640px)
+   Further optimization for smallest screens
+   ===================================================== */
+
+@media (max-width: 640px) {
+  /* ===== PAGE PADDING ===== */
+  .jobs-page,
+  .resume-page,
+  .interviews-page,
+  .about-page {
+    padding: 12px 0 !important;
+  }
+
+  /* ===== HERO MINIMAL ===== */
+  .hero {
+    margin-bottom: 16px !important;
+  }
+
+  .hero__container {
+    padding: 20px 12px !important;
+    gap: 16px !important;
+  }
+
+  .hero__title {
+    font-size: 20px !important;
+  }
+
+  .hero__subtitle {
+    font-size: 12px !important;
+  }
+
+  .hero__btn {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* ===== SECTION SURFACE ===== */
+  .section-surface {
+    margin: 16px 0 !important;
+    padding: 12px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* ===== CARDS EXTRA COMPACT ===== */
+  [class*="card"]:not([class*="explored"]):not([class*="applicant"]) {
+    flex: 0 0 calc(100vw - 48px) !important;
+    border-radius: 10px !important;
+  }
+
+  [class*="card"] [class*="image"],
+  [class*="card"] [class*="wrapper"] {
+    max-height: 120px !important;
+  }
+
+  [class*="card"] [class*="body"],
+  [class*="card"] [class*="content"],
+  [class*="card"] [class*="info"] {
+    padding: 10px !important;
+  }
+
+  .template-preview {
+    height: 180px !important;
+  }
+
+  /* ===== FILTERS MINIMAL ===== */
+  .jobs-filters-horizontal > *,
+  [class*="filter"] > * {
+    min-width: 120px !important;
+    height: 32px !important;
+    padding: 0 8px !important;
+    font-size: 11px !important;
+  }
+
+  /* ===== BUTTONS ===== */
+  button,
+  a.btn,
+  .btn-outline {
+    min-height: 36px !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* ===== DISABLE HEAVY ANIMATIONS ===== */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* =====================================================
+   TABLET (641px to 1024px)
+   Two-column grids where possible, better spacing
+   ===================================================== */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* ===== HERO ===== */
+  .hero__container {
+    grid-template-columns: 1.2fr 0.8fr !important;
+    gap: 24px !important;
+    padding: 40px 24px !important;
+  }
+
+  .hero__title {
+    font-size: 28px !important;
+  }
+
+  .hero__subtitle {
+    font-size: 14px !important;
+  }
+
+  .hero__image {
+    max-height: 250px;
+  }
+
+  /* ===== TWO-COLUMN GRIDS ===== */
+  .explore-domains-grid,
+  .in-demand-grid,
+  .opportunities-grid,
+  .roles-fit-grid,
+  .sharpen-skills-grid,
+  .hiring-journey-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    padding: 0 !important;
+    overflow-x: visible !important;
+  }
+
+  .template-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    padding: 0 !important;
+  }
+
+  /* ===== CARD HEIGHT AUTO ===== */
+  [class*="card"]:not([class*="explored"]):not([class*="applicant"]) {
+    flex: none !important;
+    height: auto !important;
+  }
+
+  [class*="card"] [class*="image"],
+  [class*="card"] [class*="wrapper"] {
+    max-height: 180px !important;
+  }
+
+  .template-preview {
+    height: 240px !important;
+  }
+
+  /* ===== SECTION SPACING ===== */
+  .section-surface {
+    margin: 28px auto !important;
+    padding: 24px 20px !important;
+  }
+
+  /* ===== BUTTONS ===== */
+  button,
+  a.btn,
+  .btn-outline {
+    min-height: 40px !important;
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* =====================================================
+   DESKTOP (>1024px) — COMPLETELY UNCHANGED
+   ===================================================== */
+
+@media (min-width: 1025px) {
+  /* All desktop styles remain in their original files */
+  /* No changes to desktop UI */
+}

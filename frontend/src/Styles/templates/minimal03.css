@@ -1,0 +1,155 @@
+/* =========================================================
+   MINIMAL 03 — COMPACT + INTERACTIVE PROFESSIONAL
+   (Still minimal, but no longer boring)
+========================================================= */
+
+.minimal03 {
+  width: 100%;
+  min-height: 1123px;
+
+  padding: 36px 46px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.55;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ================= HEADER ================= */
+.minimal03-header {
+  padding-bottom: 14px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.minimal03-header h1 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.minimal03-header h2 {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #2563eb;
+  margin-top: 4px;
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  font-size: 10px;
+  color: #475569;
+  margin-top: 8px;
+}
+
+/* ================= SECTIONS ================= */
+.minimal03 section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.minimal03 h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  color: #1e293b;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 6px;
+}
+
+/* subtle accent line */
+.minimal03 h3::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background: #2563eb;
+  border-radius: 2px;
+}
+
+/* ================= ITEMS ================= */
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 6px;
+
+  border-left: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+/* hover interaction (desktop preview only) */
+.item:hover {
+  border-left-color: #93c5fd;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.item strong {
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ================= TEXT ================= */
+.summary {
+  margin: 0;
+  color: #334155;
+}
+
+.inline {
+  margin: 0;
+}
+
+/* ================= LISTS ================= */
+ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+li {
+  margin-bottom: 3px;
+  color: #334155;
+}
+
+/* ================= MUTED ================= */
+.muted {
+  font-size: 9.8px;
+  color: #64748b;
+}
+
+/* ================= TAG STYLE (SKILLS / LANGUAGES) ================= */
+.minimal03-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.minimal03-tag {
+  font-size: 9.5px;
+  padding: 3px 7px;
+  border-radius: 999px;
+
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 500;
+}

@@ -1,0 +1,75 @@
+/* =========================================================
+   ATS 03 — EXECUTIVE ATS SAFE
+========================================================= */
+
+.ats03 {
+  width: 100%;
+  min-height: 1123px;
+  padding: 44px 54px;
+
+  background: #ffffff;
+  color: #000000;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* ================= HEADER ================= */
+.ats03-header {
+  margin-bottom: 26px;
+}
+
+.ats03 h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ats03 h2 {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.ats03 .contact {
+  font-size: 10.5px;
+  margin-top: 8px;
+}
+
+/* ================= SECTIONS ================= */
+.ats03 section {
+  margin-bottom: 22px;
+}
+
+.ats03 h3 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+/* ================= ITEMS ================= */
+.ats03 .item {
+  margin-bottom: 14px;
+}
+
+.ats03 .meta {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* ================= LISTS ================= */
+.ats03 ul {
+  padding-left: 18px;
+  margin-top: 6px;
+}
+
+.ats03 li {
+  margin-bottom: 4px;
+}
+
+/* ================= TEXT ================= */
+.ats03 p {
+  margin-top: 4px;
+}

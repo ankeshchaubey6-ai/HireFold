@@ -1,0 +1,562 @@
+/* =====================================================
+   POST JOB PAGE — MATCHING RECRUITER INTERVIEW PIPELINE
+   Clean white cards • Red accents • Compact design
+===================================================== */
+
+/* =====================================================
+   COMPACT HERO SECTION (matches pipeline page)
+===================================================== */
+
+.postjob-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.dark .postjob-header-row {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.postjob-header-left {
+  flex: 1;
+}
+
+.postjob-header-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: rgba(229, 9, 20, 0.1);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #e50914;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.postjob-header-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.2;
+}
+
+.dark .postjob-header-title {
+  color: #ffffff;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.postjob-header-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dark .postjob-header-subtitle {
+  color: #9ca3af;
+}
+
+.postjob-header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* =====================================================
+   MODERN BUTTONS (matching pipeline page)
+===================================================== */
+
+.btn-outline-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.dark .btn-outline-modern {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e5e7eb;
+}
+
+.btn-outline-modern:hover {
+  border-color: #e50914;
+  color: #e50914;
+  transform: translateY(-1px);
+  background: rgba(229, 9, 20, 0.05);
+}
+
+.btn-primary-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  border: none;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary-modern:hover::before {
+  left: 100%;
+}
+
+.btn-primary-modern:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(229, 9, 20, 0.3);
+}
+
+/* =====================================================
+   COMPACT GRID LAYOUT
+===================================================== */
+
+.postjob-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+  .postjob-actions-grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .postjob-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* =====================================================
+   COMPACT CARD (matching interview-card-compact)
+===================================================== */
+
+.action-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+  min-width: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.dark .action-card {
+  background: #0d0d1a;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  border-color: #e50914;
+  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.12);
+}
+
+.dark .action-card:hover {
+  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.2);
+}
+
+/* Accent Bar (matching interview card) */
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #e50914, #ff6b35);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  border-radius: 16px 16px 0 0;
+}
+
+.action-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Card Image - Compact */
+.action-card-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.action-card:hover .action-card-image {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(229, 9, 20, 0.15));
+}
+
+/* Card Content */
+.action-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Header Row (title + badge) */
+.action-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Card Title - Compact */
+.action-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+
+.dark .action-card h3 {
+  color: #ffffff;
+}
+
+.action-card:hover h3 {
+  color: #e50914;
+}
+
+/* Card Description - Compact */
+.action-card p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6b7280;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dark .action-card p {
+  color: #9ca3af;
+}
+
+/* =====================================================
+   BADGES (matching pipeline page)
+===================================================== */
+
+/* Verified Badge - Green (like completed status) */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 9px;
+  font-weight: 600;
+  border-radius: 100px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.dark .verified-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+/* Premium Badge - Red gradient (like primary button) */
+.premium-badge {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #e50914, #ff6b35);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+}
+
+.premium-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+}
+
+/* =====================================================
+   SELECTED STATE
+===================================================== */
+
+.action-card.selected {
+  border: 2px solid #e50914;
+  background: rgba(229, 9, 20, 0.02);
+  box-shadow: 0 6px 16px rgba(229, 9, 20, 0.12);
+}
+
+.dark .action-card.selected {
+  background: rgba(229, 9, 20, 0.05);
+  border-color: #e50914;
+  box-shadow: 0 6px 16px rgba(229, 9, 20, 0.2);
+}
+
+.action-card.selected::before {
+  transform: scaleX(1);
+}
+
+/* =====================================================
+   CTA SECTION (HiringModelCTA)
+===================================================== */
+
+.hiring-model-cta {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .hiring-model-cta {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.hiring-model-cta p {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.dark .hiring-model-cta p {
+  color: #9ca3af;
+}
+
+.hiring-model-cta .cta-link {
+  color: #e50914;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.hiring-model-cta .cta-link:hover {
+  text-decoration: underline;
+  color: #ff6b35;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+  .postjob-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .postjob-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .action-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .action-card-image {
+    align-self: center;
+    width: 70px;
+    height: 70px;
+  }
+
+  .action-card-content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .action-card-header {
+    justify-content: center;
+  }
+
+  .action-card h3 {
+    font-size: 13px;
+  }
+
+  .action-card p {
+    font-size: 11px;
+  }
+
+  .premium-badge {
+    align-self: center;
+  }
+
+  .postjob-actions-grid {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .postjob-header-title {
+    font-size: 1.5rem;
+  }
+
+  .postjob-header-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .action-card {
+    padding: 12px;
+  }
+
+  .action-card-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .action-card h3 {
+    font-size: 12px;
+  }
+
+  .action-card p {
+    font-size: 10px;
+  }
+
+  .verified-badge {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .premium-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .btn-outline-modern,
+  .btn-primary-modern {
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* =====================================================
+   ANIMATIONS (matching pipeline page)
+===================================================== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.action-card {
+  animation: fadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.action-card:nth-child(1) { animation-delay: 0.05s; }
+.action-card:nth-child(2) { animation-delay: 0.1s; }
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .action-card,
+  .action-card::before,
+  .action-card-image,
+  .btn-primary-modern::before,
+  .premium-badge {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .action-card {
+    opacity: 1;
+  }
+  
+  .action-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* =====================================================
+   ACCESSIBILITY
+===================================================== */
+
+.action-card:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+.btn-outline-modern:focus-visible,
+.btn-primary-modern:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
+}
