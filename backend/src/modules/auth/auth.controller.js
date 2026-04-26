@@ -5,12 +5,11 @@ import jwt from "jsonwebtoken";
 /* ================= COOKIE OPTIONS (GLOBAL) ================= */
 const cookieOptions = {
   httpOnly: true,
-  secure: false,        // keep false for localhost
-  sameSite: "lax",
-  path: "/",            
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
-
 /* ================= REGISTER ================= */
 export const register = async (req, res) => {
   try {
@@ -104,7 +103,9 @@ export const getMe = async (req, res) => {
 /* ================= LOGOUT ================= */
 export const logout = (req, res) => {
   res.clearCookie("hirefold_token", {
-    path: "/", 
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
   res.json({ success: true });
 };
