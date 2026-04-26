@@ -1,28 +1,18 @@
-
 import dotenv from "dotenv";
 dotenv.config();
 
-/**
-GLOBAL CRASH GUARD (PREVENTS ERR_CONNECTION_RESET)
-*/
 process.on("uncaughtException", (err) => {
-  // Global exception handler
+  console.error("Uncaught Exception:", err);
+  process.exit(1);
 });
 
 process.on("unhandledRejection", (reason) => {
-  // Global rejection handler
+  console.error("Unhandled Rejection:", reason);
+  process.exit(1);
 });
 
-/* =========================================================
-   CORE IMPORTS (AFTER ENV LOAD)
-========================================================= */
 import app from "./app.js";
 import { connectDB } from "./db.js";
-
-/**
-START BACKGROUND WORKER (QUEUE + ATS)
-MUST be imported AFTER dotenv.config()
-*/
 import "../workers/resumeAnalysis.worker.js";
 
 const PORT = process.env.PORT || 5000;
@@ -30,12 +20,12 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     await connectDB();
-
     app.listen(PORT, () => {
-      // Server is running
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
-    throw error;
+    console.error("Server failed to start:", error);
+    process.exit(1);
   }
 };
 
