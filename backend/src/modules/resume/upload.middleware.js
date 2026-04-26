@@ -58,7 +58,7 @@ export const uploadResumeMiddleware = multer({
   limits: {
     fileSize: MAX_FILE_SIZE, // 10MB limit
   },
-}).single("resume"); 
+}).single("file"); 
 
 /* =========================================================
    ERROR HANDLER (MULTER SAFE WRAPPER)

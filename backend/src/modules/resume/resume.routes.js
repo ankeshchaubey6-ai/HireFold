@@ -20,7 +20,7 @@ const upload = multer({
       cb(new Error("Only PDF and DOCX allowed"), false);
     }
   }
-}).single("resume");
+}).single("file");
 
 const uploadMiddleware = (req, res, next) => {
   upload(req, res, (err) => {
