@@ -14,6 +14,7 @@ const CandidateJobs = () => {
   const { applications, applyToJob } = useApplications();
 
   const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
   const [applyJob, setApplyJob] = useState(null);
   const [stats, setStats] = useState({
@@ -53,6 +54,9 @@ const CandidateJobs = () => {
       appliedCount: applications.length,
       recommendedCount: Math.floor(jobs.length * 0.3)
     });
+    // Update applied jobs from applications
+    const appliedIds = applications.map(a => a.jobId || a.job?._id || a.job?.id);
+    setAppliedJobs(appliedIds);
   }, [jobs, savedJobs, applications]);
 
   /* ================= FILTER ================= */
@@ -303,6 +307,7 @@ const CandidateJobs = () => {
         <div className="jobs-list">
           {filteredJobs.map((job, index) => {
             const id = getId(job);
+            const isApplied = appliedJobs.includes(id);
             return (
               <div 
                 key={id}
@@ -312,6 +317,7 @@ const CandidateJobs = () => {
                   job={job}
                   mode="candidate"
                   isSaved={savedJobs.includes(id)}
+                  isApplied={isApplied}
                   onSave={() => toggleSave(id)}
                   onApply={() => setApplyJob(job)}
                 />
@@ -336,6 +342,16 @@ const CandidateJobs = () => {
           job={applyJob}
           onClose={() => setApplyJob(null)}
           onApply={({ method, resumeFile }) => {
+            const jobId = getId(applyJob);
+            
+            // Add to applied jobs list
+            setAppliedJobs((prev) => {
+              if (!prev.includes(jobId)) {
+                return [...prev, jobId];
+              }
+              return prev;
+            });
+
             applyToJob({
               job: applyJob,
               candidate: { id: "cand-001", name: "Demo Candidate" },

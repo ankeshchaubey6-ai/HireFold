@@ -7,6 +7,7 @@ const JobCard = ({
   job, 
   mode = "candidate",
   isSaved = false,
+  isApplied = false,
   onSave = null,
   onApply = null 
 }) => {
@@ -38,7 +39,9 @@ const JobCard = ({
       return `${job.salaryRange.min} - ${job.salaryRange.max}`;
     }
     if (job.compensation?.min || job.compensation?.max) {
-      return `${job.compensation.currency || "USD"} ${job.compensation.min}${job.compensation.max ? ` - ${job.compensation.max}` : ""}`;
+      const min = job.compensation.min || "";
+      const max = job.compensation.max ? ` - ${job.compensation.max}` : "";
+      return `${job.compensation.currency || "USD"} ${min}${max}`;
     }
     return null;
   };
@@ -46,6 +49,8 @@ const JobCard = ({
   const getSkillsList = () => {
     return job.requiredSkills || job.skills || [];
   };
+
+  const salaryDisplay = getSalaryDisplay();
 
   return (
     <div className={`job-card ${expanded ? "expanded" : ""}`}>
@@ -59,27 +64,31 @@ const JobCard = ({
           )}
         </div>
 
-        <div className="job-card-title">
-          <h3>{job.title}</h3>
-          <p className="company">{companyName}</p>
+        <div className="job-card-title-section">
+          <div className="job-card-title">
+            <h3>{job.title}</h3>
+            <p className="company">{companyName}</p>
+          </div>
         </div>
 
-        {!isPublic && (
-          <button
-            className={`btn-save ${isSaved ? "saved" : ""}`}
-            onClick={() => onSave && onSave(job)}
-            title={isSaved ? "Remove saved job" : "Save job"}
-          >
-            {isSaved ? "☆" : "☆"}
-          </button>
-        )}
+        <div className="job-card-header-actions">
+          {!isPublic && (
+            <button
+              className={`btn-save ${isSaved ? "saved" : ""}`}
+              onClick={() => onSave && onSave(job)}
+              title={isSaved ? "Remove saved job" : "Save job"}
+            >
+              {isSaved ? "★" : "☆"}
+            </button>
+          )}
 
-        <button
-          className="btn-ghost"
-          onClick={() => setExpanded((v) => !v)}
-        >
-          {expanded ? "Hide" : "Details"}
-        </button>
+          <button
+            className="btn-ghost"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded ? "Hide" : "Details"}
+          </button>
+        </div>
       </div>
 
       {/* ================= META ================= */}
@@ -89,6 +98,14 @@ const JobCard = ({
         {job.employmentType && <span className="meta-item">{job.employmentType}</span>}
         {job.workMode && <span className="meta-item">{job.workMode}</span>}
       </div>
+
+      {/* ================= SALARY (VISIBLE IN COLLAPSED VIEW) ================= */}
+      {salaryDisplay && (
+        <div className="job-card-salary-banner">
+          <span className="salary-label">Salary:</span>
+          <span className="salary-value">{salaryDisplay}</span>
+        </div>
+      )}
 
       {/* ================= DESCRIPTION PREVIEW ================= */}
       {!expanded && job.description && (
@@ -103,15 +120,15 @@ const JobCard = ({
       {expanded && (
         <div className="job-card-expanded">
           {job.description && (
-            <div className="job-description">
-              <strong>Description:</strong>
+            <div className="job-description-section">
+              <strong>Description</strong>
               <p>{job.description}</p>
             </div>
           )}
 
           {getSkillsList().length > 0 && (
             <div className="job-skills">
-              <strong>Required Skills:</strong>
+              <strong>Required Skills</strong>
               <div className="skill-tags">
                 {getSkillsList().slice(0, 6).map((skill, i) => (
                   <span key={i} className="skill-tag">
@@ -125,15 +142,9 @@ const JobCard = ({
             </div>
           )}
 
-          {getSalaryDisplay() && (
-            <div className="job-salary">
-              <strong>Salary:</strong> {getSalaryDisplay()}
-            </div>
-          )}
-
           {job.benefits?.length > 0 && (
             <div className="job-benefits">
-              <strong>Benefits:</strong>
+              <strong>Benefits</strong>
               <div className="benefits-list">
                 {job.benefits.slice(0, 4).map((benefit, i) => (
                   <span key={i} className="benefit-tag">✓ {benefit}</span>
@@ -162,16 +173,18 @@ const JobCard = ({
             ) : (
               <>
                 <button 
-                  className="btn-primary hf-premium"
-                  onClick={() => onApply && onApply(job)}
+                  className={`btn-primary hf-premium ${isApplied ? "applied" : ""}`}
+                  onClick={() => !isApplied && onApply && onApply(job)}
+                  disabled={isApplied}
+                  title={isApplied ? "You have already applied to this job" : "Apply for this job"}
                 >
-                  Apply Now
+                  {isApplied ? "✓ Applied" : "Apply Now"}
                 </button>
                 <button 
                   className={`btn-outline hf-premium ${isSaved ? "saved" : ""}`}
                   onClick={() => onSave && onSave(job)}
                 >
-                  {isSaved ? "✓ Saved" : "Save Job"}
+                  {isSaved ? "★ Saved" : "☆ Save Job"}
                 </button>
               </>
             )}
