@@ -56,7 +56,7 @@ const JobForm = () => {
   preferredSkills:  job?.preferredSkills || [],
   compensation:     job?.compensation || {},
   hiringPreferences: job?.hiringPreferences || "",
-  companyLogoPreview: job?.basics?.companyLogoPreview || null,
+  companyLogo: job?.basics?.companyLogoPreview || null,
 };
 
   return (
@@ -76,7 +76,7 @@ const JobForm = () => {
                 This updates live based on the job form you filled
               </p>
             </div>
-            <JobPreviewCard job={previewJob} />
+            <JobPreviewCard job={previewJob} mode="preview" />
           </div>
         </div>
       )}

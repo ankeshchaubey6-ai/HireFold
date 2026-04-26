@@ -1,6 +1,7 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useJobsFeed } from "../../Context/JobsFeedContext";
 import { useApplications } from "@/Context/ApplicationsContext";
+import JobPreviewCard from "@/Components/Jobs/JobPreviewCard";
 import ApplyModal from "@/Components/Jobs/ApplyModal";
 
 import "../../Styles/jobs.css";
@@ -34,6 +35,19 @@ const CandidateJobs = () => {
   });
 
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  const cardRefs = useRef({});
+
+  const handleMouseMove = (e, id) => {
+    const card = cardRefs.current[id];
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    card.style.setProperty("--mouse-x", `${x}%`);
+    card.style.setProperty("--mouse-y", `${y}%`);
+  };
 
   /* ================= HELPERS ================= */
   const getId = (job) => job._id || job.id;
@@ -307,155 +321,21 @@ const CandidateJobs = () => {
         <div className="jobs-list">
           {filteredJobs.map((job, index) => {
             const id = getId(job);
-            const alreadyApplied = hasApplied(id);
-            const companyName = job.companyName || "Company";
-            const logoSrc = job.companyLogo
-              ? job.companyLogo.startsWith("http")
-                ? job.companyLogo
-                : `${BACKEND_ORIGIN}${job.companyLogo}`
-              : null;
-            const salaryDisplay = getSalaryDisplay(job);
-
             return (
-              <div
+              <div 
                 key={id}
-                className="job-card"
                 style={{ animationDelay: `${index * 0.05}s` }}
+                ref={(el) => (cardRefs.current[id] = el)}
               >
-                {/* Premium Corner Badge */}
-                {job.featured && (
-                  <div className="job-card-featured-badge">Featured</div>
-                )}
-                
-                <div className="job-card-header">
-                  {/* LOGO */}
-                  <div className="job-card-logo">
-                    {logoSrc ? (
-                      <img
-                        src={logoSrc}
-                        alt={companyName}
-                        className="job-logo-img"
-                      />
-                    ) : (
-                      <span className="job-logo-fallback">
-                        {companyName.charAt(0).toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* STATUS BADGE */}
-                  <div className="job-header-status">
-                    <span className={`status-badge ${job.status || "Published"}`}>
-                      {job.status === "Closed" ? "Closed" : "Open"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="job-card-content">
-                  <div className="job-company">
-                    {companyName}
-                    <span className="job-time-ago">{getTimeAgo(job.createdAt)}</span>
-                  </div>
-                  <h3 className="job-title">
-                    <a href={`/jobs/${id}`}>{job.title}</a>
-                  </h3>
-                  <p className="job-description">
-                    {job.description?.length > 120
-                      ? `${job.description.substring(0, 120)}...`
-                      : job.description || "No description available"}
-                  </p>
-
-                  {/* TAGS */}
-                  <div className="job-meta-tags">
-                    <span className="job-tag">{job.location || "Remote"}</span>
-                    <span className="job-tag">{job.employmentType || "Full-time"}</span>
-                    <span className="job-tag">{job.workMode || "Onsite"}</span>
-                    <span className="job-tag">{job.experienceLevel || "All Levels"}</span>
-                  </div>
-
-                  {/* SKILLS */}
-                  {job.skills && job.skills.length > 0 && (
-                    <div className="job-skills">
-                      {job.skills.slice(0, 4).map((skill, i) => (
-                        <span key={i} className="job-skill-tag">
-                          {skill}
-                        </span>
-                      ))}
-                      {job.skills.length > 4 && (
-                        <span className="job-skill-tag-more">+{job.skills.length - 4}</span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* SALARY SECTION - Only show if salary data exists */}
-                  {salaryDisplay && (
-                    <div className="job-salary-section">
-                      <span className="job-salary">{salaryDisplay}</span>
-                      {job.salary && (
-                        <span className="job-salary-period">/ year</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* EXPANDED DETAILS */}
-                {expandedJobId === id && (
-                  <div className="job-expanded">
-                    <div className="job-details-grid">
-                      <div className="job-detail-item">
-                        <span className="job-detail-label">Full Description</span>
-                        <span className="job-detail-value">{job.description}</span>
-                      </div>
-                      {job.requirements && (
-                        <div className="job-detail-item">
-                          <span className="job-detail-label">Requirements</span>
-                          <ul className="job-detail-value">
-                            {job.requirements.map((req, i) => (
-                              <li key={i}>{req}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {job.benefits && (
-                        <div className="job-detail-item">
-                          <span className="job-detail-label">Benefits</span>
-                          <ul className="job-detail-value">
-                            {job.benefits.map((benefit, i) => (
-                              <li key={i}>{benefit}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                <div className="job-card-footer">
-                  <div className="job-actions">
-                    <button
-                      className="btn-outline"
-                      onClick={() =>
-                        setExpandedJobId(expandedJobId === id ? null : id)
-                      }
-                    >
-                      {expandedJobId === id ? "Hide Details" : "View Details"}
-                    </button>
-                    <button
-                      className={`btn-primary ${alreadyApplied ? "applied" : ""}`}
-                      disabled={alreadyApplied}
-                      onClick={() => setApplyJob(job)}
-                    >
-                      {alreadyApplied ? "Applied" : "Apply Now"}
-                    </button>
-                  </div>
-                  <button
-                    className={`btn-save ${savedJobs.includes(id) ? "saved" : ""}`}
-                    onClick={() => toggleSave(id)}
-                    aria-label={savedJobs.includes(id) ? "Unsave job" : "Save job"}
-                  >
-                    {savedJobs.includes(id) ? "Save" : "Save"}
-                  </button>
-                </div>
+                <JobPreviewCard
+                  job={job}
+                  mode="candidate"
+                  expandedJobId={expandedJobId}
+                  setExpandedJobId={setExpandedJobId}
+                  onMouseMove={handleMouseMove}
+                  cardRef={(el) => (cardRefs.current[id] = el)}
+                  onApply={() => setApplyJob(job)}
+                />
               </div>
             );
           })}
