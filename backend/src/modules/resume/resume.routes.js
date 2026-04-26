@@ -1,7 +1,7 @@
 import express from "express";
 import { ResumeController } from "./resume.controller.js";
 import { protect } from "../../middleware/auth.middleware.js";
-import { uploadResumeMiddleware, handleUploadErrors } from "./resume.upload.js";
+import { uploadResumeMiddleware } from "./resume.upload.js";
 
 const router = express.Router();
 
@@ -13,7 +13,6 @@ router.post(
   "/upload",
   protect,
   uploadResumeMiddleware,
-  handleUploadErrors,
   ResumeController.uploadResume
 );
 
