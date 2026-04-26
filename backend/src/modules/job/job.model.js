@@ -52,6 +52,50 @@ const jobSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+
+    /* MISSING FIELDS - ADD FROM FRONTEND */
+    companyName: {
+      type: String,
+      default: "",
+    },
+
+    employmentType: {
+      type: String,
+      default: "",
+    },
+
+    department: {
+      type: String,
+      default: "",
+    },
+
+    workMode: {
+      type: String,
+      default: "Onsite",
+    },
+
+    preferredSkills: {
+      type: [String],
+      default: [],
+    },
+
+    hiringPreferences: {
+      type: String,
+      default: "",
+    },
+
+    compensation: {
+      min: { type: Number, default: null },
+      max: { type: Number, default: null },
+      currency: { type: String, default: "USD" },
+      frequency: { type: String, default: "Yearly" },
+      showPublicly: { type: Boolean, default: true },
+    },
+
+    applicationLastDate: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

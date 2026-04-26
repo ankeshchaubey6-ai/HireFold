@@ -19,7 +19,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const jobs = await Job.find({ status: "OPEN" })
-      .populate("recruiter", "name")
+      .populate("recruiter", "name company email")
       .sort({ createdAt: -1 });
 
     res.json({

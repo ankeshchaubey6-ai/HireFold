@@ -20,6 +20,8 @@ const normalizeExperienceLevel = (value) => {
 const PostJobActions = () => {
   const { job, setJob, resetJob } = useJob();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleDateChange = (event) => {
     const { value } = event.target;
@@ -49,6 +51,8 @@ const PostJobActions = () => {
 
   const submitJob = async () => {
     setLoading(true);
+    setError("");
+    setSuccess(false);
 
     try {
       const payload = buildPayload();
@@ -59,7 +63,14 @@ const PostJobActions = () => {
         await api.post("/jobs", payload);
       }
 
+      setSuccess(true);
       resetJob();
+      // Clear success message after 2 seconds
+      setTimeout(() => setSuccess(false), 2000);
+    } catch (err) {
+      const errorMessage = err?.response?.data?.message || err?.message || "Failed to post job";
+      setError(errorMessage);
+      console.error("Job posting error:", err);
     } finally {
       setLoading(false);
     }
@@ -92,23 +103,51 @@ const PostJobActions = () => {
       </div>
 
       <div className="footer-actions">
-        <button
-          type="button"
-          className="btn-outline"
-          onClick={handleSaveDraft}
-          disabled={loading}
-        >
-          Save Draft
-        </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-end", flex: 1 }}>
+          {error && (
+            <div style={{ 
+              color: "#d32f2f", 
+              fontSize: "13px", 
+              padding: "8px 12px", 
+              backgroundColor: "#ffebee", 
+              borderRadius: "4px",
+              width: "100%"
+            }}>
+              ⚠️ {error}
+            </div>
+          )}
+          {success && (
+            <div style={{ 
+              color: "#388e3c", 
+              fontSize: "13px", 
+              padding: "8px 12px", 
+              backgroundColor: "#e8f5e9", 
+              borderRadius: "4px",
+              width: "100%"
+            }}>
+              ✓ Job posted successfully!
+            </div>
+          )}
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button
+              type="button"
+              className="btn-outline"
+              onClick={handleSaveDraft}
+              disabled={loading}
+            >
+              Save Draft
+            </button>
 
-        <button
-          type="button"
-          className="btn-primary"
-          onClick={handlePublish}
-          disabled={loading}
-        >
-          {loading ? "Posting..." : "Publish Job"}
-        </button>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handlePublish}
+              disabled={loading}
+            >
+              {loading ? "Posting..." : "Publish Job"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

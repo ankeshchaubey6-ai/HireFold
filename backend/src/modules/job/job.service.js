@@ -11,6 +11,14 @@ export const createJobService = async (data, recruiterId) => {
     experienceLevel,
     requiredSkills,
     hiringModel,
+    companyName,
+    employmentType,
+    department,
+    workMode,
+    preferredSkills,
+    hiringPreferences,
+    compensation,
+    applicationLastDate,
   } = data;
 
   if (!title || !description || !experienceLevel || !hiringModel) {
@@ -31,8 +39,16 @@ export const createJobService = async (data, recruiterId) => {
   requiredSkills: requiredSkills || [],
   hiringModel: normalizedHiringModel,
   recruiter: recruiterId,
-  status: "OPEN", 
-  companyLogo: data.companyLogo || null ,
+  status: "OPEN",
+  companyLogo: data.companyLogo || null,
+  companyName: companyName || "",
+  employmentType: employmentType || "",
+  department: department || "",
+  workMode: workMode || "Onsite",
+  preferredSkills: preferredSkills || [],
+  hiringPreferences: hiringPreferences || "",
+  compensation: compensation || {},
+  applicationLastDate: applicationLastDate || null,
 });
 
 };
