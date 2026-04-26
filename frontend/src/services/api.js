@@ -1,77 +1,43 @@
+
 import axios from "axios";
 
-/* =========================================================
-   BASE URL (MUST MATCH BACKEND DOMAIN)
-========================================================= */
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const api = axios.create({
   baseURL: BASE_URL,
-
-  
   withCredentials: true,
-
-  headers: {
-    "Content-Type": "application/json",
-  },
-
-  
+  headers: { "Content-Type": "application/json" },
   timeout: 15000,
 });
 
-/* =========================================================
-   REQUEST INTERCEPTOR
-========================================================= */
 api.interceptors.request.use(
   (config) => {
-    config.withCredentials = true; //  FORCE EVERY REQUEST
-
+    config.withCredentials = true;
+    const token = localStorage.getItem("hirefold_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-/* =========================================================
-   RESPONSE INTERCEPTOR
-========================================================= */
 api.interceptors.response.use(
-  (response) => {
-
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (!error.response) {
-
       return Promise.reject({
         success: false,
         error: "NETWORK_ERROR",
         message: "Backend unreachable",
       });
     }
-
-    const { status, data, config } = error.response;
-
+    const { status, data } = error.response;
     if (status === 401) {
-
-
+      localStorage.removeItem("hirefold_token");
     }
-
-    return Promise.reject(
-      data || {
-        success: false,
-        message: "Unknown server error",
-      }
-    );
+    return Promise.reject(data || { success: false, message: "Unknown server error" });
   }
 );
 
 export default api;
-
-
-
-
-
-
-
-
-
-
