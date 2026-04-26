@@ -1,11 +1,7 @@
-// =====================================================
-// PUBLIC JOBS  ENHANCED PREMIUM VERSION
-// =====================================================
-
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useJobsFeed } from "../../Context/JobsFeedContext";
-import JobPreviewCard from "../../Components/Jobs/JobPreviewCard";
+import JobCard from "../../Components/Jobs/JobCard";
 
 import "../../Styles/jobs.css";
 
@@ -16,7 +12,6 @@ const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
 const PublicJobs = () => {
   const { jobs } = useJobsFeed();
 
-  const [expandedJobId, setExpandedJobId] = useState(null);
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -28,20 +23,6 @@ const PublicJobs = () => {
     skills: "",
     salaryRange: ""
   });
-
-  const cardRefs = useRef({});
-
-  const handleMouseMove = (e, id) => {
-    const card = cardRefs.current[id];
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-    card.style.setProperty("--mouse-x", `${x}%`);
-    card.style.setProperty("--mouse-y", `${y}%`);
-  };
 
   /* ================= STATS ================= */
   const stats = useMemo(() => ({
@@ -301,16 +282,10 @@ const PublicJobs = () => {
             <div 
               key={job._id || job.id}
               style={{ animationDelay: `${index * 0.05}s` }}
-              ref={(el) => (cardRefs.current[job._id || job.id] = el)}
             >
-              <JobPreviewCard
+              <JobCard
                 job={job}
                 mode="public"
-                expandedJobId={expandedJobId}
-                setExpandedJobId={setExpandedJobId}
-                onMouseMove={handleMouseMove}
-                cardRef={(el) => (cardRefs.current[job._id || job.id] = el)}
-                onApply={() => window.location.href = "/login/candidate"}
               />
             </div>
           ))}

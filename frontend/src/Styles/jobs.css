@@ -1057,6 +1057,262 @@
 }
 
 /* =====================================================
+   JOB CARD - NEW STRUCTURE (for candidate/public modes)
+===================================================== */
+
+/* Header with title and company */
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.job-card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-card-title h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.3;
+  color: #111827;
+}
+
+.dark .job-card-title h3 {
+  color: #ffffff;
+}
+
+.job-card-title .company {
+  font-size: 0.85rem;
+  color: #e50914;
+  font-weight: 700;
+  margin: 0;
+}
+
+.dark .job-card-title .company {
+  color: #ff6b35;
+}
+
+/* Meta information (location, level, type, mode) */
+.job-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.meta-item {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.9rem;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 100px;
+  color: #4b5563;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dark .meta-item {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #c0c0e0 !important;
+}
+
+/* Description preview */
+.job-description-preview {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dark .job-description-preview {
+  color: #b0b0d0;
+}
+
+/* Expanded section */
+.job-card-expanded {
+  padding: 1rem 0 0 0;
+  border-top: 1px solid #e5e7eb;
+  animation: slideDown 0.3s ease;
+}
+
+.dark .job-card-expanded {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Job description section in expanded view */
+.job-card-expanded .job-description {
+  margin-bottom: 1.25rem;
+}
+
+.job-card-expanded .job-description strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dark .job-card-expanded .job-description strong {
+  color: #ffffff;
+}
+
+/* Skills section */
+.job-skills {
+  margin-bottom: 1.25rem;
+}
+
+.job-skills strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dark .job-skills strong {
+  color: #ffffff;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.skill-tag {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(59, 130, 246, 0.12);
+  border-radius: 100px;
+  color: #3b82f6;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.dark .skill-tag {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+}
+
+.skill-tag-more {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 100px;
+  color: #6b7280;
+  border: 1px solid transparent;
+}
+
+.dark .skill-tag-more {
+  color: #a0a0c0;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Salary section */
+.job-salary {
+  margin-bottom: 1.25rem;
+}
+
+.job-salary strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dark .job-salary strong {
+  color: #ffffff;
+}
+
+/* Benefits section */
+.job-benefits {
+  margin-bottom: 1.25rem;
+}
+
+.job-benefits strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dark .job-benefits strong {
+  color: #ffffff;
+}
+
+.benefits-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.benefit-tag {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(34, 211, 160, 0.12);
+  border-radius: 8px;
+  color: #22d3a0;
+  border: 1px solid rgba(34, 211, 160, 0.2);
+  font-weight: 500;
+}
+
+.dark .benefit-tag {
+  background: rgba(34, 211, 160, 0.2);
+  border-color: rgba(34, 211, 160, 0.3);
+  color: #2ee59d;
+}
+
+/* Actions section */
+.job-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.dark .job-card-actions {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Save button styling */
+.btn-outline.saved {
+  background: rgba(34, 211, 160, 0.1);
+  border-color: #22d3a0;
+  color: #22d3a0;
+}
+
+.dark .btn-outline.saved {
+  background: rgba(34, 211, 160, 0.2);
+  border-color: #2ee59d;
+  color: #2ee59d;
+}
+
+/* Login hint message */
+.login-hint {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0.75rem 0 0 0;
+  font-weight: 500;
+}
+
+.dark .login-hint {
+  color: #a0a0c0;
+}
+
+/* =====================================================
    RESPONSIVE
 ===================================================== */
 @media (max-width: 1280px) {

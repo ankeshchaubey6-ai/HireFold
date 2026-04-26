@@ -3,59 +3,140 @@ import React, { useState } from "react";
 import "../../Styles/jobs.css";
 import "../../Styles/sectionSurface.css";
 
-const JobCard = ({ job, mode = "candidate" }) => {
+const JobCard = ({ 
+  job, 
+  mode = "candidate",
+  isSaved = false,
+  onSave = null,
+  onApply = null 
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   const isPublic = mode === "public";
+  const companyName = job.companyName || job.company || "Company";
+  
+  // Handle logo URL resolution
+  let logoSrc = null;
+  if (job.companyLogo) {
+    if (job.companyLogo.startsWith("http")) {
+      logoSrc = job.companyLogo;
+    } else {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+      logoSrc = `${BACKEND_ORIGIN}${job.companyLogo}`;
+    }
+  }
+  if (!logoSrc && (job.companyLogoUrl || job.companyLogoPreview)) {
+    logoSrc = job.companyLogoUrl || job.companyLogoPreview;
+  }
+
+  const getSalaryDisplay = () => {
+    if (job.salary) {
+      return `$${job.salary.toLocaleString()}/year`;
+    }
+    if (job.salaryRange) {
+      return `${job.salaryRange.min} - ${job.salaryRange.max}`;
+    }
+    if (job.compensation?.min || job.compensation?.max) {
+      return `${job.compensation.currency || "USD"} ${job.compensation.min}${job.compensation.max ? ` - ${job.compensation.max}` : ""}`;
+    }
+    return null;
+  };
+
+  const getSkillsList = () => {
+    return job.requiredSkills || job.skills || [];
+  };
 
   return (
     <div className={`job-card ${expanded ? "expanded" : ""}`}>
       {/* ================= HEADER ================= */}
       <div className="job-card-header">
         <div className="job-card-logo">
-          {job.company?.charAt(0) || "H"}
+          {logoSrc ? (
+            <img src={logoSrc} alt={companyName} className="job-logo-img" />
+          ) : (
+            <span className="job-logo-fallback">{companyName.charAt(0).toUpperCase()}</span>
+          )}
         </div>
 
         <div className="job-card-title">
           <h3>{job.title}</h3>
-          <p className="company">{job.company}</p>
+          <p className="company">{companyName}</p>
         </div>
+
+        {!isPublic && (
+          <button
+            className={`btn-save ${isSaved ? "saved" : ""}`}
+            onClick={() => onSave && onSave(job)}
+            title={isSaved ? "Remove saved job" : "Save job"}
+          >
+            {isSaved ? "☆" : "☆"}
+          </button>
+        )}
 
         <button
           className="btn-ghost"
           onClick={() => setExpanded((v) => !v)}
         >
-          {expanded ? "Collapse" : "View Details"}
+          {expanded ? "Hide" : "Details"}
         </button>
       </div>
 
       {/* ================= META ================= */}
       <div className="job-card-meta">
-        <span>{job.location}</span>
-        <span>{job.experienceLevel}</span>
-        <span>{job.employmentType}</span>
-        <span>{job.workMode}</span>
+        {job.location && <span className="meta-item">{job.location}</span>}
+        {job.experienceLevel && <span className="meta-item">{job.experienceLevel}</span>}
+        {job.employmentType && <span className="meta-item">{job.employmentType}</span>}
+        {job.workMode && <span className="meta-item">{job.workMode}</span>}
       </div>
+
+      {/* ================= DESCRIPTION PREVIEW ================= */}
+      {!expanded && job.description && (
+        <div className="job-description-preview">
+          {job.description?.length > 100
+            ? `${job.description.substring(0, 100)}...`
+            : job.description}
+        </div>
+      )}
 
       {/* ================= EXPANDED ================= */}
       {expanded && (
         <div className="job-card-expanded">
-          <p className="job-description">{job.description}</p>
-
-          {job.salary && (
-            <div className="job-salary">
-              <strong>Salary:</strong> {job.salary}
+          {job.description && (
+            <div className="job-description">
+              <strong>Description:</strong>
+              <p>{job.description}</p>
             </div>
           )}
 
-          {job.skills?.length > 0 && (
+          {getSkillsList().length > 0 && (
             <div className="job-skills">
-              <strong>Skills:</strong>
+              <strong>Required Skills:</strong>
               <div className="skill-tags">
-                {job.skills.map((skill, i) => (
+                {getSkillsList().slice(0, 6).map((skill, i) => (
                   <span key={i} className="skill-tag">
                     {skill}
                   </span>
+                ))}
+                {getSkillsList().length > 6 && (
+                  <span className="skill-tag-more">+{getSkillsList().length - 6} more</span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {getSalaryDisplay() && (
+            <div className="job-salary">
+              <strong>Salary:</strong> {getSalaryDisplay()}
+            </div>
+          )}
+
+          {job.benefits?.length > 0 && (
+            <div className="job-benefits">
+              <strong>Benefits:</strong>
+              <div className="benefits-list">
+                {job.benefits.slice(0, 4).map((benefit, i) => (
+                  <span key={i} className="benefit-tag">✓ {benefit}</span>
                 ))}
               </div>
             </div>
@@ -80,8 +161,18 @@ const JobCard = ({ job, mode = "candidate" }) => {
               </>
             ) : (
               <>
-                <button className="btn-primary hf-premium">Apply Now</button>
-                <button className="btn-outline hf-premium">Save Job</button>
+                <button 
+                  className="btn-primary hf-premium"
+                  onClick={() => onApply && onApply(job)}
+                >
+                  Apply Now
+                </button>
+                <button 
+                  className={`btn-outline hf-premium ${isSaved ? "saved" : ""}`}
+                  onClick={() => onSave && onSave(job)}
+                >
+                  {isSaved ? "✓ Saved" : "Save Job"}
+                </button>
               </>
             )}
           </div>

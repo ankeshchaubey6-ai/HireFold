@@ -1,7 +1,7 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useJobsFeed } from "../../Context/JobsFeedContext";
 import { useApplications } from "@/Context/ApplicationsContext";
-import JobPreviewCard from "@/Components/Jobs/JobPreviewCard";
+import JobCard from "@/Components/Jobs/JobCard";
 import ApplyModal from "@/Components/Jobs/ApplyModal";
 
 import "../../Styles/jobs.css";
@@ -15,7 +15,6 @@ const CandidateJobs = () => {
 
   const [savedJobs, setSavedJobs] = useState([]);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
-  const [expandedJobId, setExpandedJobId] = useState(null);
   const [applyJob, setApplyJob] = useState(null);
   const [stats, setStats] = useState({
     totalJobs: 0,
@@ -35,25 +34,8 @@ const CandidateJobs = () => {
   });
 
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
-  const cardRefs = useRef({});
 
-  const handleMouseMove = (e, id) => {
-    const card = cardRefs.current[id];
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-    card.style.setProperty("--mouse-x", `${x}%`);
-    card.style.setProperty("--mouse-y", `${y}%`);
-  };
-
-  /* ================= HELPERS ================= */
   const getId = (job) => job._id || job.id;
-
-  const hasApplied = (jobId) =>
-    applications.some((a) => a.jobId === jobId);
 
   const toggleSave = (id) => {
     setSavedJobs((prev) =>
@@ -325,15 +307,12 @@ const CandidateJobs = () => {
               <div 
                 key={id}
                 style={{ animationDelay: `${index * 0.05}s` }}
-                ref={(el) => (cardRefs.current[id] = el)}
               >
-                <JobPreviewCard
+                <JobCard
                   job={job}
                   mode="candidate"
-                  expandedJobId={expandedJobId}
-                  setExpandedJobId={setExpandedJobId}
-                  onMouseMove={handleMouseMove}
-                  cardRef={(el) => (cardRefs.current[id] = el)}
+                  isSaved={savedJobs.includes(id)}
+                  onSave={() => toggleSave(id)}
                   onApply={() => setApplyJob(job)}
                 />
               </div>
