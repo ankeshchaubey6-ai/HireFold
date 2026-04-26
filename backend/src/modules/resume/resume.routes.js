@@ -1,54 +1,43 @@
+
 import express from "express";
+import multer from "multer";
 import { ResumeController } from "./resume.controller.js";
 import { protect } from "../../middleware/auth.middleware.js";
-import { uploadResumeMiddleware } from "./resume.upload.js";
 
 const router = express.Router();
 
-/* =====================================================
-   UPLOAD + PARSE RESUME (MAIN PIPELINE)
-   POST /api/resumes/upload
-===================================================== */
-router.post(
-  "/upload",
-  protect,
-  uploadResumeMiddleware,
-  ResumeController.uploadResume
-);
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowed = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF and DOCX allowed"), false);
+    }
+  }
+}).single("resume");
 
-/* =====================================================
-   UPSERT RESUME (AUTOSAVE + BUILDER SAVE)
-===================================================== */
-router.post(
-  "/upsert",
-  protect,
-  ResumeController.upsertResume
-);
+const uploadMiddleware = (req, res, next) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    if (err) {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    next();
+  });
+};
 
-/* =====================================================
-   GET SINGLE RESUME (HYDRATION / CONTINUE EDITING)
-===================================================== */
-router.get(
-  "/:resumeId",
-  ResumeController.getResumeById
-);
-
-/* =====================================================
-   GET RESUMES BY USER (MY RESUMES PAGE)
-===================================================== */
-router.get(
-  "/user/:userId",
-  protect,
-  ResumeController.getResumesByUser
-);
-
-/* =====================================================
-   DELETE RESUME
-===================================================== */
-router.delete(
-  "/:resumeId",
-  protect,
-  ResumeController.deleteResume
-);
+router.post("/upload", protect, uploadMiddleware, ResumeController.uploadResume);
+router.post("/upsert", protect, ResumeController.upsertResume);
+router.get("/:resumeId", ResumeController.getResumeById);
+router.get("/user/:userId", protect, ResumeController.getResumesByUser);
+router.delete("/:resumeId", protect, ResumeController.deleteResume);
 
 export default router;
