@@ -116,7 +116,7 @@ const PublicJobs = () => {
     <main className="jobs-page">
       {/* ================= HERO SECTION ================= */}
       <div className="jobs-hero">
-        <div className="jobs-hero-content">
+        <div className="jobs-hero-left">
           <span className="jobs-hero-badge"> Explore Opportunities</span>
           <h1 className="jobs-hero-title">
             Discover Your <span className="gradient-text">Next Career</span> Move
@@ -167,7 +167,7 @@ const PublicJobs = () => {
             >
               {isFiltersExpanded ? " Simple Filters" : " Advanced Filters"}
             </button>
-            <Link to="/login/candidate" className="btn-signup">
+            <Link to="/login/candidate" className="saved-toggle-btn active">
               Sign in to Apply 
             </Link>
           </div>
@@ -279,22 +279,19 @@ const PublicJobs = () => {
       ) : (
         <div className="jobs-list">
           {visibleJobs.map((job, index) => (
-            <div 
+            <JobCard
               key={job._id || job.id}
+              job={job}
+              mode="public"
               style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              <JobCard
-                job={job}
-                mode="public"
-              />
-            </div>
+            />
           ))}
         </div>
       )}
 
       {/* ================= CTA ================= */}
       {filteredJobs.length > PUBLIC_JOBS_LIMIT && (
-        <div className="jobs-login-cta">
+        <div className="load-more-container">
           <p>
             Showing {PUBLIC_JOBS_LIMIT} of {filteredJobs.length} jobs
           </p>

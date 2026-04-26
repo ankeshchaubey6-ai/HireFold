@@ -3,20 +3,21 @@ import React, { useState } from "react";
 import "../../Styles/jobs.css";
 import "../../Styles/sectionSurface.css";
 
-const JobCard = ({ 
-  job, 
+const JobCard = ({
+  job,
   mode = "candidate",
   isSaved = false,
   isApplied = false,
   onSave = null,
-  onApply = null 
+  onApply = null,
+  style = {},
 }) => {
   const [expanded, setExpanded] = useState(false);
 
   const isPublic = mode === "public";
   const companyName = job.companyName || job.company || "Company";
-  
-  // Handle logo URL resolution
+  const status = (job.status || "OPEN").toUpperCase();
+
   let logoSrc = null;
   if (job.companyLogo) {
     if (job.companyLogo.startsWith("http")) {
@@ -32,12 +33,8 @@ const JobCard = ({
   }
 
   const getSalaryDisplay = () => {
-    if (job.salary) {
-      return `$${job.salary.toLocaleString()}/year`;
-    }
-    if (job.salaryRange) {
-      return `${job.salaryRange.min} - ${job.salaryRange.max}`;
-    }
+    if (job.salary) return `$${job.salary.toLocaleString()}/year`;
+    if (job.salaryRange) return `${job.salaryRange.min} - ${job.salaryRange.max}`;
     if (job.compensation?.min || job.compensation?.max) {
       const min = job.compensation.min || "";
       const max = job.compensation.max ? ` - ${job.compensation.max}` : "";
@@ -46,151 +43,184 @@ const JobCard = ({
     return null;
   };
 
-  const getSkillsList = () => {
-    return job.requiredSkills || job.skills || [];
+  const getTimeAgo = (date) => {
+    if (!date) return "Recently";
+    const now = new Date();
+    const posted = new Date(date);
+    const diffDays = Math.floor((now - posted) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    return `${Math.floor(diffDays / 30)} months ago`;
   };
 
+  const skills = job.requiredSkills || job.skills || [];
   const salaryDisplay = getSalaryDisplay();
+  const isClosed = status === "CLOSED";
+  const statusClass = isClosed ? "closed" : job.featured ? "featured" : "open";
+  const statusText = isClosed ? "Closed" : job.featured ? "Featured" : "Open";
 
   return (
-    <div className={`job-card ${expanded ? "expanded" : ""}`}>
-      {/* ================= HEADER ================= */}
-      <div className="job-card-header">
-        <div className="job-card-logo">
-          {logoSrc ? (
-            <img src={logoSrc} alt={companyName} className="job-logo-img" />
-          ) : (
-            <span className="job-logo-fallback">{companyName.charAt(0).toUpperCase()}</span>
-          )}
-        </div>
+    <div className="job-card" style={style}>
+      <div className="job-card-accent" />
 
-        <div className="job-card-title-section">
-          <div className="job-card-title">
-            <h3>{job.title}</h3>
-            <p className="company">{companyName}</p>
+      <div className="job-card-body">
+        <span className={`job-card-status ${statusClass}`}>{statusText}</span>
+
+        {!isPublic && (
+          <button
+            type="button"
+            className={`job-card-save ${isSaved ? "saved" : ""}`}
+            onClick={() => onSave && onSave(job)}
+            title={isSaved ? "Remove saved job" : "Save job"}
+            aria-label={isSaved ? "Remove saved job" : "Save job"}
+          >
+            {isSaved ? "*" : "+"}
+          </button>
+        )}
+
+        <div className="job-card-header">
+          <div className="job-card-logo">
+            {logoSrc ? (
+              <img src={logoSrc} alt={companyName} className="job-logo-img" />
+            ) : (
+              <span className="job-logo-fallback">
+                {companyName.charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          <div className="job-card-title-block">
+            <div className="job-company-name">{companyName}</div>
+            <h3 className="job-title">{job.title || "Untitled role"}</h3>
           </div>
         </div>
 
-        <div className="job-card-header-actions">
-          {!isPublic && (
-            <button
-              className={`btn-save ${isSaved ? "saved" : ""}`}
-              onClick={() => onSave && onSave(job)}
-              title={isSaved ? "Remove saved job" : "Save job"}
-            >
-              {isSaved ? "★" : "☆"}
-            </button>
-          )}
-
-          <button
-            className="btn-ghost"
-            onClick={() => setExpanded((v) => !v)}
-          >
-            {expanded ? "Hide" : "Details"}
-          </button>
+        <div className="job-meta-pills">
+          <span className="meta-pill">{job.location || "Remote"}</span>
+          <span className="meta-pill">{job.experienceLevel || "All Levels"}</span>
+          <span className="meta-pill">{job.employmentType || "Full-time"}</span>
+          <span className="meta-pill">{job.workMode || "Flexible"}</span>
         </div>
-      </div>
 
-      {/* ================= META ================= */}
-      <div className="job-card-meta">
-        {job.location && <span className="meta-item">{job.location}</span>}
-        {job.experienceLevel && <span className="meta-item">{job.experienceLevel}</span>}
-        {job.employmentType && <span className="meta-item">{job.employmentType}</span>}
-        {job.workMode && <span className="meta-item">{job.workMode}</span>}
-      </div>
+        {job.description && (
+          <div className="job-description-preview">
+            {job.description.length > 120
+              ? `${job.description.substring(0, 120)}...`
+              : job.description}
+          </div>
+        )}
 
-      {/* ================= SALARY (VISIBLE IN COLLAPSED VIEW) ================= */}
-      {salaryDisplay && (
-        <div className="job-card-salary-banner">
-          <span className="salary-label">Salary:</span>
-          <span className="salary-value">{salaryDisplay}</span>
-        </div>
-      )}
+        {skills.length > 0 && (
+          <div className="job-skills-row">
+            {skills.slice(0, 5).map((skill, i) => (
+              <span key={i} className="skill-tag">
+                {skill}
+              </span>
+            ))}
+            {skills.length > 5 && (
+              <span className="skill-tag-more">+{skills.length - 5} more</span>
+            )}
+          </div>
+        )}
 
-      {/* ================= DESCRIPTION PREVIEW ================= */}
-      {!expanded && job.description && (
-        <div className="job-description-preview">
-          {job.description?.length > 100
-            ? `${job.description.substring(0, 100)}...`
-            : job.description}
-        </div>
-      )}
+        {salaryDisplay && (
+          <div className="job-salary-banner">
+            <span className="salary-banner-label">Salary</span>
+            <span className="salary-banner-amount">{salaryDisplay}</span>
+            {job.compensation?.frequency && (
+              <span className="salary-banner-period">/ {job.compensation.frequency}</span>
+            )}
+          </div>
+        )}
 
-      {/* ================= EXPANDED ================= */}
-      {expanded && (
-        <div className="job-card-expanded">
-          {job.description && (
-            <div className="job-description-section">
-              <strong>Description</strong>
-              <p>{job.description}</p>
-            </div>
-          )}
+        <div className="job-card-divider" />
 
-          {getSkillsList().length > 0 && (
-            <div className="job-skills">
-              <strong>Required Skills</strong>
-              <div className="skill-tags">
-                {getSkillsList().slice(0, 6).map((skill, i) => (
-                  <span key={i} className="skill-tag">
-                    {skill}
-                  </span>
-                ))}
-                {getSkillsList().length > 6 && (
-                  <span className="skill-tag-more">+{getSkillsList().length - 6} more</span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {job.benefits?.length > 0 && (
-            <div className="job-benefits">
-              <strong>Benefits</strong>
-              <div className="benefits-list">
-                {job.benefits.slice(0, 4).map((benefit, i) => (
-                  <span key={i} className="benefit-tag">✓ {benefit}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ================= ACTIONS ================= */}
+        <div className="job-card-footer">
+          <div className="job-card-footer-left">
+            <span className="job-time-ago">Posted {getTimeAgo(job.createdAt)}</span>
+          </div>
           <div className="job-card-actions">
-            {isPublic ? (
-              <>
-                <button
-                  className="btn-primary hf-premium"
-                  onClick={() =>
-                    (window.location.href = "/login/candidate")
-                  }
-                >
-                  Login to Apply
-                </button>
+            <button
+              type="button"
+              className="btn-outline"
+              onClick={() => setExpanded((v) => !v)}
+            >
+              {expanded ? "Hide Details" : "View Details"}
+            </button>
 
-                <p className="login-hint">
-                  Login required to view full job details
-                </p>
-              </>
+            {isPublic ? (
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={() => {
+                  window.location.href = "/login/candidate";
+                }}
+              >
+                Login to Apply
+              </button>
             ) : (
-              <>
-                <button 
-                  className={`btn-primary hf-premium ${isApplied ? "applied" : ""}`}
-                  onClick={() => !isApplied && onApply && onApply(job)}
-                  disabled={isApplied}
-                  title={isApplied ? "You have already applied to this job" : "Apply for this job"}
-                >
-                  {isApplied ? "✓ Applied" : "Apply Now"}
-                </button>
-                <button 
-                  className={`btn-outline hf-premium ${isSaved ? "saved" : ""}`}
-                  onClick={() => onSave && onSave(job)}
-                >
-                  {isSaved ? "★ Saved" : "☆ Save Job"}
-                </button>
-              </>
+              <button
+                type="button"
+                className={`btn-primary ${isApplied ? "applied" : ""}`}
+                onClick={() => !isApplied && onApply && onApply(job)}
+                disabled={isApplied || isClosed}
+                title={isApplied ? "You have already applied to this job" : "Apply for this job"}
+              >
+                {isApplied ? "Applied" : isClosed ? "Closed" : "Apply Now"}
+              </button>
             )}
           </div>
         </div>
-      )}
+      </div>
+
+      <div className={`job-card-expanded ${expanded ? "open" : ""}`}>
+        <div className="job-card-expanded-inner">
+          <div>
+            <div className="expanded-section-label">Description</div>
+            <div className="expanded-section-text">
+              {job.description || "No description provided."}
+            </div>
+          </div>
+
+          <div className="job-details-grid">
+            <div className="job-detail-item">
+              <span className="job-detail-label">Company</span>
+              <span className="job-detail-value">{companyName}</span>
+            </div>
+            <div className="job-detail-item">
+              <span className="job-detail-label">Location</span>
+              <span className="job-detail-value">{job.location || "Remote"}</span>
+            </div>
+            <div className="job-detail-item">
+              <span className="job-detail-label">Type</span>
+              <span className="job-detail-value">{job.employmentType || "Full-time"}</span>
+            </div>
+            <div className="job-detail-item">
+              <span className="job-detail-label">Experience</span>
+              <span className="job-detail-value">{job.experienceLevel || "All Levels"}</span>
+            </div>
+          </div>
+
+          {job.benefits?.length > 0 && (
+            <div>
+              <div className="expanded-section-label">Benefits</div>
+              <div className="benefits-list">
+                {job.benefits.slice(0, 4).map((benefit, i) => (
+                  <span key={i} className="benefit-tag">{benefit}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {isPublic && (
+            <div className="job-expanded-actions">
+              <span className="login-hint">Login required to apply for this job.</span>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

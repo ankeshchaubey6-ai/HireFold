@@ -140,7 +140,7 @@ const CandidateJobs = () => {
     <main className="jobs-page">
       {/* ================= HERO SECTION ================= */}
       <div className="jobs-hero">
-        <div className="jobs-hero-content">
+        <div className="jobs-hero-left">
           <span className="jobs-hero-badge"> Find Your Dream Job</span>
           <h1 className="jobs-hero-title">
             Discover <span className="gradient-text">Opportunities</span> That Match Your Skills
@@ -309,19 +309,16 @@ const CandidateJobs = () => {
             const id = getId(job);
             const isApplied = appliedJobs.includes(id);
             return (
-              <div 
+              <JobCard
                 key={id}
+                job={job}
+                mode="candidate"
+                isSaved={savedJobs.includes(id)}
+                isApplied={isApplied}
+                onSave={() => toggleSave(id)}
+                onApply={() => setApplyJob(job)}
                 style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <JobCard
-                  job={job}
-                  mode="candidate"
-                  isSaved={savedJobs.includes(id)}
-                  isApplied={isApplied}
-                  onSave={() => toggleSave(id)}
-                  onApply={() => setApplyJob(job)}
-                />
-              </div>
+              />
             );
           })}
         </div>

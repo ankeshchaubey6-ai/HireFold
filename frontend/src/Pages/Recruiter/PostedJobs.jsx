@@ -67,11 +67,11 @@ const PostedJobs = () => {
     return null;
   };
 
-  const getStatusStyle = (status) => {
+  const getStatusClass = (status) => {
     const upperStatus = (status || "OPEN").toUpperCase();
-    if (upperStatus === "OPEN") return "status-open";
-    if (upperStatus === "CLOSED") return "status-closed";
-    return "status-draft";
+    if (upperStatus === "CLOSED") return "closed";
+    if (upperStatus === "DRAFT") return "featured";
+    return "open";
   };
 
   const getStatusText = (status) => {
@@ -84,7 +84,7 @@ const PostedJobs = () => {
   return (
     <main className="jobs-page">
       <div className="jobs-hero">
-        <div className="jobs-hero-content">
+        <div className="jobs-hero-left">
           <span className="jobs-hero-badge"> Job Dashboard</span>
           <h1 className="jobs-hero-title">
             Manage Your <span className="gradient-text">Job Listings</span>
@@ -118,31 +118,38 @@ const PostedJobs = () => {
         </div>
       </div>
 
-      <div className="posted-jobs-header">
-        <div className="posted-jobs-title-section">
-          <h2>
-            {type === "drafts"
-              ? "Draft Jobs"
-              : type === "past"
-              ? "Past Jobs"
-              : "Active Jobs"}
-          </h2>
-          <p>{filteredJobs.length} jobs in this category</p>
+      <div className="jobs-filters-container">
+        <div className="filters-header">
+          <div className="filters-title-section">
+            <h2>
+              {type === "drafts"
+                ? "Draft Jobs"
+                : type === "past"
+                ? "Past Jobs"
+                : "Active Jobs"}
+            </h2>
+            <p>{filteredJobs.length} jobs in this category</p>
+          </div>
+          <div className="filters-actions">
+            <button
+              className="btn-primary"
+              onClick={() => navigate("/recruiter/post-job")}
+            >
+              Post New Job
+            </button>
+          </div>
         </div>
-        <div className="posted-jobs-actions">
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button
-            className="btn-primary"
-            onClick={() => navigate("/recruiter/post-job")}
-          >
-            Post New Job
-          </button>
+
+        <div className="filters-grid expanded">
+          <div className="filter-group">
+            <label>Search Jobs</label>
+            <input
+              type="text"
+              placeholder="Search jobs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
@@ -182,143 +189,141 @@ const PostedJobs = () => {
             const salaryDisplay = getSalaryDisplay(job);
 
             return (
-              <div
-                key={id}
-                className="job-card"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="job-card-header">
-                  <div className="job-card-logo">
-                    {logoSrc ? (
-                      <img
-                        src={logoSrc}
-                        alt={companyName}
-                        className="job-logo-img"
-                      />
-                    ) : (
-                      <span className="job-logo-fallback">
-                        {companyName.charAt(0).toUpperCase()}
-                      </span>
-                    )}
+              <div key={id} className="job-card" style={{ animationDelay: `${index * 0.05}s` }}>
+                <div className="job-card-accent" />
+
+                <div className="job-card-body">
+                  <span className={`job-card-status ${getStatusClass(status)}`}>
+                    {getStatusText(status)}
+                  </span>
+
+                  <div className="job-card-header">
+                    <div className="job-card-logo">
+                      {logoSrc ? (
+                        <img
+                          src={logoSrc}
+                          alt={companyName}
+                          className="job-logo-img"
+                        />
+                      ) : (
+                        <span className="job-logo-fallback">
+                          {companyName.charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="job-card-title-block">
+                      <div className="job-company-name">{companyName}</div>
+                      <h3 className="job-title">{job.title}</h3>
+                    </div>
                   </div>
 
-                  <div className="job-header-status">
-                    <span className={`status-badge ${getStatusStyle(status)}`}>
-                      {getStatusText(status)}
-                    </span>
+                  <div className="job-meta-pills">
+                    <span className="meta-pill">{job.location || "Remote"}</span>
+                    <span className="meta-pill">{job.employmentType || "Full-time"}</span>
+                    <span className="meta-pill">{job.workMode || "Flexible"}</span>
+                    <span className="meta-pill">{job.experienceLevel || "All Levels"}</span>
+                    <span className="meta-pill">{job.applicationsCount || 0} applications</span>
                   </div>
-                </div>
 
-                <div className="job-card-content">
-                  <div className="job-company">
-                    {companyName}
-                    <span className="job-time-ago">
-                      Posted {dayjs(job.createdAt).format("DD MMM YYYY")}
-                    </span>
-                  </div>
-                  <h3 className="job-title">{job.title}</h3>
-                  <p className="job-description">
+                  <div className="job-description-preview">
                     {job.description?.length > 120
                       ? `${job.description.substring(0, 120)}...`
                       : job.description || "No description provided"}
-                  </p>
-
-                  <div className="job-meta-tags">
-                    <span className="job-tag">{job.location || "Remote"}</span>
-                    <span className="job-tag">{job.employmentType || "Full-time"}</span>
-                    <span className="job-tag">{job.workMode || "Flexible"}</span>
-                    <span className="job-tag">{job.experienceLevel || "All Levels"}</span>
-                  </div>
-
-                  <div className="job-applications-count">
-                    <span className="applications-icon">Apps</span>
-                    <span className="applications-number">{job.applicationsCount || 0}</span>
-                    <span className="applications-text">applications received</span>
                   </div>
 
                   {salaryDisplay && (
-                    <div className="job-salary-section">
-                      <span className="job-salary">{salaryDisplay}</span>
-                      {job.salary && (
-                        <span className="job-salary-period">/ year</span>
-                      )}
+                    <div className="job-salary-banner">
+                      <span className="salary-banner-label">Salary</span>
+                      <span className="salary-banner-amount">{salaryDisplay}</span>
                     </div>
                   )}
+
+                  <div className="job-card-divider" />
+
+                  <div className="job-card-footer">
+                    <div className="job-card-footer-left">
+                      <span className="job-time-ago">
+                        Posted {dayjs(job.createdAt).format("DD MMM YYYY")}
+                      </span>
+                    </div>
+                    <div className="job-card-actions">
+                      <button
+                        className="btn-outline"
+                        onClick={() =>
+                          setExpandedJobId(expandedJobId === id ? null : id)
+                        }
+                      >
+                        {expandedJobId === id ? "Hide Details" : "View Details"}
+                      </button>
+
+                      {status === "OPEN" && (
+                        <>
+                          <button
+                            className="btn-outline"
+                            onClick={() => {
+                              loadJobForEdit(job);
+                              navigate("/recruiter/post-job");
+                            }}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            className="btn-outline"
+                            onClick={() => updateStatus(id, "CLOSED")}
+                          >
+                            Close
+                          </button>
+                        </>
+                      )}
+
+                      <button
+                        className="btn-ghost"
+                        onClick={() => {
+                          if (window.confirm("Delete this job permanently? This action cannot be undone.")) {
+                            deleteJob(id);
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
-                {expandedJobId === id && (
-                  <div className="job-expanded">
+                <div className={`job-card-expanded ${expandedJobId === id ? "open" : ""}`}>
+                  <div className="job-card-expanded-inner">
+                    <div>
+                      <div className="expanded-section-label">Full Description</div>
+                      <div className="expanded-section-text">
+                        {job.description || "No description provided"}
+                      </div>
+                    </div>
+
                     <div className="job-details-grid">
                       <div className="job-detail-item">
-                        <span className="job-detail-label">Full Description</span>
-                        <span className="job-detail-value">{job.description}</span>
+                        <span className="job-detail-label">Applications</span>
+                        <span className="job-detail-value">{job.applicationsCount || 0}</span>
                       </div>
                       {Array.isArray(job.requirements) && job.requirements.length > 0 && (
                         <div className="job-detail-item">
                           <span className="job-detail-label">Requirements</span>
-                          <ul className="job-detail-value">
-                            {job.requirements.map((req, i) => (
-                              <li key={i}>{req}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {Array.isArray(job.benefits) && job.benefits.length > 0 && (
-                        <div className="job-detail-item">
-                          <span className="job-detail-label">Benefits</span>
-                          <ul className="job-detail-value">
-                            {job.benefits.map((benefit, i) => (
-                              <li key={i}>{benefit}</li>
-                            ))}
-                          </ul>
+                          <span className="job-detail-value">{job.requirements.join(", ")}</span>
                         </div>
                       )}
                     </div>
-                  </div>
-                )}
 
-                <div className="job-card-footer">
-                  <div className="job-actions">
-                    <button
-                      className="btn-outline"
-                      onClick={() =>
-                        setExpandedJobId(expandedJobId === id ? null : id)
-                      }
-                    >
-                      {expandedJobId === id ? "Hide Details" : "View Details"}
-                    </button>
-
-                    {status === "OPEN" && (
-                      <>
-                        <button
-                          className="btn-outline"
-                          onClick={() => {
-                            loadJobForEdit(job);
-                            navigate("/recruiter/post-job");
-                          }}
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          className="btn-outline"
-                          onClick={() => updateStatus(id, "CLOSED")}
-                        >
-                          Close
-                        </button>
-                      </>
+                    {Array.isArray(job.benefits) && job.benefits.length > 0 && (
+                      <div>
+                        <div className="expanded-section-label">Benefits</div>
+                        <div className="benefits-list">
+                          {job.benefits.map((benefit, i) => (
+                            <span key={i} className="benefit-tag">{benefit}</span>
+                          ))}
+                        </div>
+                      </div>
                     )}
-
-                    <button
-                      className="btn-danger"
-                      onClick={() => {
-                        if (window.confirm("Delete this job permanently? This action cannot be undone.")) {
-                          deleteJob(id);
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
                   </div>
                 </div>
               </div>
