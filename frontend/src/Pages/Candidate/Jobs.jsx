@@ -5,6 +5,9 @@ import ApplyModal from "@/Components/Jobs/ApplyModal";
 
 import "../../Styles/jobs.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
 const CandidateJobs = () => {
   const { jobs } = useJobsFeed();
   const { applications, applyToJob } = useApplications();
@@ -309,7 +312,7 @@ const CandidateJobs = () => {
             const logoSrc = job.companyLogo
               ? job.companyLogo.startsWith("http")
                 ? job.companyLogo
-                : `http://localhost:5000${job.companyLogo}`
+                : `${BACKEND_ORIGIN}${job.companyLogo}`
               : null;
             const salaryDisplay = getSalaryDisplay(job);
 

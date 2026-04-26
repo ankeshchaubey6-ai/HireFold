@@ -9,6 +9,8 @@ import { useJobsFeed } from "../../Context/JobsFeedContext";
 import "../../Styles/jobs.css";
 
 const PUBLIC_JOBS_LIMIT = 6;
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
 
 const PublicJobs = () => {
   const { jobs } = useJobsFeed();
@@ -300,7 +302,7 @@ const PublicJobs = () => {
             const logoSrc = job.companyLogo
               ? job.companyLogo.startsWith("http")
                 ? job.companyLogo
-                : `http://localhost:5000${job.companyLogo}`
+                : `${BACKEND_ORIGIN}${job.companyLogo}`
               : null;
             const salaryDisplay = getSalaryDisplay(job);
 

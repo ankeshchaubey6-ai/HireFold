@@ -7,6 +7,9 @@ import { useJob } from "../../Context/JobContext";
 
 import "../../Styles/jobs.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BACKEND_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
 const PostedJobs = () => {
   const {
     recruiterJobs,
@@ -174,7 +177,7 @@ const PostedJobs = () => {
             const logoSrc = job.companyLogo
               ? job.companyLogo.startsWith("http")
                 ? job.companyLogo
-                : `http://localhost:5000${job.companyLogo}`
+                : `${BACKEND_ORIGIN}${job.companyLogo}`
               : null;
             const salaryDisplay = getSalaryDisplay(job);
 

@@ -41,8 +41,10 @@ export const googleLogin = async (req, res) => {
 
     res.cookie("hirefold_token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({
