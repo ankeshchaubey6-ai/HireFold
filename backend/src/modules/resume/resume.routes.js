@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import { ResumeController } from "./resume.controller.js";
 import { protect } from "../../middleware/auth.middleware.js";
-
+import { upload } from "./resume.upload.js"; 
 const router = express.Router();
 
 
