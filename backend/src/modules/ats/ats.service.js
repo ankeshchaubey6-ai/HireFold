@@ -64,6 +64,7 @@ class ATSServiceImpl {
       requiredSkills,
       missingSkills,
       rawText,
+      features,
     });
 
     return {
@@ -103,7 +104,7 @@ class ATSServiceImpl {
       requiredSkills,
       missingSkills,
       rawText,
-      features,
+      features = {},
     } = data;
 
     const sections = [];
