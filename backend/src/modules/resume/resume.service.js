@@ -315,17 +315,25 @@ export const ResumeService = {
   },
 
   async updateResumeAnalysis(resumeId, analysisData) {
+    const existingResume = await ResumeModel.findOne({ resumeId })
+      .select("structuredData")
+      .lean();
+
+    const mergedStructuredData = {
+      ...(existingResume?.structuredData || {}),
+      ...(analysisData?.structuredData || {}),
+      meta: {
+        ...(existingResume?.structuredData?.meta || {}),
+        ...(analysisData?.structuredData?.meta || {}),
+        analysisStatus: "completed",
+        atsEvaluatedAt: Date.now(),
+      },
+    };
+
     const atsResult = {
       atsScore: analysisData.totalScore ?? analysisData.score,
       ats: analysisData.ats,
-      structuredData: {
-        ...analysisData.structuredData,
-        meta: {
-          ...(analysisData.structuredData?.meta || {}),
-          analysisStatus: "completed",
-          atsEvaluatedAt: Date.now(),
-        },
-      },
+      structuredData: mergedStructuredData,
       updatedAt: Date.now(),
     };
 

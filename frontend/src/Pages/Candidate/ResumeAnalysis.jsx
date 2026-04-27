@@ -14,6 +14,27 @@ import "../../Styles/resumeAnalysis.css";
 
 const ACTIVE_RESUME_KEY = "hirefold_active_resume_id";
 
+const resolveATSScore = (payload = {}) =>
+  payload?.atsScore ??
+  payload?.totalScore ??
+  payload?.score ??
+  payload?.overallScore ??
+  payload?.ats?.atsScore ??
+  payload?.ats?.totalScore ??
+  payload?.ats?.score ??
+  payload?.meta?.atsScore ??
+  null;
+
+const hasSections = (payload = {}) =>
+  Array.isArray(payload?.sections)
+    ? payload.sections.length > 0
+    : Object.keys(payload?.sectionScores || {}).length > 0;
+
+const isRenderableAnalysis = (payload = {}) => {
+  const score = Number(resolveATSScore(payload));
+  return (Number.isFinite(score) && score > 0) || hasSections(payload);
+};
+
 const normalizeSections = (analysis) => {
   if (Array.isArray(analysis?.sections) && analysis.sections.length) {
     return analysis.sections;
@@ -71,11 +92,14 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
     null;
 
   const baseStructuredData = loadedResume || resumeData || resume || null;
+  const preferredATS =
+    isRenderableAnalysis(atsOverride) ? atsOverride :
+    isRenderableAnalysis(loadedAnalysis) ? loadedAnalysis :
+    isRenderableAnalysis(loadedResume?.ats) ? loadedResume.ats :
+    isRenderableAnalysis(baseStructuredData?.ats) ? baseStructuredData.ats :
+    null;
   const analysis =
-    atsOverride ||
-    loadedAnalysis ||
-    loadedResume?.ats ||
-    baseStructuredData?.ats ||
+    preferredATS ||
     null;
 
   useEffect(() => {
@@ -138,11 +162,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
               ats: latestAnalysis.ats || latestAnalysis,
               meta: {
                 ...(fetchedResume.meta || {}),
-                atsScore:
-                  latestAnalysis.score ??
-                  latestAnalysis.ats?.score ??
-                  fetchedResume.meta?.atsScore ??
-                  null,
+                atsScore: resolveATSScore(latestAnalysis) ?? fetchedResume.meta?.atsScore ?? null,
                 ats: latestAnalysis.ats || latestAnalysis,
               },
             };
@@ -171,14 +191,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
   const activeStructuredData = loadedResume || resumeData || resume || null;
 
   const safeScore = Number(
-    analysis?.totalScore ??
-      analysis?.score ??
-      analysis?.atsScore ??
-      analysis?.overallScore ??
-      analysis?.ats?.totalScore ??
-      analysis?.ats?.score ??
-      activeStructuredData?.meta?.atsScore ??
-      0
+    resolveATSScore(analysis) ?? activeStructuredData?.meta?.atsScore ?? 0
   );
 
   const sections = useMemo(() => normalizeSections(analysis), [analysis]);

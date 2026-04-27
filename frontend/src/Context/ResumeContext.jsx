@@ -24,6 +24,13 @@ const resolveATSScore = (payload = {}) =>
   payload?.meta?.ats?.score ??
   null;
 
+const hasRenderableATS = (payload = {}) => {
+  const resolvedScore = Number(resolveATSScore(payload));
+  const sectionCount = Object.keys(payload?.ats?.sectionScores || {}).length;
+
+  return (Number.isFinite(resolvedScore) && resolvedScore > 0) || sectionCount > 0;
+};
+
 export const ResumeProvider = ({ children }) => {
   const [activeResumeId, setActiveResumeId] = useState(null);
   const [resume, setResume] = useState(() => resumeSanitizer(resumeSchema));
@@ -70,7 +77,11 @@ export const ResumeProvider = ({ children }) => {
 
         //  CORRECT STOP CONDITION: Check analysisStatus
         const analysisStatus = backendData.structuredData?.meta?.analysisStatus;
-        if (analysisStatus === "completed" || analysisStatus === "ats_failed") {
+        if (
+          analysisStatus === "completed" ||
+          analysisStatus === "ats_failed" ||
+          hasRenderableATS(backendData)
+        ) {
           clearInterval(interval);
 
         }

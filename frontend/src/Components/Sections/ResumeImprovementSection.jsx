@@ -7,6 +7,21 @@ import ResumeTipsCard from "../Cards/ResumeTipsCard";
 
 import "../../Styles/resumeImprovementSection.css";
 
+const hasRenderableATS = (payload = {}) => {
+  const score = Number(
+    payload?.totalScore ??
+      payload?.score ??
+      payload?.atsScore ??
+      payload?.overallScore ??
+      0
+  );
+
+  return (
+    (Number.isFinite(score) && score > 0) ||
+    Object.keys(payload?.sectionScores || payload?.breakdown || {}).length > 0
+  );
+};
+
 const ResumeImprovementSection = () => {
   const { resume } = useResume();
   const navigate = useNavigate();
@@ -17,8 +32,8 @@ const ResumeImprovementSection = () => {
    * resume.meta.ats (optional full object)
    */
   const ats =
-    resume?.ats ||
-    resume?.meta?.ats ||
+    (hasRenderableATS(resume?.ats) ? resume.ats : null) ||
+    (hasRenderableATS(resume?.meta?.ats) ? resume.meta.ats : null) ||
     (resume?.meta?.atsScore !== null && resume?.meta?.atsScore !== undefined
       ? {
           score: resume.meta.atsScore,
