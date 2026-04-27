@@ -33,6 +33,11 @@ const JobCard = ({
   }
 
   const getSalaryDisplay = () => {
+    // Check if salary should be shown publicly
+    if (job.compensation?.showPublicly === false) {
+      return null;
+    }
+    
     if (job.salary) return `$${job.salary.toLocaleString()}/year`;
     if (job.salaryRange) return `${job.salaryRange.min} - ${job.salaryRange.max}`;
     if (job.compensation?.min || job.compensation?.max) {
