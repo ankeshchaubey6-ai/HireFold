@@ -118,7 +118,7 @@ const PostedJobs = () => {
         <div className="jobs-stat-card">
           <div className="jobs-stat-icon"></div>
           <div className="jobs-stat-number">{stats.totalApplications}</div>
-          <div className="jobs-stat-label">Total Applications</div>
+          <div className="jobs-stat-label">Total Applicants</div>
         </div>
       </div>
 
@@ -196,11 +196,11 @@ const PostedJobs = () => {
               job.employmentType,
               job.workMode,
               job.experienceLevel,
-              `${job.applicationsCount || 0} applications`,
+              `${job.applicationsCount || 0} applicants`,
             ].filter(Boolean);
             const detailItems = [
               {
-                label: "Applications",
+                label: "Applicants",
                 value: String(job.applicationsCount || 0),
               },
               {

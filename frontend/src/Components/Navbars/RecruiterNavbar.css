@@ -183,10 +183,10 @@
   background: #f3f4f6;
   border: 2px solid #d1d5db;
   color: #1f2937;
-  padding: 6px 8px;
+  padding: 0;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -195,6 +195,7 @@
   width: 40px;
   height: 40px;
   min-width: 40px;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 .dark .recruiter-navbar__theme {

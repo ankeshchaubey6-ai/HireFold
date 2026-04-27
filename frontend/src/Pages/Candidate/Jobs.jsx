@@ -146,7 +146,7 @@ const CandidateJobs = () => {
         <div className="jobs-stat-card">
           <div className="jobs-stat-icon"></div>
           <div className="jobs-stat-number">{stats.appliedCount}</div>
-          <div className="jobs-stat-label">Applications</div>
+          <div className="jobs-stat-label">Jobs Applied</div>
         </div>
         <div className="jobs-stat-card">
           <div className="jobs-stat-icon"></div>

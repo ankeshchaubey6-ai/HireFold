@@ -118,8 +118,13 @@ const RecruiterNavbar = () => {
               
             </Link>
 
-            <button className="recruiter-navbar__theme" onClick={toggleTheme}>
-              {theme === "dark" ? "" : ""}
+            <button 
+              className="recruiter-navbar__theme" 
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? "🌙" : "☀️"}
             </button>
           </div>
 

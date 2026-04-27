@@ -905,14 +905,22 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: #9ca3af;
   margin-bottom: 6px;
   display: block;
+}
+
+.dark .expanded-section-label {
+  color: var(--text-3);
 }
 
 .expanded-section-text {
   font-size: 0.82rem;
   line-height: 1.6;
+  color: #4b5563;
+}
+
+.dark .expanded-section-text {
   color: var(--text-2);
 }
 
@@ -926,14 +934,19 @@
 
 .job-detail-item {
   padding: 8px 10px;
-  background: var(--surface-2);
+  background: #f3f4f6;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
+  border: 1px solid #d1d5db;
   transition: background var(--transition-fast);
 }
 
+.dark .job-detail-item {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+}
+
 .job-card:hover .job-detail-item {
-  background: rgba(229, 9, 20, 0.03);
+  background: #e5e7eb;
 }
 
 .dark .job-card:hover .job-detail-item {
@@ -945,16 +958,24 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-3);
+  color: #9ca3af;
   display: block;
   margin-bottom: 2px;
+}
+
+.dark .job-detail-label {
+  color: var(--text-3);
 }
 
 .job-detail-value {
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--text-1);
+  color: #374151;
   line-height: 1.35;
+}
+
+.dark .job-detail-value {
+  color: var(--text-1);
 }
 
 /* Benefits */
