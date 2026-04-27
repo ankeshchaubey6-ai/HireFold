@@ -233,27 +233,32 @@
 
 /* ---- Theme Toggle ---- */
 .public-navbar__theme {
-  background: none;
+  background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 6px 10px;
-  border-radius: 50%;
+  padding: 8px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s cubic-bezier(0.23, 1, 0.320, 1),
-              border-color 0.2s cubic-bezier(0.23, 1, 0.320, 1),
-              transform 0.2s cubic-bezier(0.23, 1, 0.320, 1);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.320, 1);
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
 }
 
 @media (hover: hover) {
   .public-navbar__theme:hover {
-    background: var(--card);
-    border-color: var(--accent);
+    background: var(--surface-2);
+    border-color: #e50914;
     transform: scale(1.05);
   }
 }
 
 .public-navbar__theme:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 /* =========================================================
