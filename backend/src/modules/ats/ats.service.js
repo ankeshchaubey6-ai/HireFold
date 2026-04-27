@@ -2,14 +2,18 @@ import { ResumeModel } from "../resume/resume.model.js";
 
 class ATSServiceImpl {
   async analyzeResume(resumeOrId, jobRole = "default") {
+    console.log(`[ATS-ANALYZE] Starting analysis for job role: ${jobRole}`);
+    
     const resume =
       typeof resumeOrId === "string"
         ? await ResumeModel.findOne({ resumeId: resumeOrId }).lean()
         : resumeOrId;
 
     if (!resume) {
-      throw new Error("Resume not found");
+      throw new Error("Resume not found for analysis");
     }
+
+    console.log(`[ATS-ANALYZE] Resume loaded: ${resume.resumeId}`);
 
     const structuredData = resume.structuredData || {};
     const skills = Array.isArray(structuredData.skills) ? structuredData.skills : [];
@@ -21,6 +25,8 @@ class ATSServiceImpl {
       : [];
     const features = structuredData.features || {};
     const rawText = structuredData.rawText || "";
+
+    console.log(`[ATS-ANALYZE] Data extracted: skills=${skills.length}, exp=${experience.length}, edu=${education.length}, projects=${projects.length}, certs=${certifications.length}, textLen=${rawText.length}`);
 
     const requiredSkills = this.getRequiredSkillsForRole(jobRole);
 
@@ -41,6 +47,8 @@ class ATSServiceImpl {
       textQualityScore * 0.1;
 
     const score = Math.round(weightedScore * 100);
+
+    console.log(`[ATS-ANALYZE] Scores: skill=${Math.round(skillScore*100)}, exp=${Math.round(experienceScore*100)}, edu=${Math.round(educationScore*100)}, proj=${Math.round(projectScore*100)}, cert=${Math.round(certificationScore*100)}, text=${Math.round(textQualityScore*100)}, final=${score}`);
 
     const metrics = {
       skillScore,
@@ -66,6 +74,12 @@ class ATSServiceImpl {
       rawText,
       features,
     });
+
+    if (!Array.isArray(sections) || sections.length === 0) {
+      throw new Error("Section feedback generation failed - no sections returned");
+    }
+
+    console.log(`[ATS-ANALYZE] Generated ${sections.length} sections`);
 
     return {
       resumeId: resume.resumeId,
@@ -93,21 +107,26 @@ class ATSServiceImpl {
   }
 
   generateSectionFeedback(data) {
-    const {
-      metrics,
-      score,
-      skills,
-      experience,
-      education,
-      projects,
-      certifications,
-      requiredSkills,
-      missingSkills,
-      rawText,
-      features = {},
-    } = data;
+    try {
+      const {
+        metrics,
+        score,
+        skills,
+        experience,
+        education,
+        projects,
+        certifications,
+        requiredSkills,
+        missingSkills,
+        rawText,
+        features = {},
+      } = data;
 
-    const sections = [];
+      if (!metrics) {
+        throw new Error("Metrics required for section feedback");
+      }
+
+      const sections = [];
 
     // Skills Section
     const skillScore = Math.round(metrics.skillScore * 100);
@@ -307,7 +326,19 @@ class ATSServiceImpl {
       estimatedTime: "10-15 min",
     });
 
-    return sections;
+      return sections;
+    } catch (err) {
+      console.error("[ATS-SECTIONS] Error generating section feedback:", err.message);
+      // Return minimal sections structure on error instead of crashing
+      return [
+        { name: "Skills", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "high", estimatedTime: "" },
+        { name: "Experience", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "high", estimatedTime: "" },
+        { name: "Education", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "medium", estimatedTime: "" },
+        { name: "Projects", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "high", estimatedTime: "" },
+        { name: "Certifications", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "medium", estimatedTime: "" },
+        { name: "Content Quality", score: 0, status: "weak", feedback: "Unable to analyze", recommendations: [], priority: "high", estimatedTime: "" },
+      ];
+    }
   }
 
   getRequiredSkillsForRole(jobRole = "default") {

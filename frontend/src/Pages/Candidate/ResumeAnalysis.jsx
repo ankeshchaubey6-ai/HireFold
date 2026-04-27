@@ -28,33 +28,53 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
 
   // Properly extract sections from analysis
   const sections = useMemo(() => {
-    if (!analysis) return [];
+    if (!analysis) {
+      console.debug("[ResumeAnalysis] No analysis object available");
+      return [];
+    }
 
-    // Sections come from backend generated sections array
+    console.debug("[ResumeAnalysis] Analysis object:", { 
+      hasScore: analysis.score !== undefined, 
+      hasSections: Array.isArray(analysis?.sections),
+      sectionsCount: analysis?.sections?.length || 0,
+      hasBreakdown: !!analysis?.breakdown,
+    });
+
+    // Sections come from backend generated sections array (primary source)
     if (Array.isArray(analysis?.sections) && analysis.sections.length > 0) {
+      console.debug(`[ResumeAnalysis] Extracting ${analysis.sections.length} sections from analysis.sections`);
       return analysis.sections.map((section) => ({
         name: section.name || "Unknown",
         score: section.score || 0,
-        status: section.status || "unknown",
+        status: section.status || "average",
         feedback: section.feedback || "",
+        recommendations: Array.isArray(section.recommendations) ? section.recommendations : [],
+        priority: section.priority || "medium",
+        estimatedTime: section.estimatedTime || "",
       }));
     }
 
     // Legacy fallback to sectionSummary
     if (Array.isArray(analysis?.sectionSummary) && analysis.sectionSummary.length > 0) {
+      console.debug(`[ResumeAnalysis] Fallback: Using sectionSummary with ${analysis.sectionSummary.length} items`);
       return analysis.sectionSummary;
     }
 
-    // Legacy fallback to breakdown
+    // Legacy fallback to breakdown (score-based)
     if (analysis?.breakdown && typeof analysis.breakdown === "object") {
+      console.debug("[ResumeAnalysis] Fallback: Generating sections from breakdown scores");
       return Object.entries(analysis.breakdown).map(([key, score]) => ({
         name: key.charAt(0).toUpperCase() + key.slice(1),
         score: score || 0,
         status: score >= 75 ? "strong" : score >= 50 ? "moderate" : "weak",
         feedback: `${key} section scored ${score}/100`,
+        recommendations: [],
+        priority: score < 50 ? "high" : "medium",
+        estimatedTime: "",
       }));
     }
 
+    console.debug("[ResumeAnalysis] No sections data found in any format");
     return [];
   }, [analysis]);
 

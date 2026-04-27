@@ -63,6 +63,15 @@ export const ResumeProvider = ({ children }) => {
 
         if (!backendData || !mounted) return;
 
+        // Debug logging
+        const analysisStatus = backendData.structuredData?.meta?.analysisStatus;
+        const hasAtsData = !!backendData.ats;
+        const hasSections = Array.isArray(backendData.ats?.sections) && backendData.ats.sections.length > 0;
+        
+        if (pollAttemptsRef.current % 5 === 0 || analysisStatus === "completed") {
+          console.debug(`[ResumeContext-Poll] Attempt ${pollAttemptsRef.current}: status=${analysisStatus}, hasAts=${hasAtsData}, sections=${hasSections}, score=${backendData.atsScore}`);
+        }
+
         const safe = resumeSanitizer(backendData.structuredData);
 
         safe.meta = {
@@ -76,10 +85,9 @@ export const ResumeProvider = ({ children }) => {
 
         setResume(safe);
 
-        // Check analysis status
-        const analysisStatus = backendData.structuredData?.meta?.analysisStatus;
-
+        // Check analysis status based on already-declared analysisStatus
         if (analysisStatus === "completed") {
+          console.debug(`[ResumeContext-Poll] Analysis COMPLETED for ${activeResumeId}`);
           setAnalysisLoading(false);
           setAnalysisError(null);
           clearInterval(interval);
@@ -87,12 +95,13 @@ export const ResumeProvider = ({ children }) => {
           const errorMsg =
             backendData.structuredData?.meta?.analysisError ||
             "ATS analysis failed. Please try again.";
+          console.error(`[ResumeContext-Poll] Analysis FAILED: ${errorMsg}`);
           setAnalysisError(errorMsg);
           setAnalysisLoading(false);
           clearInterval(interval);
         }
       } catch (error) {
-        console.error("Error fetching resume:", error);
+        console.error("[ResumeContext-Poll] Error fetching resume:", error?.message);
 
         if (pollAttemptsRef.current >= 3) {
           if (mounted) {

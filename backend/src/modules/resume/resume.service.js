@@ -92,13 +92,18 @@ export const ResumeService = {
             );
           } catch (queueErr) {
             // Queue failed - run analysis synchronously as fallback
-            console.warn(`Queue failed, running ATS synchronously: ${queueErr.message}`);
+            console.warn(`[ATS] Queue failed for ${resumeId}, running synchronously:`, queueErr.message);
             try {
               const ATSService = (await import("../ats/ats.service.js")).default;
               
               // For OCR resumes, wait up to 5 attempts with backoff before analyzing
               let freshResume = await ResumeModel.findOne({ resumeId });
+              if (!freshResume) {
+                throw new Error(`Resume not found after save: ${resumeId}`);
+              }
+              
               const needsOCR = freshResume?.structuredData?.meta?.needsOCR;
+              console.log(`[ATS] Analyzing ${resumeId}, needsOCR=${needsOCR}`);
               
               if (needsOCR) {
                 // Retry up to 5 times waiting for OCR
@@ -110,22 +115,29 @@ export const ResumeService = {
                     (structuredData.education?.length > 0);
                   
                   if (hasData) {
-                    console.log(`OCR completed on attempt ${attempt} for ${resumeId}`);
+                    console.log(`[ATS] OCR completed on attempt ${attempt} for ${resumeId}`);
                     break;
                   }
                   
                   if (attempt < 5) {
                     const delay = Math.pow(2, attempt - 1) * 2000; // Exponential backoff: 2s, 4s, 8s, 16s
-                    console.log(`OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
+                    console.log(`[ATS] OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
                     await new Promise(resolve => setTimeout(resolve, delay));
                     freshResume = await ResumeModel.findOne({ resumeId });
                   }
                 }
               }
               
+              console.log(`[ATS] Running analysis for ${resumeId}`);
               const analysis = await ATSService.analyzeResume(freshResume, "default");
               
-              await ResumeModel.updateOne(
+              if (!analysis || !analysis.ats) {
+                throw new Error("ATS analysis returned empty result");
+              }
+              
+              console.log(`[ATS] Analysis complete for ${resumeId}, score=${analysis.score}`);
+              
+              const updateResult = await ResumeModel.updateOne(
                 { resumeId },
                 {
                   $set: {
@@ -137,8 +149,11 @@ export const ResumeService = {
                   },
                 }
               );
+              
+              console.log(`[ATS] Database updated for ${resumeId}, matched=${updateResult.matchedCount}`);
+              
             } catch (analysisErr) {
-              console.error(`Synchronous ATS analysis failed: ${analysisErr.message}`);
+              console.error(`[ATS] Synchronous analysis failed for ${resumeId}:`, analysisErr.message);
               // Mark as failed
               await ResumeModel.updateOne(
                 { resumeId },
@@ -333,13 +348,18 @@ export const ResumeService = {
         );
       } catch (queueErr) {
         // Queue failed - run analysis synchronously as fallback
-        console.warn(`Queue failed during upload, running ATS synchronously: ${queueErr.message}`);
+        console.warn(`[UPLOAD-ATS] Queue failed for ${resumeId}, running ATS synchronously:`, queueErr.message);
         try {
           const ATSService = (await import("../ats/ats.service.js")).default;
           
           // For OCR resumes, wait up to 5 attempts with backoff before analyzing
           let freshResume = await ResumeModel.findOne({ resumeId });
+          if (!freshResume) {
+            throw new Error(`Resume not found after upload save: ${resumeId}`);
+          }
+          
           const needsOCR = freshResume?.structuredData?.meta?.needsOCR;
+          console.log(`[UPLOAD-ATS] Analyzing uploaded ${resumeId}, needsOCR=${needsOCR}`);
           
           if (needsOCR) {
             // Retry up to 5 times waiting for OCR
@@ -351,22 +371,29 @@ export const ResumeService = {
                 (structuredData.education?.length > 0);
               
               if (hasData) {
-                console.log(`OCR completed on attempt ${attempt} for ${resumeId}`);
+                console.log(`[UPLOAD-ATS] OCR completed on attempt ${attempt} for ${resumeId}`);
                 break;
               }
               
               if (attempt < 5) {
                 const delay = Math.pow(2, attempt - 1) * 2000; // Exponential backoff: 2s, 4s, 8s, 16s
-                console.log(`OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
+                console.log(`[UPLOAD-ATS] OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
                 await new Promise(resolve => setTimeout(resolve, delay));
                 freshResume = await ResumeModel.findOne({ resumeId });
               }
             }
           }
           
+          console.log(`[UPLOAD-ATS] Running analysis for uploaded ${resumeId}`);
           const analysis = await ATSService.analyzeResume(freshResume, "default");
           
-          await ResumeModel.updateOne(
+          if (!analysis || !analysis.ats) {
+            throw new Error("ATS analysis returned empty result for uploaded resume");
+          }
+          
+          console.log(`[UPLOAD-ATS] Analysis complete for ${resumeId}, score=${analysis.score}`);
+          
+          const updateResult = await ResumeModel.updateOne(
             { resumeId },
             {
               $set: {
@@ -378,8 +405,11 @@ export const ResumeService = {
               },
             }
           );
+          
+          console.log(`[UPLOAD-ATS] Database updated for ${resumeId}, matched=${updateResult.matchedCount}`);
+          
         } catch (analysisErr) {
-          console.error(`Synchronous ATS analysis failed after upload: ${analysisErr.message}`);
+          console.error(`[UPLOAD-ATS] Synchronous analysis failed after upload for ${resumeId}:`, analysisErr.message);
           // Mark as failed
           await ResumeModel.updateOne(
             { resumeId },

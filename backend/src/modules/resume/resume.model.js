@@ -104,12 +104,23 @@ const StructuredDataSchema = new mongoose.Schema({
   meta: { type: mongoose.Schema.Types.Mixed, default: {} }
 }, { _id: false });
 
+const SectionSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  score: { type: Number, default: 0 },
+  status: { type: String, enum: ["strong", "moderate", "weak", "average"], default: "average" },
+  feedback: { type: String, default: "" },
+  recommendations: [String],
+  priority: { type: String, enum: ["high", "medium", "low"], default: "medium" },
+  estimatedTime: { type: String, default: "" }
+}, { _id: false });
+
 const ATSSchema = new mongoose.Schema({
   score: { type: Number, default: null },
   engine: { type: String, default: "hirefold-ats-v2.0" },
   jobRole: { type: String, default: "default" },
   evaluatedAt: { type: Number, default: null },
   breakdown: { type: mongoose.Schema.Types.Mixed, default: null },
+  sections: [SectionSchema],
   rawMetrics: { type: mongoose.Schema.Types.Mixed, default: null }
 }, { _id: false });
 
