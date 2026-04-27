@@ -197,6 +197,8 @@ class ATSServiceImpl {
 
     return sections;
   }
+
+  getRequiredSkillsForRole(jobRole = "default") {
     const roleSkillMap = {
       frontend: ["javascript", "react", "html", "css"],
       backend: ["node", "javascript", "api", "database"],
