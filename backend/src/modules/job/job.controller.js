@@ -6,7 +6,7 @@ import {
   closeJobService,
 } from "./job.service.js";
 
-import { v2 as cloudinary } from "cloudinary";
+import { cloudinary } from "../../core/env.js";
 import streamifier from "streamifier";
 
 /* =========================================================
