@@ -429,30 +429,35 @@ export const ResumeService = {
         .select("structuredData")
         .lean();
 
+      const mergedStructuredData = analysisData.structuredData
+        ? {
+            ...(existingResume?.structuredData || {}),
+            ...analysisData.structuredData,
+            meta: {
+              ...(existingResume?.structuredData?.meta || {}),
+              ...(analysisData.structuredData?.meta || {}),
+              analysisStatus: "completed",
+              atsEvaluatedAt: Date.now(),
+            },
+          }
+        : {
+            ...(existingResume?.structuredData || {}),
+            meta: {
+              ...(existingResume?.structuredData?.meta || {}),
+              analysisStatus: "completed",
+              atsEvaluatedAt: Date.now(),
+            },
+          };
+
       const update = {
         $set: {
           atsScore: analysisData.totalScore ?? analysisData.score,
           ats: analysisData.ats,
-          "structuredData.meta.analysisStatus": "completed",
-          "structuredData.meta.atsEvaluatedAt": Date.now(),
-          updatedAt: Date.now()
-        }
+          structuredData: mergedStructuredData,
+          updatedAt: Date.now(),
+        },
       };
-      
-      // If we have enhanced structured data from AI, update it
-      if (analysisData.structuredData) {
-        update.$set["structuredData"] = {
-          ...(existingResume?.structuredData || {}),
-          ...analysisData.structuredData,
-          meta: {
-            ...(existingResume?.structuredData?.meta || {}),
-            ...(analysisData.structuredData.meta || {}),
-            analysisStatus: "completed",
-            atsEvaluatedAt: Date.now(),
-          }
-        };
-      }
-      
+
       const result = await ResumeModel.updateOne({ resumeId }, update);
       return result;
     } catch (error) {
