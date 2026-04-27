@@ -62,6 +62,11 @@
   width: 100%;
   font-family: var(--font-body);
   box-sizing: border-box;
+  color: #0d0f12;
+}
+
+.dark .candidate-jobs-container,
+.dark .jobs-page {
   color: var(--text-1);
 }
 
@@ -204,9 +209,14 @@
   margin-bottom: 1.75rem;
   border-radius: var(--radius-xl);
   padding: 1.25rem 1.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   box-shadow: var(--shadow-card);
+}
+
+.dark .jobs-filters-container {
+  background: #0c0d14;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .filters-header {

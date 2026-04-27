@@ -233,27 +233,39 @@
 
 /* ---- Theme Toggle ---- */
 .public-navbar__theme {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #1f2937;
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s cubic-bezier(0.23, 1, 0.320, 1);
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+}
+
+.dark .public-navbar__theme {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f3f4f6;
 }
 
 @media (hover: hover) {
   .public-navbar__theme:hover {
-    background: var(--surface-2);
+    background: #e5e7eb;
     border-color: #e50914;
-    transform: scale(1.05);
+    transform: scale(1.08);
+  }
+  
+  .dark .public-navbar__theme:hover {
+    background: #374151;
+    border-color: #e50914;
+    transform: scale(1.08);
   }
 }
 
