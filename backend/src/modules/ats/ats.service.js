@@ -151,8 +151,8 @@ class ATSServiceImpl {
     }
     
     // Check if experiences have metrics
-    const hasMetrics = experience.some(e => /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(e.description || ""));
-    if (!hasMetrics) {
+    const expHasMetrics = experience.some(e => /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(e.description || ""));
+    if (!expHasMetrics) {
       expRecommendations.push("Add quantifiable achievements: 'increased X by 25%', 'saved $50K annually', etc.");
     }
     
@@ -278,8 +278,8 @@ class ATSServiceImpl {
       textRecommendations.push(`Resume is lengthy (${wordCount} words, target: 400-600). Remove redundancy and focus on impact.`);
     }
     
-    const hasMetrics = /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(rawText || "");
-    if (!hasMetrics) {
+    const textHasMetrics = /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(rawText || "");
+    if (!textHasMetrics) {
       textRecommendations.push("Use quantifiable metrics: percentages, dollar amounts, time saved, growth achieved");
     }
     
