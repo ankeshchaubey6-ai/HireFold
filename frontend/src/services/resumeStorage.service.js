@@ -1,5 +1,12 @@
 import api from "./api";
 
+const resolveATSScore = (record = {}) =>
+  record?.atsScore ??
+  record?.totalScore ??
+  record?.score ??
+  record?.ats?.totalScore ??
+  record?.ats?.score ??
+  null;
 
 export const ResumeStorageService = {
   async saveResume(payload) {
@@ -32,7 +39,7 @@ export const ResumeStorageService = {
         structuredData: record.structuredData || {},
 
         ats: record.ats ?? null,
-        atsScore: record.atsScore ?? null,
+        atsScore: resolveATSScore(record),
 
         isEditable: record.isEditable,
         isDraft: record.isDraft,
@@ -60,15 +67,24 @@ export const ResumeStorageService = {
 
       // Normalize all backend shapes (production safe)
       if (Array.isArray(data?.resumes)) {
-        return data.resumes;
+        return data.resumes.map((resume) => ({
+          ...resume,
+          atsScore: resolveATSScore(resume),
+        }));
       }
 
       if (Array.isArray(data?.data)) {
-        return data.data;
+        return data.data.map((resume) => ({
+          ...resume,
+          atsScore: resolveATSScore(resume),
+        }));
       }
 
       if (Array.isArray(data)) {
-        return data;
+        return data.map((resume) => ({
+          ...resume,
+          atsScore: resolveATSScore(resume),
+        }));
       }
 
       return [];

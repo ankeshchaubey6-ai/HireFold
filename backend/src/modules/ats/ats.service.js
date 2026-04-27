@@ -46,7 +46,22 @@ class ATSServiceImpl {
       certificationScore * 0.05 +
       textQualityScore * 0.1;
 
-    const score = Math.round(weightedScore * 100);
+    let score = Math.round(weightedScore * 100);
+
+    const hasResumeContent = Boolean(
+      String(rawText || "").trim().length > 100 ||
+      structuredData?.skills?.length ||
+      structuredData?.experience?.length ||
+      structuredData?.education?.length ||
+      structuredData?.projects?.length ||
+      structuredData?.certifications?.length ||
+      structuredData?.basics?.fullName ||
+      structuredData?.basics?.email
+    );
+
+    if (hasResumeContent && score < 20) {
+      score = 20;
+    }
 
     console.log(`[ATS-ANALYZE] Scores: skill=${Math.round(skillScore*100)}, exp=${Math.round(experienceScore*100)}, edu=${Math.round(educationScore*100)}, proj=${Math.round(projectScore*100)}, cert=${Math.round(certificationScore*100)}, text=${Math.round(textQualityScore*100)}, final=${score}`);
 
@@ -127,6 +142,13 @@ class ATSServiceImpl {
       }
 
       const sections = [];
+      const flattenedSkills = Array.isArray(skills)
+        ? skills.flatMap((group) =>
+            Array.isArray(group?.items)
+              ? group.items.map((item) => String(item?.name || "").toLowerCase())
+              : []
+          )
+        : [];
 
     // Skills Section
     const skillScore = Math.round(metrics.skillScore * 100);
@@ -139,7 +161,7 @@ class ATSServiceImpl {
     if (skills.length < 5) {
       skillRecommendations.push(`Expand skill set (currently ${skills.length}, target: 8-12 relevant skills)`);
     }
-    if (skills.length > 0 && !skills.some(s => s.toLowerCase().includes("leadership"))) {
+    if (flattenedSkills.length > 0 && !flattenedSkills.some((s) => s.includes("leadership"))) {
       skillRecommendations.push("Include soft skills: Leadership, Communication, Problem-solving");
     }
     

@@ -1,25 +1,63 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
-import os from "os";
-import util from "util";
+import { fromBuffer } from "pdf2pic";
 import Tesseract from "tesseract.js";
 
-const execAsync = util.promisify(exec);
+const MAX_OCR_PAGES = 3;
 
-
-export async function checkOCRSystem() {
-  try {
-    // Check for pdftoppm
-    await execAsync("which pdftoppm");
-    
-    // Check for tesseract
-    await execAsync("which tesseract");
-    
-    return true;
-    
-  } catch (error) {
-    return false;
-  }
+function normalizeOCRText(text = "") {
+  return String(text || "")
+    .replace(/\r/g, "\n")
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
+export async function checkOCRSystem() {
+  return true;
+}
+
+export async function extractTextFromPDFWithOCR(buffer) {
+  if (!buffer || !Buffer.isBuffer(buffer) || buffer.length === 0) {
+    return "";
+  }
+
+  const convert = fromBuffer(buffer, {
+    density: 180,
+    format: "png",
+    width: 1600,
+    height: 2200,
+    preserveAspectRatio: true,
+  });
+
+  let combinedText = "";
+
+  for (let pageNumber = 1; pageNumber <= MAX_OCR_PAGES; pageNumber += 1) {
+    try {
+      const pageImage = await convert(pageNumber, { responseType: "base64" });
+      const base64 = pageImage?.base64;
+
+      if (!base64) {
+        break;
+      }
+
+      const { data } = await Tesseract.recognize(
+        Buffer.from(base64, "base64"),
+        "eng",
+        {}
+      );
+
+      const pageText = normalizeOCRText(data?.text || "");
+      if (!pageText) {
+        continue;
+      }
+
+      combinedText += `${pageText}\n\n`;
+    } catch (error) {
+      if (pageNumber === 1) {
+        return "";
+      }
+      break;
+    }
+  }
+
+  return normalizeOCRText(combinedText);
+}

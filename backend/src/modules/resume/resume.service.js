@@ -1,6 +1,21 @@
 import crypto from "crypto";
 import { ResumeModel } from "./resume.model.js";
 import { parseResumeBuffer } from "./resumeParser.service.js";
+import ATSService from "../ats/ats.service.js";
+
+function hasMeaningfulResumeContent(structuredData = {}) {
+  return Boolean(
+    String(structuredData?.rawText || "").trim().length > 100 ||
+      String(structuredData?.summary || "").trim() ||
+      structuredData?.skills?.length ||
+      structuredData?.experience?.length ||
+      structuredData?.education?.length ||
+      structuredData?.projects?.length ||
+      structuredData?.certifications?.length ||
+      structuredData?.basics?.fullName ||
+      structuredData?.basics?.email
+  );
+}
 
 export const ResumeService = {
 
@@ -314,119 +329,45 @@ export const ResumeService = {
     /* ================= SAVE TO DATABASE ================= */
     try {
       const savedResume = await ResumeModel.create(entity);
-      
-      /* ================= QUEUE FOR DEEP ANALYSIS ================= */
-      try {
-        const { resumeAnalysisQueue } = await import("../../queues/resumeAnalysis.queue.js");
-        
-        await resumeAnalysisQueue.add(
-          "analyze-resume",
-          {
-            resumeId,
-            buffer: file.buffer.toString("base64"),
-            mimeType: file.mimetype,
-            fileName: file.originalname,
-            jobRole: "default"
-          },
-          {
-            attempts: 3,
-            removeOnComplete: true,
-            removeOnFail: false,
-            backoff: { type: "exponential", delay: 5000 },
-          }
-        );
 
-        // Update status to queued
+      let analysis = null;
+
+      try {
+        analysis = await ATSService.analyzeResume(savedResume.toObject(), "default");
+
+        const score = Number(analysis?.score);
+        if ((!Number.isFinite(score) || score <= 0) && hasMeaningfulResumeContent(structuredData)) {
+          analysis = {
+            ...analysis,
+            score: 20,
+            ats: {
+              ...(analysis?.ats || {}),
+              score: 20,
+            },
+          };
+        }
+
+        await this.updateResumeAnalysis(resumeId, {
+          ...analysis,
+          structuredData: {
+            ...(savedResume.structuredData || {}),
+            ...(analysis?.structuredData || {}),
+          },
+        });
+      } catch (analysisErr) {
         await ResumeModel.updateOne(
           { resumeId },
           {
             $set: {
-              "structuredData.meta.analysisStatus": "queued",
+              "structuredData.meta.analysisStatus": "ats_failed",
+              "structuredData.meta.analysisError": analysisErr.message,
               updatedAt: Date.now(),
             },
           }
         );
-      } catch (queueErr) {
-        // Queue failed - run analysis synchronously as fallback
-        console.warn(`[UPLOAD-ATS] Queue failed for ${resumeId}, running ATS synchronously:`, queueErr.message);
-        try {
-          const ATSService = (await import("../ats/ats.service.js")).default;
-          
-          // For OCR resumes, wait up to 5 attempts with backoff before analyzing
-          let freshResume = await ResumeModel.findOne({ resumeId });
-          if (!freshResume) {
-            throw new Error(`Resume not found after upload save: ${resumeId}`);
-          }
-          
-          const needsOCR = freshResume?.structuredData?.meta?.needsOCR;
-          console.log(`[UPLOAD-ATS] Analyzing uploaded ${resumeId}, needsOCR=${needsOCR}`);
-          
-          if (needsOCR) {
-            // Retry up to 5 times waiting for OCR
-            for (let attempt = 1; attempt <= 5; attempt++) {
-              const structuredData = freshResume?.structuredData || {};
-              const hasData = 
-                (structuredData.skills?.length > 0) ||
-                (structuredData.experience?.length > 0) ||
-                (structuredData.education?.length > 0);
-              
-              if (hasData) {
-                console.log(`[UPLOAD-ATS] OCR completed on attempt ${attempt} for ${resumeId}`);
-                break;
-              }
-              
-              if (attempt < 5) {
-                const delay = Math.pow(2, attempt - 1) * 2000; // Exponential backoff: 2s, 4s, 8s, 16s
-                console.log(`[UPLOAD-ATS] OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                freshResume = await ResumeModel.findOne({ resumeId });
-              }
-            }
-          }
-          
-          console.log(`[UPLOAD-ATS] Running analysis for uploaded ${resumeId}`);
-          const analysis = await ATSService.analyzeResume(freshResume, "default");
-          
-          if (!analysis || !analysis.ats) {
-            throw new Error("ATS analysis returned empty result for uploaded resume");
-          }
-          
-          console.log(`[UPLOAD-ATS] Analysis complete for ${resumeId}, score=${analysis.score}`);
-          
-          const updateResult = await ResumeModel.updateOne(
-            { resumeId },
-            {
-              $set: {
-                atsScore: analysis.score,
-                ats: analysis.ats,
-                "structuredData.meta.analysisStatus": "completed",
-                "structuredData.meta.evaluatedAt": Date.now(),
-                updatedAt: Date.now(),
-              },
-            }
-          );
-          
-          console.log(`[UPLOAD-ATS] Database updated for ${resumeId}, matched=${updateResult.matchedCount}`);
-          
-        } catch (analysisErr) {
-          console.error(`[UPLOAD-ATS] Synchronous analysis failed after upload for ${resumeId}:`, analysisErr.message);
-          // Mark as failed
-          await ResumeModel.updateOne(
-            { resumeId },
-            {
-              $set: {
-                "structuredData.meta.analysisStatus": "ats_failed",
-                "structuredData.meta.analysisError": analysisErr.message,
-                updatedAt: Date.now(),
-              },
-            }
-          );
-        }
       }
 
-      const finalResume = await ResumeModel.findOne({ resumeId }).lean();
-
-      return finalResume;
+      return await ResumeModel.findOne({ resumeId }).lean();
     } catch (dbError) {
       throw new Error(`Failed to save resume: ${dbError.message}`);
     }
@@ -435,7 +376,26 @@ export const ResumeService = {
   async getResumeById(resumeId) {
     if (!resumeId) return null;
     try {
-      return await ResumeModel.findOne({ resumeId }).lean();
+      let resume = await ResumeModel.findOne({ resumeId }).lean();
+      if (
+        resume &&
+        hasMeaningfulResumeContent(resume.structuredData) &&
+        (!Number.isFinite(Number(resume.atsScore)) || Number(resume.atsScore) <= 0)
+      ) {
+        try {
+          const analysis = await ATSService.analyzeResume(resume, "default");
+          await this.updateResumeAnalysis(resumeId, {
+            ...analysis,
+            structuredData: {
+              ...(resume.structuredData || {}),
+              ...(analysis?.structuredData || {}),
+            },
+          });
+          resume = await ResumeModel.findOne({ resumeId }).lean();
+        } catch (error) {
+        }
+      }
+      return resume;
     } catch (error) {
       return null;
     }
@@ -465,9 +425,13 @@ export const ResumeService = {
   
   async updateResumeAnalysis(resumeId, analysisData) {
     try {
+      const existingResume = await ResumeModel.findOne({ resumeId })
+        .select("structuredData")
+        .lean();
+
       const update = {
         $set: {
-          atsScore: analysisData.score,
+          atsScore: analysisData.totalScore ?? analysisData.score,
           ats: analysisData.ats,
           "structuredData.meta.analysisStatus": "completed",
           "structuredData.meta.atsEvaluatedAt": Date.now(),
@@ -478,10 +442,13 @@ export const ResumeService = {
       // If we have enhanced structured data from AI, update it
       if (analysisData.structuredData) {
         update.$set["structuredData"] = {
+          ...(existingResume?.structuredData || {}),
           ...analysisData.structuredData,
           meta: {
-            ...analysisData.structuredData.meta,
-            analysisStatus: "completed"
+            ...(existingResume?.structuredData?.meta || {}),
+            ...(analysisData.structuredData.meta || {}),
+            analysisStatus: "completed",
+            atsEvaluatedAt: Date.now(),
           }
         };
       }

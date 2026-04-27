@@ -11,6 +11,16 @@ import ResumeAnalysisActions from "../../Components/ResumeAnalysis/ActionBar/Res
 import { generateResumeImprovements } from "../../services/resumeImprovement.service";
 import "../../Styles/resumeAnalysis.css";
 
+const resolveATSScore = (payload = {}) =>
+  payload?.totalScore ??
+  payload?.score ??
+  payload?.atsScore ??
+  payload?.overallScore ??
+  payload?.ats?.totalScore ??
+  payload?.ats?.score ??
+  payload?.meta?.atsScore ??
+  0;
+
 const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = null }) => {
   const navigate = useNavigate();
   const { resume, analysisLoading, analysisError } = useResume();
@@ -18,13 +28,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
   const activeStructuredData = resumeData || resume || null;
   const analysis = atsOverride || activeStructuredData?.ats || null;
 
-  const safeScore = Number(
-    analysis?.score ??
-      analysis?.atsScore ??
-      analysis?.overallScore ??
-      activeStructuredData?.meta?.atsScore ??
-      0
-  );
+  const safeScore = Number(resolveATSScore(analysis) ?? activeStructuredData?.meta?.atsScore ?? 0);
 
   // Properly extract sections from analysis
   const sections = useMemo(() => {

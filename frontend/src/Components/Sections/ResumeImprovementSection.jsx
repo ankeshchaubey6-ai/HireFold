@@ -17,10 +17,12 @@ const ResumeImprovementSection = () => {
    * resume.meta.ats (optional full object)
    */
   const ats =
+    resume?.ats ||
     resume?.meta?.ats ||
-    (resume?.meta?.atsScore
+    (resume?.meta?.atsScore !== null && resume?.meta?.atsScore !== undefined
       ? {
           score: resume.meta.atsScore,
+          totalScore: resume.meta.atsScore,
           breakdown: resume.meta.ats?.breakdown,
         }
       : null);

@@ -1,6 +1,9 @@
 import mammoth from "mammoth";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
+import pdfParse from "pdf-parse";
 import { extractStructuredDataFromText } from "./resumeStructureExtractor.service.js";
+import { parseResumeWithAffindaBuffer } from "./affindaRestParser.service.js";
+import { extractTextFromPDFWithOCR } from "./tesseractOCR.service.js";
 
 /**
  * =========================================================
@@ -29,8 +32,12 @@ function normalizeText(text = "") {
     .replace(/\r/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[^\x00-\x7F]/g, " ")
-    .replace(/\s+/g, " ")
+    .replace(/[^\S\n]+/g, " ")
     .trim();
+}
+
+function hasMeaningfulText(text = "") {
+  return normalizeText(text).replace(/\s+/g, " ").trim().length >= LOW_TEXT_THRESHOLD;
 }
 
 /**
@@ -82,6 +89,15 @@ async function extractTextFromPDF(buffer) {
   }
 }
 
+async function extractTextFromPdfParse(buffer) {
+  try {
+    const result = await pdfParse(buffer);
+    return result?.text || "";
+  } catch (error) {
+    return "";
+  }
+}
+
 /**
  * Extract text from DOCX using mammoth
  */
@@ -119,18 +135,91 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
   let rawText = "";
   let needsOCR = false;
   let parseQuality = "unknown";
+  let parserUsed = mimeType === "application/pdf" ? "hirefold-pdfjs-v2" : "hirefold-docx-v1";
+
+  const enrichParsedResult = (structuredData = {}, metadata = {}) => ({
+    rawText: structuredData?.rawText || metadata.rawText || "",
+    needsOCR: Boolean(metadata.needsOCR),
+    structuredData: {
+      ...structuredData,
+      meta: {
+        ...(structuredData?.meta || {}),
+        source: "upload",
+        parser: metadata.parser || structuredData?.meta?.parser || parserUsed,
+        parseQuality: metadata.parseQuality || structuredData?.meta?.parseQuality || parseQuality,
+        needsOCR: Boolean(metadata.needsOCR),
+        analysisStatus: "ready",
+        extractionDate: Date.now(),
+        fileInfo: {
+          fileName,
+          mimeType,
+          sizeBytes: buffer.length,
+        },
+      },
+    },
+  });
   
   // STEP 1: Parse based on file type
   try {
     if (mimeType === "application/pdf") {
       rawText = await extractTextFromPDF(buffer);
-      parseQuality = rawText.length > LOW_TEXT_THRESHOLD ? "high" : "low";
-      needsOCR = rawText.length < LOW_TEXT_THRESHOLD;
+      parserUsed = "hirefold-pdfjs-v2";
+
+      if (!hasMeaningfulText(rawText)) {
+        const pdfParseText = await extractTextFromPdfParse(buffer);
+        if (pdfParseText.length > rawText.length) {
+          rawText = pdfParseText;
+          parserUsed = "pdf-parse";
+        }
+      }
+
+      if (!hasMeaningfulText(rawText) && process.env.AFFINDA_API_KEY && process.env.AFFINDA_WORKSPACE_ID) {
+        try {
+          const affindaResult = await parseResumeWithAffindaBuffer(buffer, fileName);
+          if (hasMeaningfulText(affindaResult?.rawText) || affindaResult?.structuredData?.skills?.length) {
+            return enrichParsedResult(affindaResult.structuredData, {
+              rawText: affindaResult.rawText,
+              parser: affindaResult?.structuredData?.meta?.parser || "affinda-ai",
+              parseQuality: affindaResult?.structuredData?.meta?.parseQuality || "ai-high",
+              needsOCR: false,
+            });
+          }
+        } catch (error) {
+        }
+      }
+
+      if (!hasMeaningfulText(rawText)) {
+        const ocrText = await extractTextFromPDFWithOCR(buffer);
+        if (ocrText.length > rawText.length) {
+          rawText = ocrText;
+          parserUsed = "tesseract-ocr";
+        }
+      }
+
+      parseQuality = hasMeaningfulText(rawText) ? "high" : "low";
+      needsOCR = !hasMeaningfulText(rawText);
       
     } else if (mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
       rawText = await extractTextFromDOCX(buffer);
-      parseQuality = rawText.length > LOW_TEXT_THRESHOLD ? "high" : "low";
-      needsOCR = rawText.length < LOW_TEXT_THRESHOLD;
+      parserUsed = "hirefold-docx-v1";
+
+      if (!hasMeaningfulText(rawText) && process.env.AFFINDA_API_KEY && process.env.AFFINDA_WORKSPACE_ID) {
+        try {
+          const affindaResult = await parseResumeWithAffindaBuffer(buffer, fileName);
+          if (hasMeaningfulText(affindaResult?.rawText) || affindaResult?.structuredData?.skills?.length) {
+            return enrichParsedResult(affindaResult.structuredData, {
+              rawText: affindaResult.rawText,
+              parser: affindaResult?.structuredData?.meta?.parser || "affinda-ai",
+              parseQuality: affindaResult?.structuredData?.meta?.parseQuality || "ai-high",
+              needsOCR: false,
+            });
+          }
+        } catch (error) {
+        }
+      }
+
+      parseQuality = hasMeaningfulText(rawText) ? "high" : "low";
+      needsOCR = !hasMeaningfulText(rawText);
       
     } else {
       throw new Error(`Unsupported format: ${mimeType}. Only PDF and DOCX allowed.`);
@@ -143,14 +232,13 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
   // STEP 2: Normalize text
   rawText = normalizeText(rawText);
   
-  // STEP 3: Handle image/Canva resumes
+  // STEP 3: Handle low-text resumes
   if (needsOCR || rawText.length < LOW_TEXT_THRESHOLD) {
-    
     return {
-      rawText: "",
-      needsOCR: true,
+      rawText,
+      needsOCR: false,
       structuredData: {
-        rawText: "",
+        rawText,
         basics: {
           fullName: "",
           email: "",
@@ -159,7 +247,7 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
           linkedin: "",
           github: ""
         },
-        summary: "Processing resume with OCR. This may take a moment...",
+        summary: rawText ? rawText.slice(0, 500) : "We could extract limited text from this resume.",
         skills: [],
         experience: [],
         education: [],
@@ -174,11 +262,11 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
         },
         meta: {
           source: "upload",
-          parser: "hirefold-pdfjs-v2",
-          parseQuality: "image-resume-detected",
-          needsOCR: true,
-          ocrStatus: "pending",
-          analysisStatus: "processing",
+          parser: parserUsed,
+          parseQuality: rawText ? "low" : "image-resume-detected",
+          needsOCR: false,
+          ocrStatus: rawText ? "completed" : "unavailable",
+          analysisStatus: "ready",
           extractionDate: Date.now()
         }
       }
@@ -194,8 +282,8 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
     structuredData.meta = {
       ...structuredData.meta,
       source: "upload",
-      parser: "hirefold-pdfjs-v2",
-      parseQuality: "high",
+      parser: parserUsed,
+      parseQuality,
       needsOCR: false,
       analysisStatus: "ready",
       extractionDate: Date.now(),
