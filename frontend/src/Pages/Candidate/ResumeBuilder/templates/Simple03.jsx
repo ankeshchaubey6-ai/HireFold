@@ -29,7 +29,7 @@ const Simple03 = ({ resume }) => {
     meta?.accentColor || "#0ea5e9";
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",
@@ -334,7 +334,15 @@ const Simple03 = ({ resume }) => {
             <h3 style={{ color: "var(--resume-accent)" }}>
               References
             </h3>
-            <p>Available on request</p>
+            {references.map((reference, index) => (
+              <p key={index}>
+                {[reference.name, reference.role, reference.company]
+                  .filter(Boolean)
+                  .join("  ")}
+                {(reference.email || reference.phone) &&
+                  `  ${[reference.email, reference.phone].filter(Boolean).join(" | ")}`}
+              </p>
+            ))}
           </section>
         )}
       </main>

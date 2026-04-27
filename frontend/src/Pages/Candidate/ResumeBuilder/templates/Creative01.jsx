@@ -19,7 +19,7 @@ const Creative01 = ({ resume, accentColor = "#be185d" }) => {
   } = resume;
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     photo = null,
     email = "",

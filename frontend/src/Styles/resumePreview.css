@@ -49,6 +49,8 @@
   height: auto;
   overflow-y: visible;
   padding-right: 6px;
+  display: flex;
+  justify-content: center;
 }
 
 /* ======================================================
@@ -56,13 +58,13 @@
 ====================================================== */
 
 .resume-paper {
-  width: 794px;              /* A4 width */
-  min-height: 1123px;        /* A4 height */
+  width: 210mm;
+  min-height: 297mm;
+  max-height: 297mm;
 
   background: #ffffff;
   color: #111827;
 
-  padding: 36px 38px;
   box-sizing: border-box;
 
   border-radius: 8px;
@@ -72,6 +74,13 @@
   overflow: hidden;
 
   font-family: "Inter", system-ui, sans-serif;
+}
+
+.resume-paper__content {
+  width: 100%;
+  min-height: 297mm;
+  padding: 36px 38px;
+  box-sizing: border-box;
 }
 
 /* ======================================================
@@ -166,6 +175,15 @@ body.dark .resume-paper {
 ====================================================== */
 
 @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+  }
+
   body * {
     visibility: hidden;
   }
@@ -176,11 +194,8 @@ body.dark .resume-paper {
   }
 
   .resume-paper {
-    position: sticky;
-    left: 0;
-    top: 90px;
     transform: scale(1) !important;
     box-shadow: none;
+    border-radius: 0;
   }
 }
-  /*this file was empty durung problem solving i just added this code */

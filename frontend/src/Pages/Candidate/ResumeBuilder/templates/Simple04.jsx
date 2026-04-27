@@ -1,7 +1,7 @@
 import "../../../../Styles/templates/baseResume.css";
 import "../../../../Styles/templates/simple03.css";
 
-const Simple03 = ({ resume }) => {
+const Simple04 = ({ resume }) => {
   if (!resume) return null;
 
   const {
@@ -308,7 +308,15 @@ const Simple03 = ({ resume }) => {
             <h3 style={{ color: "var(--accent)" }}>
               References
             </h3>
-            <p>Available on request</p>
+            {references.map((reference, index) => (
+              <p key={index}>
+                {[reference.name, reference.role, reference.company]
+                  .filter(Boolean)
+                  .join("  ")}
+                {(reference.email || reference.phone) &&
+                  `  ${[reference.email, reference.phone].filter(Boolean).join(" | ")}`}
+              </p>
+            ))}
           </section>
         )}
       </main>
@@ -316,5 +324,5 @@ const Simple03 = ({ resume }) => {
   );
 };
 
-export default Simple03;
+export default Simple04;
 

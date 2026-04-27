@@ -28,7 +28,7 @@ const AutoScalePreview = ({ children, containerHeight = 420 }) => {
         style={{
           transform: `scale(${scale})`,
           transformOrigin: "top left",
-          width: "794px",
+          width: "210mm",
         }}
       >
         {children}

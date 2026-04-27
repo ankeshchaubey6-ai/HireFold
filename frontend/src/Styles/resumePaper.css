@@ -1,25 +1,31 @@
 .resume-paper {
-  width: 794px;
-  min-height: 1123px;
+  width: 210mm;
+  min-height: 297mm;
+  max-height: 297mm;
   background: #ffffff;
-
-  padding: 40px 48px;
   box-sizing: border-box;
 
   font-family: Inter, system-ui, sans-serif;
   font-size: 11px;
   line-height: 1.45;
   color: #0f172a;
-  
   margin: 0 auto;
+  overflow: hidden;
+}
+
+.resume-paper__content {
+  width: 100%;
+  min-height: 297mm;
+  padding: 40px 48px;
+  box-sizing: border-box;
 }
 
 .resume-paper.preview {
-  height: 1123px;
+  height: 297mm;
   overflow: hidden;
 }
 
 .resume-paper.full {
-  height: auto;
-  overflow: visible;
+  height: 297mm;
+  overflow: hidden;
 }

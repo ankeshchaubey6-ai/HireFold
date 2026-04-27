@@ -1,6 +1,7 @@
 import React from "react";
 import { useResume } from "../../Context/ResumeContext";
 import { TEMPLATE_LIST } from "../../Pages/Candidate/ResumeBuilder/templates";
+import prepareResumeForPreview from "../../utils/prepareResumeForPreview";
 
 const TEMPLATE_DEFAULT_COLORS = {
   Modern01: "#0f172a",
@@ -25,7 +26,7 @@ const TEMPLATE_DEFAULT_COLORS = {
 
 const PreviewRenderer = ({ resumeOverride = null, mode = "preview" }) => {
   const { resume } = useResume();
-  const finalResume = resumeOverride || resume;
+  const finalResume = prepareResumeForPreview(resumeOverride || resume);
 
   if (!finalResume) {
     return null;

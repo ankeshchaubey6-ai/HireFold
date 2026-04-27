@@ -4,14 +4,18 @@ import { useResume } from "../../Context/ResumeContext";
 import PreviewRenderer from "../ResumePreview/PreviewRenderer";
 import AutoScalePreview from "../ResumePreview/AutoScalePreview";
 import ResumePaper from "../ResumePreview/ResumePaper";
-import dummyResume from "../../utils/dummyResume";
+import prepareResumeForPreview from "../../utils/prepareResumeForPreview";
 import { TEMPLATE_LIST } from "../../Pages/Candidate/ResumeBuilder/templates";
 import "../../Styles/resumeTemplatesSection.css";
 
 const ResumeTemplatesSection = ({ onSelectTemplate }) => {
   const navigate = useNavigate();
-  const { setResume } = useResume();
+  const { resume, setResume } = useResume();
   const [showAll, setShowAll] = useState(false);
+  const previewResume = useMemo(
+    () => prepareResumeForPreview(resume),
+    [resume]
+  );
 
   const visibleTemplates = useMemo(
     () => (showAll ? TEMPLATE_LIST : TEMPLATE_LIST.slice(0, 6)),
@@ -41,9 +45,9 @@ const ResumeTemplatesSection = ({ onSelectTemplate }) => {
               <ResumePaper mode="preview">
                 <PreviewRenderer
                   resumeOverride={{
-                    ...dummyResume,
+                    ...previewResume,
                     meta: {
-                      ...(dummyResume.meta || {}),
+                      ...(previewResume.meta || {}),
                       targetTemplate: template.id,
                     },
                   }}
@@ -60,7 +64,6 @@ const ResumeTemplatesSection = ({ onSelectTemplate }) => {
                   className="btn-outline"
                   onClick={() =>
                     navigate(`/candidate/resume/templates/${template.id}`, {
-                      state: { source: "dummy" },
                     })
                   }
                   type="button"

@@ -17,7 +17,7 @@ const ATS03 = ({ resume }) => {
   } = resume;
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",

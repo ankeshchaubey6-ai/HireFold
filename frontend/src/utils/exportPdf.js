@@ -11,12 +11,6 @@ import html2canvas from "html2canvas";
  */
 export const exportResumePDF = async (element = null) => {
   try {
-    /**
-     *  PRIORITY SELECTORS (in order of stability)
-     * 1. Passed element (best)
-     * 2. Preview root (new optimized system)
-     * 3. ResumePaper fallback (legacy templates)
-     */
     let resumeElement =
       element ||
       document.getElementById("resume-preview-root") ||
@@ -24,73 +18,82 @@ export const exportResumePDF = async (element = null) => {
       document.querySelector(".resume-paper");
 
     if (!resumeElement) {
-      
       alert("Resume preview not ready. Please wait 1 second and try again.");
       return;
     }
 
-    
     await new Promise((resolve) =>
       requestAnimationFrame(() => resolve())
     );
 
-    const canvas = await html2canvas(resumeElement, {
-      scale: 2, // High quality export
-      useCORS: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-      windowWidth: resumeElement.scrollWidth,
-      windowHeight: resumeElement.scrollHeight,
-    });
+    const paperElement =
+      resumeElement.classList?.contains("resume-paper")
+        ? resumeElement
+        : resumeElement.querySelector(".resume-paper");
+
+    const contentElement =
+      paperElement?.querySelector(".resume-paper__content") || paperElement;
+
+    if (!paperElement || !contentElement) {
+      alert("Resume preview not ready. Please wait 1 second and try again.");
+      return;
+    }
+
+    const previousTransform = contentElement.style.transform;
+    const previousTransformOrigin = contentElement.style.transformOrigin;
+    const previousWidth = contentElement.style.width;
+
+    const availableHeight = paperElement.clientHeight;
+    const contentHeight = contentElement.scrollHeight;
+    const scaleFactor =
+      contentHeight > availableHeight
+        ? availableHeight / contentHeight
+        : 1;
+
+    let canvas;
+
+    try {
+      if (scaleFactor < 1) {
+        contentElement.style.transform = `scale(${scaleFactor})`;
+        contentElement.style.transformOrigin = "top left";
+        contentElement.style.width = `${100 / scaleFactor}%`;
+      }
+
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => resolve())
+      );
+
+      canvas = await html2canvas(paperElement, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        width: paperElement.scrollWidth,
+        height: paperElement.scrollHeight,
+        windowWidth: paperElement.scrollWidth,
+        windowHeight: paperElement.scrollHeight,
+      });
+    } finally {
+      contentElement.style.transform = previousTransform;
+      contentElement.style.transformOrigin = previousTransformOrigin;
+      contentElement.style.width = previousWidth;
+    }
 
     const imgData = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF({
       orientation: "portrait",
-      unit: "pt",
+      unit: "mm",
       format: "a4",
     });
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    const imgWidth = pageWidth;
-    const imgHeight =
-      (canvas.height * imgWidth) / canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    // First page
-    pdf.addImage(
-      imgData,
-      "PNG",
-      0,
-      position,
-      imgWidth,
-      imgHeight
-    );
-
-    heightLeft -= pageHeight;
-
-    // Multi-page support (long resumes)
-    while (heightLeft > 0) {
-      position -= pageHeight;
-      pdf.addPage();
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position,
-        imgWidth,
-        imgHeight
-      );
-      heightLeft -= pageHeight;
-    }
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
 
     pdf.save("HireFold_Resume.pdf");
   } catch (error) {
-    
     alert("Failed to export PDF. Try again.");
   }
 };

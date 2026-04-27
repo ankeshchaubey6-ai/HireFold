@@ -17,7 +17,7 @@ const Modern04 = ({ resume }) => {
   } = resume;
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",

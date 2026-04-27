@@ -28,7 +28,7 @@ const Modern01 = ({ resume }) => {
   } = resume;
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",
@@ -406,9 +406,19 @@ const Modern01 = ({ resume }) => {
           >
             References
           </h3>
-          <p className="resume-muted">
-            Available upon request
-          </p>
+          {references.map((reference, index) => (
+            <div key={index} className="resume-item">
+              <strong>
+                {reference.name}
+                {reference.role && `  ${reference.role}`}
+              </strong>
+              <div className="resume-muted">
+                {[reference.company, reference.email, reference.phone]
+                  .filter(Boolean)
+                  .join(" | ")}
+              </div>
+            </div>
+          ))}
         </section>
       )}
     </div>

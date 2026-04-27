@@ -20,7 +20,7 @@ const Modern02 = ({ resume }) => {
   } = resume;
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",

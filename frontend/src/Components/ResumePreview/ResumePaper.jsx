@@ -4,7 +4,7 @@ import "../../Styles/resumePaper.css";
 const ResumePaper = ({
   children,
   mode = "full",
-  accentColor = "#111827", 
+  accentColor = "#111827",
 }) => {
   return (
     <div
@@ -18,7 +18,7 @@ const ResumePaper = ({
         "--resume-accent-border": `${accentColor}55`,
       }}
     >
-      {children}
+      <div className="resume-paper__content">{children}</div>
     </div>
   );
 };

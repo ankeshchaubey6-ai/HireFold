@@ -1,35 +1,24 @@
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useResume } from "../../Context/ResumeContext";
 import PreviewRenderer from "../../Components/ResumePreview/PreviewRenderer";
 import ResumePaper from "../../Components/ResumePreview/ResumePaper";
-import dummyResume from "../../utils/dummyResume";
+import prepareResumeForPreview from "../../utils/prepareResumeForPreview";
 
 import "../../Styles/resumePage.css";
 
 const TemplateViewer = () => {
   const { templateId } = useParams();
-  const location = useLocation();
   const { resume } = useResume();
 
-  
-
-  const isDummy = location.state?.source === "dummy";
-
-  const baseData = isDummy ? dummyResume : resume;
-
-  const resumeData = {
-    ...baseData,
+  const resumeData = prepareResumeForPreview({
+    ...resume,
     meta: {
-      
-      ...(baseData?.meta || {}),
+      ...(resume?.meta || {}),
       targetTemplate: templateId,
-      //  ENSURE COLOR ENGINE NEVER BREAKS
-      accentColor:
-        baseData?.meta?.accentColor ||
-        "#111827",
+      accentColor: resume?.meta?.accentColor || "#111827",
     },
-  };
+  });
 
   return (
     <div className="resume-view-page">

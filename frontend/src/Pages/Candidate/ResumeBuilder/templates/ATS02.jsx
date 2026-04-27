@@ -25,7 +25,7 @@ const ATS02 = ({ resume }) => {
     meta?.accentColor || "#0ea5e9";
 
   const {
-    fullName = "Your Name",
+    fullName = "",
     label = "",
     email = "",
     phone = "",
