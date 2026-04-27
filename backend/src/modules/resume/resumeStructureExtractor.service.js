@@ -34,6 +34,11 @@ const SECTION_HEADERS = {
   ]
 };
 
+const DASH_PATTERN = "[\\-\\u2013\\u2014\\u2212]";
+const BULLET_PATTERN = /^[\-*•●▪◦]\s*/;
+const MONTH_PATTERN =
+  "(?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)";
+
 // Predefined skill categories with comprehensive skill lists
 const SKILL_CATEGORIES = {
   frontend: [
@@ -148,19 +153,34 @@ export function extractStructuredDataFromText(rawText = "") {
 function normalizeText(text) {
   return text
     .replace(/\r/g, "\n")
+    .replace(/\u2022|\u25CF|\u25AA|\u25E6/g, "•")
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[^\x00-\x7F]/g, " ")
     .replace(/[^\S\n]+/g, " ")
     .trim();
 }
 
-/* ================= SECTION DETECTION ================= */
-
-function detectSections(text) {
-  const lines = text
+function getLines(text = "") {
+  return String(text)
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+function dedupeBy(items = [], getKey = (item) => item) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = getKey(item);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/* ================= SECTION DETECTION ================= */
+
+function detectSections(text) {
+  const lines = getLines(text);
   const sections = {};
   let currentSection = "other";
   let sectionContent = [];
@@ -175,7 +195,12 @@ function detectSections(text) {
       if (
         headers.some(
           (header) =>
-            (lowerLine === header || lowerLine.startsWith(`${header}:`) || lowerLine.includes(header)) &&
+            (
+              lowerLine === header ||
+              lowerLine.startsWith(`${header}:`) ||
+              lowerLine.startsWith(`${header} -`) ||
+              lowerLine.includes(header)
+            ) &&
             line.length < 60
         )
       ) {
@@ -218,13 +243,15 @@ function detectSections(text) {
 /* ================= ENTITY EXTRACTION (NER) ================= */
 
 function extractEntities(text) {
+  const lines = getLines(text).slice(0, 8);
+  const headerBlock = lines.join(" | ");
   const basics = {
     fullName: extractName(text),
-    email: extractEmail(text),
-    phone: extractPhone(text),
-    location: extractLocation(text),
-    linkedin: extractLinkedIn(text),
-    github: extractGitHub(text)
+    email: extractEmail(headerBlock || text),
+    phone: extractPhone(headerBlock || text),
+    location: extractLocation(headerBlock || text),
+    linkedin: extractLinkedIn(headerBlock || text),
+    github: extractGitHub(headerBlock || text)
   };
   
   return { basics };
@@ -260,7 +287,8 @@ function extractPhone(text) {
   const phoneRegexes = [
     /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g,
     /\b\d{10}\b/g,
-    /\+\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4}\b/g
+    /\+\d{1,3}\s?\d{3}\s?\d{3}\s?\d{4}\b/g,
+    /\+\d{1,3}[\s-]?\(?\d{2,4}\)?[\s-]?\d{3,4}[\s-]?\d{3,4}\b/g
   ];
   
   for (const regex of phoneRegexes) {
@@ -274,7 +302,7 @@ function extractPhone(text) {
 }
 
 function extractLocation(text) {
-  const locationRegex = /\b[A-Z][a-z]+,\s*[A-Z]{2}\b|\b[A-Z][a-z]+\s*,\s*[A-Z][a-z]+\b/g;
+  const locationRegex = /\b[A-Z][a-z]+,\s*[A-Z]{2}\b|\b[A-Z][a-z]+\s*,\s*[A-Z][a-z]+\b|\b[A-Z][A-Za-z]+\s*,\s*(India|USA|United States|Canada|UK|United Kingdom|Remote)\b/g;
   const matches = text.match(locationRegex);
   return matches && matches.length > 0 ? matches[0] : "";
 }
@@ -298,6 +326,8 @@ function parseSkillsEnhanced(text = "") {
   
   const lowerText = text.toLowerCase();
   const skillsByCategory = [];
+  const discoveredSkills = new Map();
+  const lines = getLines(text);
   
   for (const [category, skillList] of Object.entries(SKILL_CATEGORIES)) {
     const foundSkills = [];
@@ -305,10 +335,14 @@ function parseSkillsEnhanced(text = "") {
     for (const skill of skillList) {
       const regex = new RegExp(`\\b${skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
       if (regex.test(lowerText)) {
-        foundSkills.push({
-          name: skill,
-          confidence: 0.9
-        });
+        const normalizedSkill = skill.toLowerCase();
+        if (!discoveredSkills.has(normalizedSkill)) {
+          discoveredSkills.set(normalizedSkill, category);
+          foundSkills.push({
+            name: skill,
+            confidence: 0.9
+          });
+        }
       }
     }
     
@@ -320,6 +354,51 @@ function parseSkillsEnhanced(text = "") {
       });
     }
   }
+
+  const genericSkills = [];
+  for (const line of lines) {
+    if (
+      line.length > 120 ||
+      /(experience|education|project|summary|profile)/i.test(line)
+    ) {
+      continue;
+    }
+
+    const tokens = line
+      .replace(BULLET_PATTERN, "")
+      .split(/[,|/]| {2,}/)
+      .map((token) => token.trim())
+      .filter(Boolean);
+
+    for (const token of tokens) {
+      if (
+        token.length < 2 ||
+        token.length > 40 ||
+        /\d{4}/.test(token) ||
+        /[@]/.test(token)
+      ) {
+        continue;
+      }
+
+      const normalizedToken = token.toLowerCase();
+      if (discoveredSkills.has(normalizedToken)) continue;
+      if (!/[a-z]/i.test(token)) continue;
+
+      discoveredSkills.set(normalizedToken, "other");
+      genericSkills.push({
+        name: token,
+        confidence: 0.65,
+      });
+    }
+  }
+
+  if (genericSkills.length > 0) {
+    skillsByCategory.push({
+      category: "other",
+      count: genericSkills.length,
+      items: dedupeBy(genericSkills, (item) => item.name.toLowerCase()),
+    });
+  }
   
   return skillsByCategory;
 }
@@ -330,9 +409,15 @@ function parseExperienceEnhanced(text = "") {
   if (!text) return [];
   
   const experiences = [];
-  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
-  const datePattern =
-    /((?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+\d{4}|\d{4})\s*[-–]\s*((?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+\d{4}|\d{4}|\bpresent\b|\bcurrent\b)/i;
+  const lines = getLines(text);
+  const datePattern = new RegExp(
+    `((?:${MONTH_PATTERN})\\s+\\d{4}|\\d{4})\\s*${DASH_PATTERN}\\s*((?:${MONTH_PATTERN})\\s+\\d{4}|\\d{4}|\\bpresent\\b|\\bcurrent\\b)`,
+    "i"
+  );
+  const dateOnlyLinePattern = new RegExp(
+    `^(?:${MONTH_PATTERN}\\s+\\d{4}|\\d{4})\\s*${DASH_PATTERN}\\s*(?:${MONTH_PATTERN}\\s+\\d{4}|\\d{4}|present|current)$`,
+    "i"
+  );
   
   // Extract lines that look like experience entries
   for (let i = 0; i < lines.length; i++) {
@@ -369,14 +454,19 @@ function parseExperienceEnhanced(text = "") {
       if (!experience.company && i > 0 && lines[i-1].trim() && !lines[i-1].match(datePattern)) {
         experience.company = lines[i-1].trim();
       }
+
+      if (!experience.role && i > 1 && lines[i - 1] && !lines[i - 1].match(datePattern)) {
+        experience.role = lines[i - 1];
+      }
       
       // Collect description (next 2-3 lines)
       let descLines = [];
-      for (let j = i + 1; j < Math.min(i + 4, lines.length); j++) {
+      for (let j = i + 1; j < Math.min(i + 7, lines.length); j++) {
         const descLine = lines[j].trim();
-        if (descLine && !descLine.match(/(\w+\s+\d{4})/)) {
-          descLines.push(descLine);
-        }
+        if (!descLine) continue;
+        if (descLine.match(datePattern) || descLine.match(dateOnlyLinePattern)) break;
+        if (/^(education|projects?|skills|certifications?|summary)$/i.test(descLine)) break;
+        descLines.push(descLine.replace(BULLET_PATTERN, ""));
       }
       experience.description = descLines.join(" ");
       
@@ -397,7 +487,10 @@ function parseExperienceEnhanced(text = "") {
   // If no structured experiences found, try to extract from raw text
   if (experiences.length === 0) {
     const experienceText = text;
-    const expPattern = /([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+((?:[A-Z][a-z]+\s+\d{4})|\d{4})\s*[-–]\s*(((?:[A-Z][a-z]+\s+\d{4})|\d{4}|\bpresent\b))/gi;
+    const expPattern = new RegExp(
+      `([A-Z][A-Za-z0-9+&.,/()\\- ]{2,})\\s+((?:${MONTH_PATTERN})\\s+\\d{4}|\\d{4})\\s*${DASH_PATTERN}\\s*(((?:${MONTH_PATTERN})\\s+\\d{4})|\\d{4}|\\bpresent\\b)`,
+      "gi"
+    );
     let match;
     while ((match = expPattern.exec(experienceText)) !== null) {
       experiences.push({
@@ -415,7 +508,10 @@ function parseExperienceEnhanced(text = "") {
     }
   }
   
-  return experiences;
+  return dedupeBy(
+    experiences.filter((item) => item.role || item.company || item.description),
+    (item) => `${item.role}|${item.company}|${item.duration?.raw}`
+  );
 }
 
 /* ================= EDUCATION PARSING (Enhanced) ================= */
@@ -424,7 +520,7 @@ function parseEducationEnhanced(text = "") {
   if (!text) return [];
   
   const education = [];
-  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = getLines(text);
   
   for (const line of lines) {
     const lowerLine = line.toLowerCase();
@@ -449,6 +545,11 @@ function parseEducationEnhanced(text = "") {
         edu.level = levelKey ? EDUCATION_LEVELS[levelKey] : 3;
       }
       
+      const fieldMatch = line.match(/\b(computer science|information technology|electronics|mechanical|civil|business administration|data science|artificial intelligence|mathematics|physics|commerce)\b/i);
+      if (fieldMatch) {
+        edu.field = fieldMatch[0];
+      }
+
       const yearMatch = line.match(/\b(19|20)\d{2}\b/);
       if (yearMatch) {
         edu.year = parseInt(yearMatch[0]);
@@ -463,7 +564,10 @@ function parseEducationEnhanced(text = "") {
     }
   }
   
-  return education;
+  return dedupeBy(
+    education.filter((item) => item.degree || item.institution || item.year),
+    (item) => `${item.degree}|${item.institution}|${item.year}`
+  );
 }
 
 /* ================= PROJECTS PARSING (Enhanced) ================= */
@@ -472,9 +576,10 @@ function parseProjectsEnhanced(text = "") {
   if (!text) return [];
   
   const projects = [];
-  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = getLines(text);
   
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     if (
       line.trim() &&
       line.length < 220 &&
@@ -488,11 +593,23 @@ function parseProjectsEnhanced(text = "") {
         impact: "",
         duration: null
       };
+
+      const detailLines = [];
+      for (let j = i + 1; j < Math.min(i + 4, lines.length); j++) {
+        const nextLine = lines[j];
+        if (/^(education|experience|skills|summary|profile|certifications?|projects?)$/i.test(nextLine)) break;
+        if (nextLine.length > 220) break;
+        if (new RegExp(`${MONTH_PATTERN}\\s+\\d{4}|\\d{4}\\s*${DASH_PATTERN}`).test(nextLine)) break;
+        detailLines.push(nextLine.replace(BULLET_PATTERN, ""));
+      }
+      if (detailLines.length) {
+        project.description = [project.description, ...detailLines].join(" ");
+      }
       
       // Extract technologies
       for (const [category, skills] of Object.entries(SKILL_CATEGORIES)) {
         const foundTechs = skills.filter(skill => 
-          line.toLowerCase().includes(skill.toLowerCase())
+          project.description.toLowerCase().includes(skill.toLowerCase())
         );
         if (foundTechs.length > 0) {
           project.techStack.push(...foundTechs);
@@ -506,11 +623,13 @@ function parseProjectsEnhanced(text = "") {
         project.complexity = "medium";
       }
       
-      projects.push(project);
+      if (project.techStack.length || /project|developed|built|created|designed/i.test(project.description)) {
+        projects.push(project);
+      }
     }
   }
   
-  return projects.slice(0, 10);
+  return dedupeBy(projects, (item) => item.name.toLowerCase()).slice(0, 10);
 }
 
 /* ================= CERTIFICATIONS PARSING ================= */
@@ -519,7 +638,7 @@ function parseCertifications(text = "") {
   if (!text) return [];
   
   const certifications = [];
-  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = getLines(text);
   
   const certKeywords = [
     "certified", "certification", "certificate", "aws", "azure", 
@@ -536,7 +655,7 @@ function parseCertifications(text = "") {
     }
   }
   
-  return certifications;
+  return dedupeBy(certifications, (item) => item.name.toLowerCase());
 }
 
 /* ================= SUMMARY EXTRACTION ================= */
