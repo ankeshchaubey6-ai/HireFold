@@ -205,6 +205,122 @@ body.dark .overview-progress-track {
 
 .dark .overview-metrics {
   background: rgba(255,255,255,0.04);
+}
+
+/* ===== PRIORITY BADGE ===== */
+.overview-priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 8px 0;
+  width: fit-content;
+}
+
+.overview-priority-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== ESTIMATED TIME ===== */
+.overview-estimate-time {
+  font-size: 0.78rem;
+  padding: 6px 8px;
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid #3b82f6;
+  border-radius: 4px;
+  color: #1e40af;
+  margin: 4px 0;
+}
+
+.dark .overview-estimate-time {
+  background: rgba(96, 165, 250, 0.1);
+  color: #93c5fd;
+}
+
+/* ===== MAIN FEEDBACK ===== */
+.overview-feedback {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--hf-text-secondary, #64748b);
+  margin: 6px 0;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.02);
+  border-left: 3px solid var(--hf-accent, #6366f1);
+  border-radius: 4px;
+}
+
+.dark .overview-feedback {
+  background: rgba(255,255,255,0.04);
+  color: #cbd5e1;
+}
+
+/* ===== RECOMMENDATIONS ===== */
+.overview-recommendations {
+  margin: 10px 0 4px;
+}
+
+.overview-recommendations-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #059669;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.overview-recommendations-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overview-recommendations-list li {
+  font-size: 0.78rem;
+  color: #047857;
+  padding: 6px 8px 6px 24px;
+  position: relative;
+  line-height: 1.3;
+  background: rgba(5, 150, 105, 0.05);
+  border-radius: 4px;
+  margin: 0;
+}
+
+.overview-recommendations-list li::before {
+  content: "→";
+  position: absolute;
+  left: 8px;
+  color: #059669;
+  font-weight: bold;
+}
+
+.dark .overview-recommendations-list li {
+  background: rgba(16, 185, 129, 0.1);
+  color: #6ee7b7;
+}
+
+.dark .overview-recommendations-list li::before {
+  color: #10b981;
+}
+
+/* ===== NOTE (fallback) ===== */
+.overview-note {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--hf-text-secondary, #64748b);
+  margin: 6px 0;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.02);
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
 }/* ===== URGENCY BADGE ===== */
 .overview-urgency-badge {
   display: inline-flex;

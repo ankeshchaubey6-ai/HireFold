@@ -58,14 +58,17 @@ const AnimatedProgress = ({ value, color }) => {
 ========================================================= */
 
 const normalizeSection = (section) => ({
-  section:     section.section   || "Unknown",
-  score:       clampScore(section.score),
-  status:      section.status    || "average",
-  priority:    section.priority  || "medium",
-  urgency:     section.urgency   || null,
-  note:        section.note      || "",
-  suggestions: Array.isArray(section.suggestions) ? section.suggestions : [],
-  positives:   Array.isArray(section.positives)   ? section.positives   : [],
+  name:            section.name     || section.section   || "Unknown",
+  score:           clampScore(section.score),
+  status:          section.status    || "average",
+  priority:        section.priority  || "medium",
+  urgency:         section.urgency   || null,
+  note:            section.note      || section.feedback || "",
+  feedback:        section.feedback  || "",
+  suggestions:     Array.isArray(section.suggestions) ? section.suggestions : Array.isArray(section.recommendations) ? section.recommendations : [],
+  recommendations: Array.isArray(section.recommendations) ? section.recommendations : [],
+  positives:       Array.isArray(section.positives)   ? section.positives   : [],
+  estimatedTime:   section.estimatedTime || "",
   details:
     typeof section.details === "object" && section.details !== null
       ? section.details
@@ -96,11 +99,11 @@ const AnalysisOverviewGrid = ({ sections }) => {
           const urgencyMeta = s.urgency ? URGENCY_META[s.urgency] : null;
 
           return (
-            <article key={s.section} className="analysis-overview-card">
+            <article key={s.name} className="analysis-overview-card">
 
               {/* ===== HEADER ===== */}
               <div className="overview-card-header">
-                <h4>{s.section}</h4>
+                <h4>{s.name}</h4>
                 <span
                   className="overview-status"
                   style={{ color: meta.color }}
@@ -118,50 +121,44 @@ const AnalysisOverviewGrid = ({ sections }) => {
               {/* ===== PROGRESS BAR ===== */}
               <AnimatedProgress value={s.score} color={meta.color} />
 
-              {/* ===== URGENCY BADGE ===== */}
-              {urgencyMeta && (
-                <div className="overview-urgency-badge" style={{
-                  background: urgencyMeta.bg,
-                  color: urgencyMeta.color,
-                  border: `1px solid ${urgencyMeta.color}33`,
+              {/* ===== PRIORITY BADGE ===== */}
+              {s.priority && (
+                <div className="overview-priority-badge" style={{
+                  background: URGENCY_META[s.priority]?.bg || "#f3f4f6",
+                  color: URGENCY_META[s.priority]?.color || "#666",
+                  border: `1px solid ${URGENCY_META[s.priority]?.color}33`,
                 }}>
-                  <span className="overview-urgency-dot" style={{
-                    background: urgencyMeta.dot,
+                  <span className="overview-priority-dot" style={{
+                    background: URGENCY_META[s.priority]?.dot || "#999",
                   }} />
-                  {s.urgency}
+                  Priority: {s.priority}
                 </div>
               )}
 
-              {/* ===== SCORE EXPLANATION NOTE ===== */}
-              {s.note && (
-                <p className="overview-note">{s.note}</p>
-              )}
-
-              {/* ===== WHAT'S GOOD ===== */}
-              {s.positives.length > 0 && (
-                <div className="overview-positives">
-                  <p className="overview-positives-label">
-                     What's working
-                  </p>
-                  <ul className="overview-positives-list">
-                    {s.positives.map((text, i) => (
-                      <li key={i} className="overview-positive-item">
-                        {text}
-                      </li>
-                    ))}
-                  </ul>
+              {/* ===== ESTIMATED TIME ===== */}
+              {s.estimatedTime && (
+                <div className="overview-estimate-time">
+                  <strong>⏱️ Time to fix:</strong> {s.estimatedTime}
                 </div>
               )}
 
-              {/* ===== SUGGESTIONS / ISSUES ===== */}
-              {s.suggestions.length > 0 && (
-                <div className="overview-suggestions-wrap">
-                  <p className="overview-suggestions-label">
-                     Issues to fix
+              {/* ===== MAIN FEEDBACK ===== */}
+              {s.feedback && (
+                <p className="overview-feedback">{s.feedback}</p>
+              )}
+
+              {/* ===== RECOMMENDATIONS / ISSUES ===== */}
+              {(s.recommendations.length > 0 || s.suggestions.length > 0) && (
+                <div className="overview-recommendations">
+                  <p className="overview-recommendations-label">
+                    ✅ What to do
                   </p>
-                  <ul className="overview-suggestions">
-                    {s.suggestions.map((text, i) => (
+                  <ul className="overview-recommendations-list">
+                    {s.recommendations.map((text, i) => (
                       <li key={i}>{text}</li>
+                    ))}
+                    {s.suggestions.map((text, i) => (
+                      <li key={`sug-${i}`}>{text}</li>
                     ))}
                   </ul>
                 </div>
@@ -220,28 +217,6 @@ const AnalysisOverviewGrid = ({ sections }) => {
                       {s.details.highComplexProjects}
                     </div>
                   )}
-                </div>
-              )}
-
-              {/* ===== WORD COUNT (FORMATTING) ===== */}
-              {s.details.wordCount !== undefined && (
-                <div className="overview-metrics">
-                  <div>
-                    <strong>Word count:</strong>{" "}
-                    {s.details.wordCount}
-                    <span style={{
-                      color: s.details.wordCount > 200 && s.details.wordCount < 2000
-                        ? "#16a34a" : "#ef4444",
-                      marginLeft: "6px",
-                      fontSize: "0.75rem",
-                    }}>
-                      {s.details.wordCount < 200
-                        ? "(too short)"
-                        : s.details.wordCount > 2000
-                        ? "(too long)"
-                        : "(good range)"}
-                    </span>
-                  </div>
                 </div>
               )}
 

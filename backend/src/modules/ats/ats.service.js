@@ -103,96 +103,207 @@ class ATSServiceImpl {
       requiredSkills,
       missingSkills,
       rawText,
+      features,
     } = data;
 
     const sections = [];
 
     // Skills Section
     const skillScore = Math.round(metrics.skillScore * 100);
+    const skillStatus = skillScore >= 75 ? "strong" : skillScore >= 50 ? "moderate" : "weak";
+    const skillRecommendations = [];
+    
+    if (missingSkills.length > 0) {
+      skillRecommendations.push(`Add missing critical skills: ${missingSkills.slice(0, 5).join(", ")}`);
+    }
+    if (skills.length < 5) {
+      skillRecommendations.push(`Expand skill set (currently ${skills.length}, target: 8-12 relevant skills)`);
+    }
+    if (skills.length > 0 && !skills.some(s => s.toLowerCase().includes("leadership"))) {
+      skillRecommendations.push("Include soft skills: Leadership, Communication, Problem-solving");
+    }
+    
     sections.push({
       name: "Skills",
       score: skillScore,
-      status: skillScore >= 75 ? "strong" : skillScore >= 50 ? "moderate" : "weak",
-      feedback:
-        skillScore >= 75
-          ? `Strong skill set with ${skills.length} categories. ${missingSkills.length > 0 ? `Consider adding: ${missingSkills.slice(0, 3).join(", ")}` : "No critical gaps detected."}`
-          : skillScore >= 50
-            ? `Moderate skill coverage. Missing critical skills: ${missingSkills.slice(0, 3).join(", ")}. Prioritize these for your role.`
-            : `Weak skill alignment. Add these key skills: ${missingSkills.slice(0, 5).join(", ")}`,
+      status: skillStatus,
+      feedback: 
+        skillScore >= 75 
+          ? `Excellent! ${skills.length} skills identified. ${missingSkills.length > 0 ? `Consider adding: ${missingSkills.slice(0, 2).join(", ")}` : "Great skill-job alignment."}`
+          : `${skills.length} skills found (target: 8-12). ${skillRecommendations[0] || "Add more technical and soft skills."}`,
+      recommendations: skillRecommendations,
+      priority: skillScore < 50 ? "high" : "medium",
+      estimatedTime: "15-20 min",
     });
 
     // Experience Section
     const expScore = Math.round(metrics.experienceScore * 100);
+    const expStatus = expScore >= 75 ? "strong" : expScore >= 50 ? "moderate" : "weak";
+    const expRecommendations = [];
+    const totalExpMonths = features.totalExperienceMonths || 0;
+    const avgExpMonths = experience.length > 0 ? totalExpMonths / experience.length : 0;
+    
+    if (experience.length === 0) {
+      expRecommendations.push("Add your work experience history with clear job titles and company names");
+      expRecommendations.push("For each role: include dates, key responsibilities, and quantifiable achievements");
+    } else if (experience.length < 3) {
+      expRecommendations.push(`Expand experience history (currently ${experience.length} roles, target: 3-5 recent roles)`);
+    }
+    
+    // Check if experiences have metrics
+    const hasMetrics = experience.some(e => /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(e.description || ""));
+    if (!hasMetrics) {
+      expRecommendations.push("Add quantifiable achievements: 'increased X by 25%', 'saved $50K annually', etc.");
+    }
+    
     sections.push({
       name: "Experience",
       score: expScore,
-      status: expScore >= 75 ? "strong" : expScore >= 50 ? "moderate" : "weak",
+      status: expStatus,
       feedback:
         expScore >= 75
-          ? `${experience.length} relevant work experiences with strong achievement metrics.`
-          : expScore >= 50
-            ? `${experience.length} work experiences listed. Add more specific achievements and quantifiable results.`
-            : "Limited or missing work experience. Add details about past roles and accomplishments.",
+          ? `Strong! ${experience.length} experiences with ${Math.round(totalExpMonths / 12)} years total. Include more metric-driven achievements.`
+          : `${experience.length} experiences listed (${Math.round(totalExpMonths / 12)} years). ${expRecommendations[0] || "Strengthen with achievements and metrics."}`,
+      recommendations: expRecommendations,
+      priority: expScore < 50 ? "high" : "medium",
+      estimatedTime: "20-30 min",
     });
 
     // Education Section
     const eduScore = Math.round(metrics.educationScore * 100);
+    const eduStatus = eduScore >= 75 ? "strong" : eduScore >= 50 ? "moderate" : "weak";
+    const eduRecommendations = [];
+    
+    if (education.length === 0) {
+      eduRecommendations.push("Add your degree(s): university name, field of study, graduation date");
+    } else if (education.length < 1) {
+      eduRecommendations.push("Include graduation dates and field of study for each degree");
+    }
+    
+    if (certifications.length === 0) {
+      eduRecommendations.push("Add relevant certifications: AWS, Google Cloud, Azure, Scrum Master, etc.");
+    }
+    
+    if (education.some(e => (e.coursework || "").length === 0)) {
+      eduRecommendations.push("For degrees: list relevant coursework, GPA (if 3.5+), honors, or achievements");
+    }
+    
     sections.push({
       name: "Education",
       score: eduScore,
-      status: eduScore >= 75 ? "strong" : eduScore >= 50 ? "moderate" : "weak",
+      status: eduStatus,
       feedback:
         eduScore >= 75
-          ? "Strong educational background. Consider adding relevant certifications."
-          : eduScore >= 50
-            ? `${education.length} degrees listed. Consider adding certifications or relevant coursework.`
-            : "Limited education details. Add degree information and relevant coursework.",
+          ? `Excellent education profile! ${education.length} degree(s) listed. ${certifications.length > 0 ? "Strong certification coverage." : "Consider adding relevant certifications."}`
+          : `${education.length} education entries. ${eduRecommendations[0] || "Add details and relevant certifications."}`,
+      recommendations: eduRecommendations,
+      priority: eduScore < 50 ? "medium" : "low",
+      estimatedTime: "10-15 min",
     });
 
     // Projects Section
     const projScore = Math.round(metrics.projectScore * 100);
+    const projStatus = projScore >= 75 ? "strong" : projScore >= 50 ? "moderate" : "weak";
+    const projRecommendations = [];
+    
+    if (projects.length === 0) {
+      projRecommendations.push("Add 2-3 portfolio projects with technologies, brief description, and link");
+      projRecommendations.push("Include personal projects, freelance work, or open-source contributions");
+    } else if (projects.length < 2) {
+      projRecommendations.push(`Expand project portfolio (currently ${projects.length}, target: 3-5 strong projects)`);
+    }
+    
+    const hasProjectLinks = projects.some(p => /github|gitlab|demo|link/i.test(p.description || ""));
+    if (!hasProjectLinks) {
+      projRecommendations.push("Add GitHub links or live demos for each project");
+    }
+    
+    const hasProjectTech = projects.some(p => /javascript|python|react|node|aws/i.test(p.description || ""));
+    if (!hasProjectTech) {
+      projRecommendations.push("Highlight technologies used: React, Node.js, AWS, etc.");
+    }
+    
     sections.push({
       name: "Projects",
       score: projScore,
-      status: projScore >= 75 ? "strong" : projScore >= 50 ? "moderate" : "weak",
+      status: projStatus,
       feedback:
         projScore >= 75
-          ? `Strong project portfolio with ${projects.length} detailed projects demonstrating technical ability.`
-          : projScore >= 50
-            ? `${projects.length} projects included. Enhance descriptions with technologies and business impact.`
-            : projects.length > 0
-              ? "Limited project details. Add 2-3 detailed projects with tech stack and outcomes."
-              : "No projects listed. Add project portfolio to demonstrate practical skills.",
+          ? `Excellent! ${projects.length} projects with solid descriptions. Consider adding more complex projects.`
+          : `${projects.length} project(s) listed. ${projRecommendations[0] || "Add project portfolio to demonstrate technical skills."}`,
+      recommendations: projRecommendations,
+      priority: projScore < 50 ? "high" : "medium",
+      estimatedTime: "25-35 min",
     });
 
     // Certifications Section
     const certScore = Math.round(metrics.certificationScore * 100);
+    const certStatus = certScore >= 75 ? "strong" : certScore >= 50 ? "moderate" : "weak";
+    const certRecommendations = [];
+    
+    if (certifications.length === 0) {
+      certRecommendations.push("Add industry certifications: AWS Solutions Architect, Google Cloud Associate, Azure Fundamentals");
+      certRecommendations.push("Include Agile/Scrum certifications (CSM, PSM), Security (CISSP, CEH), or role-specific certs");
+    } else if (certifications.length < 2) {
+      certRecommendations.push(`Build certification portfolio (currently ${certifications.length}, target: 2-4 relevant certs)`);
+    }
+    
+    const hasIssueDates = certifications.some(c => /date|issue|valid|expir/i.test(c.name || ""));
+    if (!hasIssueDates) {
+      certRecommendations.push("Include issue dates for certifications (month/year format)");
+    }
+    
     sections.push({
       name: "Certifications",
       score: certScore,
-      status: certScore >= 75 ? "strong" : certScore >= 50 ? "moderate" : "weak",
+      status: certStatus,
       feedback:
         certScore >= 75
-          ? `${certifications.length} relevant certifications. Excellent credential coverage.`
-          : certScore >= 50
-            ? `${certifications.length} certifications listed. Consider adding industry-standard certifications.`
-            : certifications.length > 0
-              ? "Limited certifications. Add AWS, GCP, Azure, or other industry certifications."
-              : "No certifications listed. Pursue industry certifications to strengthen your profile.",
+          ? `Strong! ${certifications.length} certifications. Keep them current and add emerging tech certifications.`
+          : `${certifications.length} certification(s). ${certRecommendations[0] || "Add industry-recognized certifications to boost credibility."}`,
+      recommendations: certRecommendations,
+      priority: certScore < 50 ? "medium" : "low",
+      estimatedTime: "Variable (depends on certification pursuit)",
     });
 
     // Content Quality Section
     const textScore = Math.round(metrics.textQualityScore * 100);
+    const textStatus = textScore >= 75 ? "strong" : textScore >= 50 ? "moderate" : "weak";
+    const textRecommendations = [];
+    const wordCount = (rawText || "").split(/\s+/).length;
+    
+    if (wordCount < 300) {
+      textRecommendations.push(`Resume is too brief (${wordCount} words, target: 400-600). Expand with achievements and details.`);
+    } else if (wordCount > 800) {
+      textRecommendations.push(`Resume is lengthy (${wordCount} words, target: 400-600). Remove redundancy and focus on impact.`);
+    }
+    
+    const hasMetrics = /(\d+%|increased|grew|reduced|saved|\$\d+)/i.test(rawText || "");
+    if (!hasMetrics) {
+      textRecommendations.push("Use quantifiable metrics: percentages, dollar amounts, time saved, growth achieved");
+    }
+    
+    const hasActionVerbs = /managed|led|increased|improved|designed|developed|implemented/i.test(rawText || "");
+    if (!hasActionVerbs) {
+      textRecommendations.push("Start bullet points with action verbs: Led, Designed, Implemented, Optimized, etc.");
+    }
+    
+    const hasSpellingIssues = /teh|recieved|occured|seperate/i.test(rawText || "");
+    if (hasSpellingIssues) {
+      textRecommendations.push("Fix spelling/grammar errors. Use spell checker before submitting.");
+    }
+    
     sections.push({
       name: "Content Quality",
       score: textScore,
-      status: textScore >= 75 ? "strong" : textScore >= 50 ? "moderate" : "weak",
+      status: textStatus,
       feedback:
         textScore >= 75
-          ? "Well-structured resume with quantifiable metrics and clear descriptions."
-          : textScore >= 50
-            ? "Good content structure. Include more metrics (percentages, numbers) for impact."
-            : "Resume lacks detail and metrics. Add quantifiable achievements and specific outcomes.",
+          ? `Excellent writing! Clear structure, quantified achievements, and strong language. Minor refinements possible.`
+          : `Content quality needs work (${wordCount} words). ${textRecommendations[0] || "Improve formatting, metrics, and action verbs."}`,
+      recommendations: textRecommendations,
+      priority: textScore < 50 ? "high" : "low",
+      estimatedTime: "10-15 min",
     });
 
     return sections;
