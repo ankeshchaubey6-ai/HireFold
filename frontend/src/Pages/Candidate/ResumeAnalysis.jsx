@@ -129,6 +129,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
         if (cancelled) return;
 
         if (latestAnalysis) {
+          console.log("[FRONTEND] Normalized ATS analysis payload:", latestAnalysis);
           setLoadedAnalysis(latestAnalysis.ats || latestAnalysis);
 
           if (fetchedResume) {
@@ -170,9 +171,12 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
   const activeStructuredData = loadedResume || resumeData || resume || null;
 
   const safeScore = Number(
-    analysis?.score ??
+    analysis?.totalScore ??
+      analysis?.score ??
       analysis?.atsScore ??
       analysis?.overallScore ??
+      analysis?.ats?.totalScore ??
+      analysis?.ats?.score ??
       activeStructuredData?.meta?.atsScore ??
       0
   );

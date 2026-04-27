@@ -25,7 +25,10 @@ class ATSServiceImpl {
       throw new Error("Resume not found");
     }
 
-    const structuredData = normalizeResumeData(resume.structuredData || {});
+    const rawStructuredData = resume.structuredData || {};
+    console.log("[ATS] analyzeResume called with:", JSON.stringify(rawStructuredData).slice(0, 500));
+
+    const structuredData = normalizeResumeData(rawStructuredData);
     const { basics, summary, skills, experience, education, projects, rawText } = structuredData;
 
     console.log(
@@ -38,14 +41,31 @@ class ATSServiceImpl {
     );
 
     const skillNames = flattenSkillNames(skills);
-    const sectionScores = {
-      contact: this.calculateContactScore(basics),
-      summary: this.calculateSummaryScore(summary),
-      skills: this.calculateSkillsScore(skillNames),
-      experience: this.calculateExperienceScore(experience),
-      education: this.calculateEducationScore(education),
-      projects: this.calculateProjectsScore(projects),
-    };
+    const sectionScores = {};
+
+    console.log("[ATS] Calculating contact score");
+    sectionScores.contact = this.calculateContactScore(basics);
+    console.log("[ATS] contact score:", sectionScores.contact);
+
+    console.log("[ATS] Calculating summary score");
+    sectionScores.summary = this.calculateSummaryScore(summary);
+    console.log("[ATS] summary score:", sectionScores.summary);
+
+    console.log("[ATS] Calculating skills score");
+    sectionScores.skills = this.calculateSkillsScore(skillNames);
+    console.log("[ATS] skills score:", sectionScores.skills);
+
+    console.log("[ATS] Calculating experience score");
+    sectionScores.experience = this.calculateExperienceScore(experience);
+    console.log("[ATS] experience score:", sectionScores.experience);
+
+    console.log("[ATS] Calculating education score");
+    sectionScores.education = this.calculateEducationScore(education);
+    console.log("[ATS] education score:", sectionScores.education);
+
+    console.log("[ATS] Calculating projects score");
+    sectionScores.projects = this.calculateProjectsScore(projects);
+    console.log("[ATS] projects score:", sectionScores.projects);
 
     console.log("[SCORER] Section scores:", JSON.stringify(sectionScores));
 
@@ -62,7 +82,18 @@ class ATSServiceImpl {
       totalScore = 15;
     }
 
+    if ((!Number.isFinite(totalScore) || totalScore === 0) && String(rawText || "").length > 100) {
+      totalScore = 20;
+      for (const key of SECTION_ORDER) {
+        if (!Number.isFinite(sectionScores[key]) || sectionScores[key] <= 0) {
+          sectionScores[key] = 10;
+        }
+      }
+      console.log("[ATS] Applied safety net score — raw scorer returned 0 but resume has content");
+    }
+
     console.log("[SCORER] Final score:", totalScore);
+    console.log("[ATS] Final scores:", JSON.stringify(sectionScores), "Total:", totalScore);
 
     const requiredKeywords = ROLE_SKILLS[jobRole?.toLowerCase()] || ROLE_SKILLS.default;
     const foundKeywords = requiredKeywords.filter((keyword) =>
@@ -377,4 +408,3 @@ class ATSServiceImpl {
 
 export const ATSService = new ATSServiceImpl();
 export default ATSService;
-

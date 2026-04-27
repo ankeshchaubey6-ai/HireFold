@@ -41,6 +41,7 @@ const UploadResumeModal = ({ onClose }) => {
       const response = await api.post("/resumes/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log("[FRONTEND] Upload resume API response:", response.data);
 
       const savedResume = response?.data?.data;
       if (!savedResume?.resumeId) {

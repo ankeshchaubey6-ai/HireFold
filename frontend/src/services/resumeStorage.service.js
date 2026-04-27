@@ -15,6 +15,7 @@ export const ResumeStorageService = {
       const response = await api.get(
         `/resumes/${resumeId}`
       );
+      console.log("[FRONTEND] Resume API response:", response.data);
 
       const record = response.data?.data;
 
@@ -50,6 +51,7 @@ export const ResumeStorageService = {
 
     try {
       const response = await api.get(`/ats/analyze/${resumeId}`);
+      console.log("[FRONTEND] ATS API response:", response.data);
       return response?.data?.data || null;
     } catch (error) {
       return null;
