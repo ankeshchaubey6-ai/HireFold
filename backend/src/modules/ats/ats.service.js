@@ -100,7 +100,7 @@ class ATSServiceImpl {
           sectionScores[key] = 10;
         }
       }
-      console.log("[ATS] Applied safety net score — raw scorer returned 0 but resume has content");
+      console.log("[ATS] Applied safety net score - raw scorer returned 0 but resume has content");
     }
 
     console.log("[SCORER] Final score:", totalScore);
