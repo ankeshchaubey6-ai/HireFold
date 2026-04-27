@@ -109,6 +109,12 @@ const ATSSchema = new mongoose.Schema({
   engine: { type: String, default: "hirefold-ats-v2.0" },
   jobRole: { type: String, default: "default" },
   evaluatedAt: { type: Number, default: null },
+  verdict: { type: mongoose.Schema.Types.Mixed, default: null },
+  recommendations: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  sections: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  sectionSummary: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  keywordGap: { type: mongoose.Schema.Types.Mixed, default: null },
+  improvementPlan: { type: mongoose.Schema.Types.Mixed, default: null },
   breakdown: { type: mongoose.Schema.Types.Mixed, default: null },
   rawMetrics: { type: mongoose.Schema.Types.Mixed, default: null }
 }, { _id: false });

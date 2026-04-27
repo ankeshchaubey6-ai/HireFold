@@ -17,6 +17,7 @@ const ResumeImprovementSection = () => {
    * resume.meta.ats (optional full object)
    */
   const ats =
+    resume?.ats ||
     resume?.meta?.ats ||
     (resume?.meta?.atsScore
       ? {

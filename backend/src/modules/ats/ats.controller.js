@@ -1,4 +1,5 @@
 import { ATSService } from "./ats.service.js";
+import { ResumeService } from "../resume/resume.service.js";
 
 export const ATSController = {
   /**
@@ -20,6 +21,7 @@ export const ATSController = {
       }
 
       const result = await ATSService.analyzeResume(resumeId);
+      await ResumeService.updateResumeAnalysis(resumeId, result);
 
       return res.status(200).json({
         success: true,

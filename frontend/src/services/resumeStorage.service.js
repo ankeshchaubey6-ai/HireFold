@@ -45,6 +45,17 @@ export const ResumeStorageService = {
     }
   },
 
+  async getResumeAnalysis(resumeId) {
+    if (!resumeId) return null;
+
+    try {
+      const response = await api.get(`/ats/analyze/${resumeId}`);
+      return response?.data?.data || null;
+    } catch (error) {
+      return null;
+    }
+  },
+
   /* ======================================================
      READ BY USER (FOR SAVED RESUMES PAGE)
   ====================================================== */

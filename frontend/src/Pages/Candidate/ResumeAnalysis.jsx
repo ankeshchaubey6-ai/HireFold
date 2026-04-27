@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResume } from "../../Context/ResumeContext";
 import RadioScoreChart from "../../Components/Charts/RadioScoreChart";
@@ -9,14 +9,125 @@ import FixSuggestionsTimeline from "../../Components/ResumeAnalysis/FixTimeline/
 import StatusBadge from "../../Components/ResumeAnalysis/Header/StatusBadge";
 import ResumeAnalysisActions from "../../Components/ResumeAnalysis/ActionBar/ResumeAnalysisActions";
 import { generateResumeImprovements } from "../../services/resumeImprovement.service";
+import { ResumeStorageService } from "../../services/resumeStorage.service";
 import "../../Styles/resumeAnalysis.css";
+
+const ACTIVE_RESUME_KEY = "hirefold_active_resume_id";
 
 const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = null }) => {
   const navigate = useNavigate();
-  const { resume } = useResume();
+  const { resume, loadResumeIntoContext } = useResume();
+  const [loadedResume, setLoadedResume] = useState(null);
+  const [loadedAnalysis, setLoadedAnalysis] = useState(null);
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  const [analysisError, setAnalysisError] = useState("");
 
-  const activeStructuredData = resumeData || resume || null;
-  const analysis = atsOverride || activeStructuredData?.ats || null;
+  const activeResumeId =
+    resumeData?.meta?.resumeId ||
+    resume?.meta?.resumeId ||
+    localStorage.getItem(ACTIVE_RESUME_KEY) ||
+    null;
+
+  const baseStructuredData = loadedResume || resumeData || resume || null;
+  const analysis =
+    atsOverride ||
+    loadedAnalysis ||
+    loadedResume?.ats ||
+    baseStructuredData?.ats ||
+    null;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const ensureAnalysis = async () => {
+      if (embedded || !activeResumeId) {
+        return;
+      }
+
+      const existingSections =
+        analysis?.sections || analysis?.sectionSummary || [];
+      if (Array.isArray(existingSections) && existingSections.length > 0 && baseStructuredData) {
+        return;
+      }
+
+      try {
+        setLoadingAnalysis(true);
+        setAnalysisError("");
+
+        let fetchedResume = baseStructuredData;
+
+        if (!fetchedResume || fetchedResume?.meta?.resumeId !== activeResumeId) {
+          const entity = await ResumeStorageService.getResumeById(activeResumeId);
+          if (cancelled) return;
+
+          if (entity?.structuredData) {
+            fetchedResume = {
+              ...(entity.structuredData || {}),
+              ats: entity.ats ?? null,
+              meta: {
+                ...(entity.structuredData?.meta || {}),
+                resumeId: entity.resumeId,
+                source: entity.source || entity.structuredData?.meta?.source || "upload",
+                atsScore: entity.atsScore ?? null,
+                ats: entity.ats ?? null,
+              },
+            };
+
+            setLoadedResume(fetchedResume);
+            loadResumeIntoContext?.(fetchedResume);
+          }
+        }
+
+        const storedSections =
+          fetchedResume?.ats?.sections || fetchedResume?.ats?.sectionSummary || [];
+
+        if (Array.isArray(storedSections) && storedSections.length > 0) {
+          return;
+        }
+
+        const latestAnalysis = await ResumeStorageService.getResumeAnalysis(activeResumeId);
+        if (cancelled) return;
+
+        if (latestAnalysis) {
+          setLoadedAnalysis(latestAnalysis.ats || latestAnalysis);
+
+          if (fetchedResume) {
+            const mergedResume = {
+              ...fetchedResume,
+              ats: latestAnalysis.ats || latestAnalysis,
+              meta: {
+                ...(fetchedResume.meta || {}),
+                atsScore:
+                  latestAnalysis.score ??
+                  latestAnalysis.ats?.score ??
+                  fetchedResume.meta?.atsScore ??
+                  null,
+                ats: latestAnalysis.ats || latestAnalysis,
+              },
+            };
+            setLoadedResume(mergedResume);
+            loadResumeIntoContext?.(mergedResume);
+          }
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setAnalysisError("We could not load the latest section-wise analysis right now.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingAnalysis(false);
+        }
+      }
+    };
+
+    ensureAnalysis();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [embedded, activeResumeId, analysis, baseStructuredData, loadResumeIntoContext]);
+
+  const activeStructuredData = loadedResume || resumeData || resume || null;
 
   const safeScore = Number(
     analysis?.score ??
@@ -55,6 +166,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
         <section className="section-surface analysis-top-wrapper">
           <h1 className="analysis-top-title">Resume Analysis</h1>
           <p className="analysis-top-subtitle">Upload or build a resume to see ATS analysis.</p>
+          {analysisError ? <p className="analysis-error">{analysisError}</p> : null}
           {!embedded ? (
             <button className="btn-outline" onClick={() => navigate("/candidate/resume")} type="button">
               Go to Resume Builder
@@ -77,6 +189,8 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
           <div className="analysis-card">
             <RadioScoreChart score={safeScore} />
             <StatusBadge score={safeScore} showScore />
+            {loadingAnalysis ? <p className="analysis-loading">Loading latest analysis...</p> : null}
+            {analysisError ? <p className="analysis-error">{analysisError}</p> : null}
           </div>
 
           <div className="analysis-card analysis-card-wide">

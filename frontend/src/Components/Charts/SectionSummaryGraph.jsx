@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 const STATUS_COLOR = {
+  strong: "#16a34a",
   good: "#16a34a",
   average: "#f59e0b",
+  weak: "#ef4444",
   poor: "#ef4444",
 };
 

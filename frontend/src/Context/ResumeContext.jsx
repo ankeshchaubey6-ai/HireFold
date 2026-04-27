@@ -50,6 +50,7 @@ export const ResumeProvider = ({ children }) => {
           ...(safe.meta || {}),
           resumeId: backendData.resumeId,
           atsScore: backendData.atsScore ?? safe.meta?.atsScore ?? null,
+          ats: backendData.ats || safe.meta?.ats || null,
         };
         safe.ats = backendData.ats || null;
 
@@ -102,6 +103,7 @@ export const ResumeProvider = ({ children }) => {
         ...(safe.meta || {}),
         resumeId,
         atsScore: backendData.atsScore ?? null,
+        ats: backendData.ats || null,
       };
       safe.ats = backendData.ats || null;
 
@@ -130,6 +132,7 @@ export const ResumeProvider = ({ children }) => {
       ...(safe.meta || {}),
       resumeId,
       atsScore: loadedResume?.meta?.atsScore ?? loadedResume?.atsScore ?? null,
+      ats: loadedResume?.ats || loadedResume?.meta?.ats || null,
     };
     safe.ats = loadedResume?.ats || null;
 

@@ -12,6 +12,8 @@ class ATSServiceImpl {
     }
 
     const structuredData = resume.structuredData || {};
+    const basics = structuredData.basics || {};
+    const summary = structuredData.summary || "";
     const skills = Array.isArray(structuredData.skills) ? structuredData.skills : [];
     const experience = Array.isArray(structuredData.experience) ? structuredData.experience : [];
     const education = Array.isArray(structuredData.education) ? structuredData.education : [];
@@ -30,19 +32,25 @@ class ATSServiceImpl {
     const projectScore = this.calculateProjectScore(projects, features);
     const certificationScore = this.calculateCertificationScore(certifications, []);
     const textQualityScore = this.calculateTextQualityScore(rawText, features);
+    const basicsScore = this.calculateBasicsScore(basics);
+    const summaryScore = this.calculateSummaryScore(summary, rawText);
     const missingSkills = this.getMissingSkills(skills, requiredSkills);
 
     const weightedScore =
-      skillScore * 0.35 +
-      experienceScore * 0.25 +
-      educationScore * 0.15 +
+      skillScore * 0.25 +
+      experienceScore * 0.2 +
+      educationScore * 0.12 +
       projectScore * 0.1 +
-      certificationScore * 0.05 +
-      textQualityScore * 0.1;
+      certificationScore * 0.08 +
+      textQualityScore * 0.1 +
+      basicsScore * 0.08 +
+      summaryScore * 0.07;
 
     const score = Math.round(weightedScore * 100);
 
     const metrics = {
+      basicsScore,
+      summaryScore,
       skillScore,
       experienceScore,
       educationScore,
@@ -50,38 +58,85 @@ class ATSServiceImpl {
       certificationScore,
       textQualityScore,
       missingSkills,
+      requiredSkills,
+    };
+
+    const sections = this.buildSectionAnalysis({
+      basics,
+      summary,
+      skills,
+      experience,
+      education,
+      projects,
+      certifications,
+      features,
+      rawText,
+      metrics,
+    });
+
+    const recommendations = this.generateRecommendations(metrics, sections);
+    const improvementPlan = this.buildImprovementPlan(score, sections, recommendations);
+    const keywordGap = this.buildKeywordGap(requiredSkills, missingSkills, skills);
+    const verdict = this.getVerdict(score);
+
+    const ats = {
+      score,
+      engine: "hirefold-ats-v2.1",
+      jobRole,
+      evaluatedAt: Date.now(),
+      verdict,
+      recommendations,
+      sections,
+      sectionSummary: sections,
+      keywordGap,
+      improvementPlan,
+      breakdown: {
+        basics: Math.round(basicsScore * 100),
+        summary: Math.round(summaryScore * 100),
+        skills: Math.round(skillScore * 100),
+        experience: Math.round(experienceScore * 100),
+        education: Math.round(educationScore * 100),
+        projects: Math.round(projectScore * 100),
+        certifications: Math.round(certificationScore * 100),
+        textQuality: Math.round(textQualityScore * 100),
+        machineSignals: {
+          keywordMatch: this.roundSignal(1 - keywordGap.missingKeywords.length / Math.max(1, requiredSkills.length)),
+          skillsCoverage: this.roundSignal(skillScore),
+          experienceRelevance: this.roundSignal(experienceScore),
+        },
+        humanSignals: {
+          signalClarity: this.roundSignal(textQualityScore),
+          authenticitySignal: this.roundSignal(this.calculateAuthenticitySignal(experience, rawText)),
+          structureCompleteness: this.roundSignal(this.calculateStructureCompleteness(features, sections)),
+        },
+      },
+      rawMetrics: {
+        ...metrics,
+        matchedSkills: keywordGap.matchedKeywords,
+      },
     };
 
     return {
       resumeId: resume.resumeId,
+      structuredData,
       score,
-      verdict: this.getVerdict(score),
-      recommendations: this.generateRecommendations(metrics),
-      ats: {
-        score,
-        engine: "hirefold-ats-v2.0",
-        jobRole,
-        evaluatedAt: Date.now(),
-        breakdown: {
-          skills: Math.round(skillScore * 100),
-          experience: Math.round(experienceScore * 100),
-          education: Math.round(educationScore * 100),
-          projects: Math.round(projectScore * 100),
-          certifications: Math.round(certificationScore * 100),
-          textQuality: Math.round(textQualityScore * 100),
-        },
-        rawMetrics: metrics,
-      },
+      verdict,
+      recommendations,
+      sections,
+      sectionSummary: sections,
+      keywordGap,
+      improvementPlan,
+      ats,
     };
   }
 
   getRequiredSkillsForRole(jobRole = "default") {
     const roleSkillMap = {
-      frontend: ["javascript", "react", "html", "css"],
-      backend: ["node", "javascript", "api", "database"],
-      fullstack: ["javascript", "react", "node", "database"],
-      data: ["python", "sql", "analysis", "machine learning"],
-      default: ["communication", "problem solving"],
+      frontend: ["javascript", "react", "html", "css", "typescript", "responsive design"],
+      backend: ["node", "javascript", "api", "database", "sql", "rest"],
+      fullstack: ["javascript", "react", "node", "database", "api", "html", "css"],
+      data: ["python", "sql", "analysis", "machine learning", "statistics"],
+      default: ["communication", "problem solving", "teamwork"],
     };
 
     return roleSkillMap[jobRole.toLowerCase()] || roleSkillMap.default;
@@ -95,7 +150,12 @@ class ATSServiceImpl {
     const allResumeSkills = [];
     for (const category of resumeSkills) {
       if (category.items && Array.isArray(category.items)) {
-        allResumeSkills.push(...category.items.map((item) => item.name.toLowerCase()));
+        allResumeSkills.push(
+          ...category.items
+            .map((item) => item?.name)
+            .filter(Boolean)
+            .map((name) => name.toLowerCase())
+        );
       }
     }
 
@@ -107,7 +167,9 @@ class ATSServiceImpl {
     );
 
     const baseScore = matchedSkills.length / requiredSkills.length;
-    const uniqueCategories = new Set(resumeSkills.map((category) => category.category));
+    const uniqueCategories = new Set(
+      resumeSkills.map((category) => category.category).filter(Boolean)
+    );
     const diversityBonus = Math.min(0.2, uniqueCategories.size / 10);
 
     const criticalSkills = ["javascript", "python", "java", "react", "node"];
@@ -171,7 +233,10 @@ class ATSServiceImpl {
     let score = Math.min(0.5, certifications.length / 10);
 
     if (preferredCertifications && preferredCertifications.length > 0) {
-      const certNames = certifications.map((certification) => certification.name?.toLowerCase() || "");
+      const certNames = certifications.map(
+        (certification) =>
+          certification.name?.toLowerCase() || certification.title?.toLowerCase() || ""
+      );
       const matchedPreferred = preferredCertifications.filter((preferred) =>
         certNames.some((certification) => certification.includes(preferred.toLowerCase()))
       ).length;
@@ -214,6 +279,51 @@ class ATSServiceImpl {
     return Math.min(1, score);
   }
 
+  calculateBasicsScore(basics) {
+    const requiredFields = [
+      basics?.fullName,
+      basics?.email,
+      basics?.phone,
+      basics?.location,
+      basics?.linkedin,
+      basics?.github,
+    ];
+
+    const presentCount = requiredFields.filter((field) => String(field || "").trim()).length;
+    return presentCount / requiredFields.length;
+  }
+
+  calculateSummaryScore(summary, rawText) {
+    const summaryText = String(summary || "").trim();
+    if (!summaryText) {
+      return 0;
+    }
+
+    const lengthScore = Math.min(1, summaryText.split(/\s+/).length / 80);
+    const keywordBonus = /(\d+%|\d+x|experienced|specialist|engineer|developer|manager)/i.test(
+      summaryText || rawText
+    )
+      ? 0.2
+      : 0;
+
+    return Math.min(1, lengthScore + keywordBonus);
+  }
+
+  calculateAuthenticitySignal(experience, rawText) {
+    const achievementCount = experience.reduce(
+      (sum, item) => sum + (Array.isArray(item.achievements) ? item.achievements.length : 0),
+      0
+    );
+    const hasMetrics = /(\d+%|\d+x|increased|reduced|improved|achieved)/i.test(rawText || "");
+
+    return Math.min(1, achievementCount / 6 + (hasMetrics ? 0.2 : 0));
+  }
+
+  calculateStructureCompleteness(features, sections) {
+    const sectionCount = features?.sectionCount || sections.length;
+    return Math.min(1, sectionCount / 7);
+  }
+
   getMissingSkills(resumeSkills, requiredSkills) {
     if (!resumeSkills || !requiredSkills) {
       return requiredSkills || [];
@@ -222,7 +332,12 @@ class ATSServiceImpl {
     const allResumeSkills = [];
     for (const category of resumeSkills) {
       if (category.items && Array.isArray(category.items)) {
-        allResumeSkills.push(...category.items.map((item) => item.name.toLowerCase()));
+        allResumeSkills.push(
+          ...category.items
+            .map((item) => item?.name)
+            .filter(Boolean)
+            .map((name) => name.toLowerCase())
+        );
       }
     }
 
@@ -277,7 +392,7 @@ class ATSServiceImpl {
     };
   }
 
-  generateRecommendations(metrics) {
+  generateRecommendations(metrics, sections = []) {
     const recommendations = [];
 
     if (metrics.skillScore < 0.6 && metrics.missingSkills?.length > 0) {
@@ -325,7 +440,320 @@ class ATSServiceImpl {
       });
     }
 
+    for (const section of sections) {
+      if (section.priority === "high" && section.suggestions?.length) {
+        recommendations.push({
+          category: section.section.toLowerCase(),
+          priority: "high",
+          message: section.suggestions[0],
+          action: section.note,
+        });
+      }
+    }
+
     return recommendations;
+  }
+
+  buildSectionAnalysis({
+    basics,
+    summary,
+    skills,
+    experience,
+    education,
+    projects,
+    certifications,
+    features,
+    rawText,
+    metrics,
+  }) {
+    const allSkillItems = skills.flatMap((group) =>
+      Array.isArray(group?.items) ? group.items.filter((item) => item?.name) : []
+    );
+    const basicsFields = [
+      ["Name", basics?.fullName],
+      ["Email", basics?.email],
+      ["Phone", basics?.phone],
+      ["Location", basics?.location],
+      ["LinkedIn", basics?.linkedin],
+      ["GitHub", basics?.github],
+    ];
+    const missingBasics = basicsFields
+      .filter(([, value]) => !String(value || "").trim())
+      .map(([label]) => label);
+    const experienceAchievements = experience.reduce(
+      (sum, item) => sum + (Array.isArray(item.achievements) ? item.achievements.length : 0),
+      0
+    );
+    const hasMetrics = /(\d+%|\d+x|increased|reduced|improved|achieved)/i.test(rawText || "");
+
+    return [
+      this.createSectionResult({
+        section: "Basics",
+        score: Math.round(metrics.basicsScore * 100),
+        suggestions: missingBasics.length
+          ? [`Add missing contact details: ${missingBasics.join(", ")}.`]
+          : [],
+        positives: missingBasics.length === 0 ? ["Core contact details are present and easy to scan."] : [],
+        note:
+          missingBasics.length === 0
+            ? "Recruiters and ATS can identify your profile quickly."
+            : "A few key contact details are missing from the resume header.",
+        details: {
+          presentFields: basicsFields.length - missingBasics.length,
+          totalFields: basicsFields.length,
+          missing: missingBasics,
+        },
+      }),
+      this.createSectionResult({
+        section: "Summary",
+        score: Math.round(metrics.summaryScore * 100),
+        suggestions: summary
+          ? summary.split(/\s+/).length < 40
+            ? ["Expand the summary with role-specific strengths, tools, and measurable impact."]
+            : []
+          : ["Add a concise professional summary tailored to the role."],
+        positives: summary
+          ? ["A summary section is present, which helps ATS and recruiters quickly understand your profile."]
+          : [],
+        note: summary
+          ? "Summary quality is based on completeness and relevance signals."
+          : "No summary was detected in the resume.",
+        details: {
+          wordCount: String(summary || "").trim().split(/\s+/).filter(Boolean).length,
+        },
+      }),
+      this.createSectionResult({
+        section: "Skills",
+        score: Math.round(metrics.skillScore * 100),
+        suggestions: metrics.missingSkills.length
+          ? [`Add or strengthen these keywords: ${metrics.missingSkills.slice(0, 5).join(", ")}.`]
+          : [],
+        positives: allSkillItems.length
+          ? [`${allSkillItems.length} skill keywords were detected across the resume.`]
+          : [],
+        note:
+          metrics.missingSkills.length > 0
+            ? "Some target-role keywords are still missing from the skills profile."
+            : "Skills coverage aligns well with the target role baseline.",
+        details: {
+          skillsCount: allSkillItems.length,
+          skillCategories: skills.length,
+          matchedKeywords: metrics.requiredSkills.length - metrics.missingSkills.length,
+          missingKeywords: metrics.missingSkills.length,
+        },
+      }),
+      this.createSectionResult({
+        section: "Experience",
+        score: Math.round(metrics.experienceScore * 100),
+        suggestions:
+          experience.length === 0
+            ? ["Add work experience entries with role, company, and measurable achievements."]
+            : !hasMetrics
+            ? ["Use quantified impact in bullet points, such as percentages, growth, or delivery metrics."]
+            : experienceAchievements < Math.max(2, experience.length)
+            ? ["Add stronger achievement bullets to show impact in each role."]
+            : [],
+        positives: experience.length
+          ? [`${experience.length} experience entries were detected.`]
+          : [],
+        note:
+          experience.length === 0
+            ? "No structured work experience was detected."
+            : "Experience quality is measured using duration, achievements, and evidence of impact.",
+        details: {
+          roles: experience.length,
+          achievements: experienceAchievements,
+          hasMetrics,
+          totalMonths: features?.totalExperienceMonths || 0,
+        },
+      }),
+      this.createSectionResult({
+        section: "Education",
+        score: Math.round(metrics.educationScore * 100),
+        suggestions:
+          education.length === 0
+            ? ["Add your highest education credential, institution, and graduation year."]
+            : metrics.educationScore < 0.6
+            ? ["Include degree details, institution, and relevant coursework or certifications."]
+            : [],
+        positives: education.length ? ["Education history is present in the resume."] : [],
+        note:
+          education.length === 0
+            ? "No education section was detected."
+            : "Education score is based on level of study and completeness.",
+        details: {
+          educationCount: education.length,
+          highestEducationLevel: features?.highestEducationLevel || 0,
+        },
+      }),
+      this.createSectionResult({
+        section: "Projects",
+        score: Math.round(metrics.projectScore * 100),
+        suggestions:
+          projects.length === 0
+            ? ["Add 1-3 projects with technologies used and measurable outcomes."]
+            : features?.highComplexProjects > 0
+            ? []
+            : ["Describe project scope, tech stack, and the outcome more explicitly."],
+        positives: projects.length ? [`${projects.length} projects were detected.`] : [],
+        note:
+          projects.length === 0
+            ? "No project section was detected."
+            : "Projects help ATS understand practical, hands-on experience.",
+        details: {
+          projectsCount: projects.length,
+          highComplexProjects: features?.highComplexProjects || 0,
+        },
+      }),
+      this.createSectionResult({
+        section: "Certifications",
+        score: Math.round(metrics.certificationScore * 100),
+        suggestions:
+          certifications.length === 0
+            ? ["Add relevant certifications if they support your target role."]
+            : [],
+        positives: certifications.length
+          ? [`${certifications.length} certification entries were detected.`]
+          : [],
+        note:
+          certifications.length === 0
+            ? "Certifications are optional but can strengthen specific role matches."
+            : "Certifications reinforce domain credibility when relevant.",
+        details: {
+          certificationsCount: certifications.length,
+        },
+      }),
+      this.createSectionResult({
+        section: "Formatting",
+        score: Math.round(metrics.textQualityScore * 100),
+        suggestions:
+          features?.wordCount < 250
+            ? ["Add more detail so the resume has enough substance for ATS scoring."]
+            : features?.wordCount > 2000
+            ? ["Trim low-signal content to keep the resume focused and scannable."]
+            : features?.sectionCount < 5
+            ? ["Use clearer section headings to improve structure and ATS parsing."]
+            : [],
+        positives:
+          features?.sectionCount >= 5
+            ? ["The resume uses recognizable section structure."]
+            : [],
+        note: "Formatting is evaluated using content length, structure, and measurable signals.",
+        details: {
+          wordCount: features?.wordCount || 0,
+          sectionCount: features?.sectionCount || 0,
+        },
+      }),
+    ];
+  }
+
+  createSectionResult({ section, score, suggestions = [], positives = [], note = "", details = {} }) {
+    const safeScore = Math.max(0, Math.min(100, Number(score) || 0));
+    const status = safeScore >= 80 ? "strong" : safeScore >= 65 ? "good" : safeScore >= 45 ? "average" : "weak";
+    const priority = safeScore < 50 ? "high" : safeScore < 70 ? "medium" : "low";
+    const urgency = priority;
+
+    return {
+      section,
+      score: safeScore,
+      status,
+      priority,
+      urgency,
+      note,
+      suggestions,
+      positives,
+      details,
+    };
+  }
+
+  buildKeywordGap(requiredSkills, missingSkills, skills) {
+    const resumeKeywords = skills.flatMap((group) =>
+      Array.isArray(group?.items)
+        ? group.items.map((item) => item?.name).filter(Boolean)
+        : []
+    );
+    const matchedKeywords = requiredSkills.filter(
+      (required) =>
+        !missingSkills.some((missing) => missing.toLowerCase() === required.toLowerCase())
+    );
+    const suggestedKeywords = requiredSkills.filter(
+      (required) =>
+        !resumeKeywords.some((keyword) => keyword.toLowerCase().includes(required.toLowerCase()))
+    );
+
+    return {
+      missingKeywords: missingSkills.slice(0, 8),
+      suggestedKeywords: suggestedKeywords.slice(0, 8),
+      matchedKeywords,
+      confidence: this.roundSignal(
+        matchedKeywords.length / Math.max(1, requiredSkills.length)
+      ),
+    };
+  }
+
+  buildImprovementPlan(score, sections, recommendations) {
+    const plan = [];
+
+    for (const section of sections) {
+      for (const suggestion of section.suggestions || []) {
+        plan.push({
+          section: section.section,
+          priority: section.priority,
+          detail: suggestion,
+          estMinutes: section.priority === "high" ? 20 : section.priority === "medium" ? 12 : 8,
+        });
+      }
+    }
+
+    for (const recommendation of recommendations) {
+      if (
+        !plan.some(
+          (item) =>
+            item.section.toLowerCase() === recommendation.category &&
+            item.detail === recommendation.action
+        )
+      ) {
+        plan.push({
+          section: this.toTitleCase(recommendation.category),
+          priority: recommendation.priority,
+          detail: recommendation.action,
+          estMinutes: recommendation.priority === "high" ? 18 : 10,
+        });
+      }
+    }
+
+    plan.sort((left, right) => this.priorityWeight(left.priority) - this.priorityWeight(right.priority));
+
+    const verdict =
+      score >= 80
+        ? "Your resume is in strong shape."
+        : score >= 60
+        ? "Your resume is competitive but still has a few clear upgrade opportunities."
+        : "Your resume needs several targeted fixes to improve ATS performance.";
+
+    return {
+      summary: `Your resume scored ${score}/100. ${verdict}`,
+      plan,
+    };
+  }
+
+  priorityWeight(priority) {
+    if (priority === "high") return 0;
+    if (priority === "medium") return 1;
+    return 2;
+  }
+
+  toTitleCase(value = "") {
+    return value
+      .split(/[\s_-]+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  roundSignal(value) {
+    const safe = Math.max(0, Math.min(1, Number(value) || 0));
+    return Number(safe.toFixed(2));
   }
 
   async batchAnalyze(resumes, jobRole = "default") {
