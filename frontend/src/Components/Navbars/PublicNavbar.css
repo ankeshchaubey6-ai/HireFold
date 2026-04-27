@@ -35,6 +35,17 @@
   font-size: 22px;
   color: var(--text);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.public-navbar__hamburger::before {
+  content: "\2630";
+  line-height: 1;
 }
 
 .public-navbar__logo {
@@ -745,7 +756,7 @@
   }
 
   .public-navbar__hamburger {
-    display: none;
+    display: inline-flex;
   }
 
   .public-navbar__create {
