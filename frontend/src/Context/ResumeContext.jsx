@@ -16,33 +16,52 @@ const ResumeContext = createContext(null);
 export const ResumeProvider = ({ children }) => {
   const [activeResumeId, setActiveResumeId] = useState(null);
   const [resume, setResume] = useState(() => resumeSanitizer(resumeSchema));
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState(null);
 
   const pollAttemptsRef = useRef(0);
+  const pollTimeoutRef = useRef(null);
 
   /* =======================================================
-     POLLING  STOPS AFTER 80 ATTEMPTS (~160 seconds)
-     STOPS WHEN: analysisStatus === "completed"
+     POLLING STOPS AFTER 80 ATTEMPTS (~160 seconds)
+     OR IF ANALYSIS COMPLETES/FAILS
   ======================================================= */
   useEffect(() => {
-    if (!activeResumeId) return;
+    if (!activeResumeId) {
+      setAnalysisLoading(false);
+      return;
+    }
 
-    pollAttemptsRef.current = 0; // reset on new resume
+    pollAttemptsRef.current = 0;
+    setAnalysisLoading(true);
+    setAnalysisError(null);
+
     let interval;
-    const MAX_ATTEMPTS = 80; // ~160 seconds at 2s interval (enough for OCR)
+    let mounted = true;
+    const MAX_ATTEMPTS = 80;
+    const POLL_INTERVAL = 2000;
+    const MAX_TIMEOUT = 180000; // 3 minutes total timeout
 
     const fetchResume = async () => {
+      if (!mounted) return;
+
       pollAttemptsRef.current += 1;
 
+      // Check hard timeout
       if (pollAttemptsRef.current >= MAX_ATTEMPTS) {
+        if (mounted) {
+          setAnalysisError("Analysis took too long. Please try again.");
+          setAnalysisLoading(false);
+        }
         clearInterval(interval);
-
         return;
       }
 
       try {
         const res = await api.get(`/resumes/${activeResumeId}`);
         const backendData = res?.data?.data;
-        if (!backendData) return;
+
+        if (!backendData || !mounted) return;
 
         const safe = resumeSanitizer(backendData.structuredData);
 
@@ -50,29 +69,66 @@ export const ResumeProvider = ({ children }) => {
           ...(safe.meta || {}),
           resumeId: backendData.resumeId,
           atsScore: backendData.atsScore ?? safe.meta?.atsScore ?? null,
+          analysisStatus: backendData.structuredData?.meta?.analysisStatus || null,
+          analysisError: backendData.structuredData?.meta?.analysisError || null,
         };
         safe.ats = backendData.ats || null;
 
         setResume(safe);
 
-        //  CORRECT STOP CONDITION: Check analysisStatus
+        // Check analysis status
         const analysisStatus = backendData.structuredData?.meta?.analysisStatus;
-        if (analysisStatus === "completed" || analysisStatus === "ats_failed") {
+
+        if (analysisStatus === "completed") {
+          setAnalysisLoading(false);
+          setAnalysisError(null);
           clearInterval(interval);
-
+        } else if (analysisStatus === "ats_failed") {
+          const errorMsg =
+            backendData.structuredData?.meta?.analysisError ||
+            "ATS analysis failed. Please try again.";
+          setAnalysisError(errorMsg);
+          setAnalysisLoading(false);
+          clearInterval(interval);
         }
-
       } catch (error) {
+        console.error("Error fetching resume:", error);
 
-        if (pollAttemptsRef.current >= 3) clearInterval(interval);
+        if (pollAttemptsRef.current >= 3) {
+          if (mounted) {
+            setAnalysisError(
+              error?.response?.data?.message || "Failed to fetch resume analysis"
+            );
+            setAnalysisLoading(false);
+          }
+          clearInterval(interval);
+        }
       }
     };
 
+    // Initial fetch
     fetchResume();
-    interval = setInterval(fetchResume, 2000);
 
-    return () => clearInterval(interval);
-  }, [activeResumeId]); // only re-runs when resume ID changes
+    // Set up polling interval
+    interval = setInterval(fetchResume, POLL_INTERVAL);
+
+    // Set up hard timeout
+    pollTimeoutRef.current = setTimeout(() => {
+      if (mounted) {
+        setAnalysisError("Analysis request timed out");
+        setAnalysisLoading(false);
+      }
+      clearInterval(interval);
+    }, MAX_TIMEOUT);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+      if (pollTimeoutRef.current) {
+        clearTimeout(pollTimeoutRef.current);
+      }
+    };
+  }, [activeResumeId]);
 
   /* =======================================================
      SAFE SETTER
@@ -223,6 +279,8 @@ export const ResumeProvider = ({ children }) => {
     <ResumeContext.Provider value={{
       resume,
       activeResumeId,
+      analysisLoading,
+      analysisError,
       fetchAndLoadResume,
       createNewResume,
       loadResumeIntoContext,

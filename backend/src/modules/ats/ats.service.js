@@ -52,11 +52,26 @@ class ATSServiceImpl {
       missingSkills,
     };
 
+    // Generate section-wise breakdown with feedback
+    const sections = this.generateSectionFeedback({
+      metrics,
+      score,
+      skills,
+      experience,
+      education,
+      projects,
+      certifications,
+      requiredSkills,
+      missingSkills,
+      rawText,
+    });
+
     return {
       resumeId: resume.resumeId,
       score,
       verdict: this.getVerdict(score),
       recommendations: this.generateRecommendations(metrics),
+      sections,
       ats: {
         score,
         engine: "hirefold-ats-v2.0",
@@ -70,12 +85,118 @@ class ATSServiceImpl {
           certifications: Math.round(certificationScore * 100),
           textQuality: Math.round(textQualityScore * 100),
         },
+        sections,
         rawMetrics: metrics,
       },
     };
   }
 
-  getRequiredSkillsForRole(jobRole = "default") {
+  generateSectionFeedback(data) {
+    const {
+      metrics,
+      score,
+      skills,
+      experience,
+      education,
+      projects,
+      certifications,
+      requiredSkills,
+      missingSkills,
+      rawText,
+    } = data;
+
+    const sections = [];
+
+    // Skills Section
+    const skillScore = Math.round(metrics.skillScore * 100);
+    sections.push({
+      name: "Skills",
+      score: skillScore,
+      status: skillScore >= 75 ? "strong" : skillScore >= 50 ? "moderate" : "weak",
+      feedback:
+        skillScore >= 75
+          ? `Strong skill set with ${skills.length} categories. ${missingSkills.length > 0 ? `Consider adding: ${missingSkills.slice(0, 3).join(", ")}` : "No critical gaps detected."}`
+          : skillScore >= 50
+            ? `Moderate skill coverage. Missing critical skills: ${missingSkills.slice(0, 3).join(", ")}. Prioritize these for your role.`
+            : `Weak skill alignment. Add these key skills: ${missingSkills.slice(0, 5).join(", ")}`,
+    });
+
+    // Experience Section
+    const expScore = Math.round(metrics.experienceScore * 100);
+    sections.push({
+      name: "Experience",
+      score: expScore,
+      status: expScore >= 75 ? "strong" : expScore >= 50 ? "moderate" : "weak",
+      feedback:
+        expScore >= 75
+          ? `${experience.length} relevant work experiences with strong achievement metrics.`
+          : expScore >= 50
+            ? `${experience.length} work experiences listed. Add more specific achievements and quantifiable results.`
+            : "Limited or missing work experience. Add details about past roles and accomplishments.",
+    });
+
+    // Education Section
+    const eduScore = Math.round(metrics.educationScore * 100);
+    sections.push({
+      name: "Education",
+      score: eduScore,
+      status: eduScore >= 75 ? "strong" : eduScore >= 50 ? "moderate" : "weak",
+      feedback:
+        eduScore >= 75
+          ? "Strong educational background. Consider adding relevant certifications."
+          : eduScore >= 50
+            ? `${education.length} degrees listed. Consider adding certifications or relevant coursework.`
+            : "Limited education details. Add degree information and relevant coursework.",
+    });
+
+    // Projects Section
+    const projScore = Math.round(metrics.projectScore * 100);
+    sections.push({
+      name: "Projects",
+      score: projScore,
+      status: projScore >= 75 ? "strong" : projScore >= 50 ? "moderate" : "weak",
+      feedback:
+        projScore >= 75
+          ? `Strong project portfolio with ${projects.length} detailed projects demonstrating technical ability.`
+          : projScore >= 50
+            ? `${projects.length} projects included. Enhance descriptions with technologies and business impact.`
+            : projects.length > 0
+              ? "Limited project details. Add 2-3 detailed projects with tech stack and outcomes."
+              : "No projects listed. Add project portfolio to demonstrate practical skills.",
+    });
+
+    // Certifications Section
+    const certScore = Math.round(metrics.certificationScore * 100);
+    sections.push({
+      name: "Certifications",
+      score: certScore,
+      status: certScore >= 75 ? "strong" : certScore >= 50 ? "moderate" : "weak",
+      feedback:
+        certScore >= 75
+          ? `${certifications.length} relevant certifications. Excellent credential coverage.`
+          : certScore >= 50
+            ? `${certifications.length} certifications listed. Consider adding industry-standard certifications.`
+            : certifications.length > 0
+              ? "Limited certifications. Add AWS, GCP, Azure, or other industry certifications."
+              : "No certifications listed. Pursue industry certifications to strengthen your profile.",
+    });
+
+    // Content Quality Section
+    const textScore = Math.round(metrics.textQualityScore * 100);
+    sections.push({
+      name: "Content Quality",
+      score: textScore,
+      status: textScore >= 75 ? "strong" : textScore >= 50 ? "moderate" : "weak",
+      feedback:
+        textScore >= 75
+          ? "Well-structured resume with quantifiable metrics and clear descriptions."
+          : textScore >= 50
+            ? "Good content structure. Include more metrics (percentages, numbers) for impact."
+            : "Resume lacks detail and metrics. Add quantifiable achievements and specific outcomes.",
+    });
+
+    return sections;
+  }
     const roleSkillMap = {
       frontend: ["javascript", "react", "html", "css"],
       backend: ["node", "javascript", "api", "database"],
