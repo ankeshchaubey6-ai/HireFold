@@ -44,20 +44,22 @@ const JobForm = () => {
   };
 
   const previewJob = {
-  title:            job?.basics?.title || "",
-  companyName:      job?.basics?.companyName || "",
-  location:         job?.basics?.location || "",
-  workMode:         job?.basics?.workMode || "",
-  employmentType:   job?.basics?.employmentType || "",
-  experienceLevel:  job?.basics?.experienceLevel || "",
-  department:       job?.basics?.department || "",
-  description:      job?.description || "",
-  requiredSkills:   job?.skills || [],
-  preferredSkills:  job?.preferredSkills || [],
-  compensation:     job?.compensation || {},
-  hiringPreferences: job?.hiringPreferences || "",
-  companyLogo: job?.basics?.companyLogoPreview || null,
-};
+    title: job?.basics?.title || "",
+    companyName: job?.basics?.companyName || "",
+    location: job?.basics?.location || "",
+    workMode: job?.basics?.workMode || "",
+    employmentType: job?.basics?.employmentType || "",
+    experienceLevel: job?.basics?.experienceLevel || "",
+    department: job?.basics?.department || "",
+    description: job?.description || "",
+    requiredSkills: job?.skills || [],
+    skills: job?.skills || [],
+    preferredSkills: job?.preferredSkills || [],
+    compensation: job?.compensation || {},
+    hiringPreferences: job?.hiringPreferences || "",
+    companyLogo: job?.basics?.companyLogoPreview || null,
+    status: "OPEN",
+  };
 
   return (
     <div className="job-form-wizard">

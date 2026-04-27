@@ -40,7 +40,8 @@
   --transition-smooth: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.dark {
+.dark,
+:root.dark {
   --surface: #0c0d14;
   --surface-2: #131420;
   --surface-3: #1a1b2e;
@@ -63,11 +64,13 @@
   font-family: var(--font-body);
   box-sizing: border-box;
   color: #0d0f12;
+  background: #ffffff;
 }
 
 .dark .candidate-jobs-container,
 .dark .jobs-page {
   color: var(--text-1);
+  background: #0c0d14;
 }
 
 /* =====================================================

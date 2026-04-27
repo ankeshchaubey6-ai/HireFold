@@ -31,23 +31,31 @@ const PostJobActions = () => {
     }));
   };
 
-  const buildPayload = () => ({
-    title: job?.basics?.title || "",
-    description: job?.description || "",
-    location: job?.basics?.location || "",
-    experienceLevel: normalizeExperienceLevel(job?.basics?.experienceLevel),
-    requiredSkills: Array.isArray(job?.skills) ? job.skills : [],
-    hiringModel: job?.hiringModel || "",
-    employmentType: job?.basics?.employmentType || "",
-    department: job?.basics?.department || "",
-    workMode: job?.basics?.workMode || "",
-    companyName: job?.basics?.companyName || "",
-    preferredSkills: Array.isArray(job?.preferredSkills) ? job.preferredSkills : [],
-    hiringPreferences: job?.hiringPreferences || "",
-    compensation: job?.compensation || {},
-    applicationLastDate: job?.applicationLastDate || "",
-    companyLogo: job?.basics?.companyLogoPreview || null,
-  });
+  const buildPayload = () => {
+    const formData = new FormData();
+    
+    formData.append("title", job?.basics?.title || "");
+    formData.append("description", job?.description || "");
+    formData.append("location", job?.basics?.location || "");
+    formData.append("experienceLevel", normalizeExperienceLevel(job?.basics?.experienceLevel));
+    formData.append("requiredSkills", JSON.stringify(Array.isArray(job?.skills) ? job.skills : []));
+    formData.append("hiringModel", job?.hiringModel || "");
+    formData.append("employmentType", job?.basics?.employmentType || "");
+    formData.append("department", job?.basics?.department || "");
+    formData.append("workMode", job?.basics?.workMode || "");
+    formData.append("companyName", job?.basics?.companyName || "");
+    formData.append("preferredSkills", JSON.stringify(Array.isArray(job?.preferredSkills) ? job.preferredSkills : []));
+    formData.append("hiringPreferences", job?.hiringPreferences || "");
+    formData.append("compensation", JSON.stringify(job?.compensation || {}));
+    formData.append("applicationLastDate", job?.applicationLastDate || "");
+    
+    // Add logo file if it exists
+    if (job?.basics?.companyLogoFile) {
+      formData.append("logo", job.basics.companyLogoFile);
+    }
+    
+    return formData;
+  };
 
   const submitJob = async () => {
     setLoading(true);
@@ -57,10 +65,16 @@ const PostJobActions = () => {
     try {
       const payload = buildPayload();
 
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
       if (job?.id) {
-        await api.put(`/jobs/${job.id}`, payload);
+        await api.put(`/jobs/${job.id}`, payload, config);
       } else {
-        await api.post("/jobs", payload);
+        await api.post("/jobs", payload, config);
       }
 
       setSuccess(true);
