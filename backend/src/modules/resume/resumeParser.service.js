@@ -1,4 +1,5 @@
 import mammoth from "mammoth";
+import pdfParse from "pdf-parse";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { parseResumeWithAffindaBuffer } from "./affindaRestParser.service.js";
 import { extractStructuredDataFromText } from "./resumeStructureExtractor.service.js";
@@ -48,6 +49,7 @@ export async function parseResumeBuffer(buffer, mimeType, fileName = "resume.pdf
   console.log("[PARSER] Falling back to local parser");
 
   const rawText = await extractTextLocally(buffer, mimeType);
+  console.log("[PARSER] Local raw text length:", rawText.length, "words:", getWordCount(rawText));
   let structuredData = normalizeResumeData(extractStructuredDataFromText(rawText), {
     parser: "pdfjs",
     parseQuality: inferParseQuality(rawText),
@@ -117,21 +119,45 @@ async function extractTextLocally(buffer, mimeType) {
 }
 
 async function extractTextFromPDF(buffer) {
-  const document = await pdfjsLib.getDocument({
-    data: new Uint8Array(buffer),
-    useSystemFonts: true,
-    verbosity: 0,
-  }).promise;
+  let bestText = "";
 
-  const textByPage = [];
-  for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
-    const page = await document.getPage(pageNumber);
-    const content = await page.getTextContent();
-    const pageText = content.items.map((item) => item.str || "").join(" ");
-    textByPage.push(pageText.replace(/\s+/g, " ").trim());
+  try {
+    const document = await pdfjsLib.getDocument({
+      data: new Uint8Array(buffer),
+      useSystemFonts: true,
+      verbosity: 0,
+    }).promise;
+
+    const textByPage = [];
+    for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+      const page = await document.getPage(pageNumber);
+      const content = await page.getTextContent();
+      const pageText = content.items.map((item) => item.str || "").join(" ");
+      textByPage.push(pageText.replace(/\s+/g, " ").trim());
+    }
+
+    bestText = textByPage.join("\n").trim();
+    console.log("[PARSER] pdfjs text length:", bestText.length, "words:", getWordCount(bestText));
+  } catch (error) {
+    console.error("[PARSER] pdfjs extraction failed:", error?.message || error);
   }
 
-  return textByPage.join("\n").trim();
+  if (getWordCount(bestText) >= OCR_WORD_THRESHOLD) {
+    return bestText;
+  }
+
+  try {
+    const parsed = await pdfParse(buffer);
+    const altText = String(parsed?.text || "").trim();
+    console.log("[PARSER] pdf-parse text length:", altText.length, "words:", getWordCount(altText));
+    if (getWordCount(altText) > getWordCount(bestText)) {
+      bestText = altText;
+    }
+  } catch (error) {
+    console.error("[PARSER] pdf-parse extraction failed:", error?.message || error);
+  }
+
+  return bestText;
 }
 
 async function extractTextFromDOCX(buffer) {
@@ -145,4 +171,3 @@ function getWordCount(text = "") {
     .split(/\s+/)
     .filter(Boolean).length;
 }
-

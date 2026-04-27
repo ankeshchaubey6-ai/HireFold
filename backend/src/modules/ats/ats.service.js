@@ -78,11 +78,22 @@ class ATSServiceImpl {
         sectionScores.projects * 0.05
     );
 
-    if (String(rawText || "").length > 100 && totalScore < 15) {
+    const hasResumeContent = Boolean(
+      String(rawText || "").length > 100 ||
+        String(summary || "").trim() ||
+        skills.length ||
+        experience.length ||
+        education.length ||
+        projects.length ||
+        basics?.fullName ||
+        basics?.email
+    );
+
+    if (hasResumeContent && totalScore < 15) {
       totalScore = 15;
     }
 
-    if ((!Number.isFinite(totalScore) || totalScore === 0) && String(rawText || "").length > 100) {
+    if ((!Number.isFinite(totalScore) || totalScore === 0) && hasResumeContent) {
       totalScore = 20;
       for (const key of SECTION_ORDER) {
         if (!Number.isFinite(sectionScores[key]) || sectionScores[key] <= 0) {
