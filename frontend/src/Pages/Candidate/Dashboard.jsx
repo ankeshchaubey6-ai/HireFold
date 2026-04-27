@@ -19,9 +19,6 @@ import SharpenSkillsCard from "../../Components/Cards/SharpenSkillsCard";
 ======================= */
 import DashboardBottomBanners from "../../Components/Banners/DashboardBottomBanners";
 
-/* =======================
-   STYLES
-======================= */
 import "../../Styles/candidateHome.css";
 
 // Animation variants
