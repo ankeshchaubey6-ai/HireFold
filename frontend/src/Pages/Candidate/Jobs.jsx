@@ -37,6 +37,11 @@ const CandidateJobs = () => {
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
 
   const getId = (job) => job._id || job.id;
+  const getComparableSalary = (job) =>
+    job.salary ??
+    job.compensation?.max ??
+    job.compensation?.min ??
+    0;
 
   const toggleSave = (id) => {
     setSavedJobs((prev) =>
@@ -73,7 +78,7 @@ const CandidateJobs = () => {
         );
 
       const salaryMatch = !filters.salaryRange || (() => {
-        const salary = job.salary || 0;
+        const salary = getComparableSalary(job);
         if (filters.salaryRange === "0-50k") return salary < 50000;
         if (filters.salaryRange === "50k-100k") return salary >= 50000 && salary <= 100000;
         if (filters.salaryRange === "100k-150k") return salary > 100000 && salary <= 150000;
@@ -97,31 +102,6 @@ const CandidateJobs = () => {
       );
     });
   }, [jobs, filters, savedJobs, showSavedOnly]);
-
-  /* ================= GET SALARY DISPLAY - REMOVED COMPETITIVE LOGIC ================= */
-  const getSalaryDisplay = (job) => {
-    if (job.salary) {
-      return `$${job.salary.toLocaleString()}/year`;
-    }
-    if (job.salaryRange) {
-      return `${job.salaryRange.min} - ${job.salaryRange.max}`;
-    }
-    // Return empty string or hide salary section when no salary data
-    return null;
-  };
-
-  /* ================= GET TIME AGO ================= */
-  const getTimeAgo = (date) => {
-    if (!date) return "Recently";
-    const now = new Date();
-    const posted = new Date(date);
-    const diffDays = Math.floor((now - posted) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
-  };
 
   /* ================= RESET FILTERS ================= */
   const resetFilters = () => {

@@ -4,33 +4,90 @@ import { useAuth } from "@/Context/AuthContext";
 
 const JobsFeedContext = createContext();
 
-const normalizeJob = (job) => ({
-  _id: job._id,
-  id: job._id,
-  title: job.title || "",
-  companyName: job.companyName || job.company || "",
-  location: job.location || "",
-  experienceLevel: job.experienceLevel || "",
-  description: job.description || "",
-  skills: job.requiredSkills || job.skills || [],
-  hiringModel: job.hiringModel || "SELF_MANAGED",
-  status: job.status || "OPEN",
-  createdAt: job.createdAt,
-  companyLogo:
-    job.companyLogo ||
-    job.companyLogoUrl ||
-    job.companyLogoPreview ||
-    job.logo ||
-    null,
-  applicationsCount: job.applicationsCount || 0,
-  employmentType: job.employmentType || job.basics?.employmentType || "",
-  workMode: job.workMode || job.basics?.workMode || "",
-  requirements: Array.isArray(job.requirements) ? job.requirements : [],
-  benefits: Array.isArray(job.benefits) ? job.benefits : [],
-  salary: job.salary,
-  salaryRange: job.salaryRange,
-  compensation: job.compensation,
+const formatExperienceLevel = (value = "") => {
+  const normalizedValue = String(value).toUpperCase();
+
+  if (normalizedValue === "ENTRY") return "Entry";
+  if (normalizedValue === "MID") return "Mid";
+  if (normalizedValue === "SENIOR") return "Senior";
+  return value || "";
+};
+
+const normalizeCompensation = (compensation = {}) => ({
+  min: compensation?.min ?? null,
+  max: compensation?.max ?? null,
+  currency: compensation?.currency || "USD",
+  frequency: compensation?.frequency || "Yearly",
+  showPublicly: compensation?.showPublicly ?? true,
+  bonus: compensation?.bonus || "",
+  hasEquity: compensation?.hasEquity ?? false,
+  equityRange: compensation?.equityRange || "",
+  vestingPeriod: compensation?.vestingPeriod || "",
 });
+
+const normalizeJob = (job) => {
+  const normalizedId = job._id || job.id;
+
+  return {
+    _id: normalizedId,
+    id: normalizedId,
+    title: job.title || "",
+    companyName: job.companyName || job.company || "",
+    location: job.location || "",
+    experienceLevel: formatExperienceLevel(job.experienceLevel),
+    experienceLevelCode: job.experienceLevel || "",
+    description: job.description || "",
+    requiredSkills: job.requiredSkills || job.skills || [],
+    skills: job.requiredSkills || job.skills || [],
+    preferredSkills: job.preferredSkills || [],
+    hiringModel: job.hiringModel || "SELF_MANAGED",
+    status: job.status || "OPEN",
+    createdAt: job.createdAt,
+    companyLogo:
+      job.companyLogo ||
+      job.companyLogoUrl ||
+      job.companyLogoPreview ||
+      job.logo ||
+      null,
+    applicationsCount: job.applicationsCount || 0,
+    employmentType: job.employmentType || job.basics?.employmentType || "",
+    department: job.department || job.basics?.department || "",
+    workMode: job.workMode || job.basics?.workMode || "",
+    requirements: Array.isArray(job.requirements) ? job.requirements : [],
+    benefits: Array.isArray(job.benefits) ? job.benefits : [],
+    salary:
+      job.salary ??
+      job.compensation?.max ??
+      job.compensation?.min ??
+      null,
+    salaryRange:
+      job.salaryRange ||
+      (job.compensation?.min || job.compensation?.max
+        ? {
+            min: job.compensation?.min ?? null,
+            max: job.compensation?.max ?? null,
+          }
+        : null),
+    compensation: normalizeCompensation(job.compensation),
+    hiringPreferences: job.hiringPreferences || "",
+    applicationLastDate: job.applicationLastDate || null,
+    basics: {
+      title: job.title || "",
+      companyName: job.companyName || job.company || "",
+      employmentType: job.employmentType || job.basics?.employmentType || "",
+      department: job.department || job.basics?.department || "",
+      experienceLevel: formatExperienceLevel(job.experienceLevel),
+      location: job.location || "",
+      workMode: job.workMode || job.basics?.workMode || "",
+      companyLogoPreview:
+        job.companyLogo ||
+        job.companyLogoUrl ||
+        job.companyLogoPreview ||
+        job.logo ||
+        null,
+    },
+  };
+};
 
 export const JobsFeedProvider = ({ children }) => {
   const { user } = useAuth();

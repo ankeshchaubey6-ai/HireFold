@@ -58,11 +58,15 @@ const PostedJobs = () => {
   }, [recruiterJobs, type, searchTerm]);
 
   const getSalaryDisplay = (job) => {
-    if (job.salary) {
-      return `$${job.salary.toLocaleString()}/year`;
+    if (job.compensation?.showPublicly === false) return null;
+    if (job.salary) return `$${job.salary.toLocaleString()}/year`;
+    if (job.salaryRange?.min || job.salaryRange?.max) {
+      return `${job.salaryRange.min ?? ""}${job.salaryRange.max ? ` - ${job.salaryRange.max}` : ""}`;
     }
-    if (job.salaryRange) {
-      return `${job.salaryRange.min} - ${job.salaryRange.max}`;
+    if (job.compensation?.min || job.compensation?.max) {
+      return `${job.compensation.currency || "USD"} ${job.compensation.min ?? ""}${
+        job.compensation?.max ? ` - ${job.compensation.max}` : ""
+      }`;
     }
     return null;
   };
@@ -180,13 +184,40 @@ const PostedJobs = () => {
           {filteredJobs.map((job, index) => {
             const id = job._id || job.id;
             const status = (job.status || "OPEN").toUpperCase();
-            const companyName = job.companyName || "HireFold";
+            const companyName = job.companyName || "";
             const logoSrc = job.companyLogo
               ? job.companyLogo.startsWith("http")
                 ? job.companyLogo
                 : `${BACKEND_ORIGIN}${job.companyLogo}`
               : null;
             const salaryDisplay = getSalaryDisplay(job);
+            const metaPills = [
+              job.location,
+              job.employmentType,
+              job.workMode,
+              job.experienceLevel,
+              `${job.applicationsCount || 0} applications`,
+            ].filter(Boolean);
+            const detailItems = [
+              {
+                label: "Applications",
+                value: String(job.applicationsCount || 0),
+              },
+              {
+                label: "Department",
+                value: job.department || "",
+              },
+              {
+                label: "Preferred Skills",
+                value: Array.isArray(job.preferredSkills) ? job.preferredSkills.join(", ") : "",
+              },
+              {
+                label: "Apply By",
+                value: job.applicationLastDate
+                  ? new Date(job.applicationLastDate).toLocaleDateString()
+                  : "",
+              },
+            ].filter((item) => item.value);
 
             return (
               <div key={id} className="job-card" style={{ animationDelay: `${index * 0.05}s` }}>
@@ -207,24 +238,24 @@ const PostedJobs = () => {
                         />
                       ) : (
                         <span className="job-logo-fallback">
-                          {companyName.charAt(0).toUpperCase()}
+                          {(companyName || job.title || "?").charAt(0).toUpperCase()}
                         </span>
                       )}
                     </div>
 
                     <div className="job-card-title-block">
-                      <div className="job-company-name">{companyName}</div>
+                      {companyName && <div className="job-company-name">{companyName}</div>}
                       <h3 className="job-title">{job.title}</h3>
                     </div>
                   </div>
 
-                  <div className="job-meta-pills">
-                    <span className="meta-pill">{job.location || "Remote"}</span>
-                    <span className="meta-pill">{job.employmentType || "Full-time"}</span>
-                    <span className="meta-pill">{job.workMode || "Flexible"}</span>
-                    <span className="meta-pill">{job.experienceLevel || "All Levels"}</span>
-                    <span className="meta-pill">{job.applicationsCount || 0} applications</span>
-                  </div>
+                  {metaPills.length > 0 && (
+                    <div className="job-meta-pills">
+                      {metaPills.map((pill) => (
+                        <span key={pill} className="meta-pill">{pill}</span>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="job-description-preview">
                     {job.description?.length > 120
@@ -297,22 +328,27 @@ const PostedJobs = () => {
                     <div>
                       <div className="expanded-section-label">Full Description</div>
                       <div className="expanded-section-text">
-                        {job.description || "No description provided"}
+                        {job.description}
                       </div>
                     </div>
 
-                    <div className="job-details-grid">
-                      <div className="job-detail-item">
-                        <span className="job-detail-label">Applications</span>
-                        <span className="job-detail-value">{job.applicationsCount || 0}</span>
+                    {detailItems.length > 0 && (
+                      <div className="job-details-grid">
+                        {detailItems.map((item) => (
+                          <div key={item.label} className="job-detail-item">
+                            <span className="job-detail-label">{item.label}</span>
+                            <span className="job-detail-value">{item.value}</span>
+                          </div>
+                        ))}
                       </div>
-                      {Array.isArray(job.requirements) && job.requirements.length > 0 && (
-                        <div className="job-detail-item">
-                          <span className="job-detail-label">Requirements</span>
-                          <span className="job-detail-value">{job.requirements.join(", ")}</span>
-                        </div>
-                      )}
-                    </div>
+                    )}
+
+                    {job.hiringPreferences && (
+                      <div>
+                        <div className="expanded-section-label">Hiring Preferences</div>
+                        <div className="expanded-section-text">{job.hiringPreferences}</div>
+                      </div>
+                    )}
 
                     {Array.isArray(job.benefits) && job.benefits.length > 0 && (
                       <div>

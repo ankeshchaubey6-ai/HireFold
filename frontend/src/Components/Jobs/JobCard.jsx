@@ -15,7 +15,7 @@ const JobCard = ({
   const [expanded, setExpanded] = useState(false);
 
   const isPublic = mode === "public";
-  const companyName = job.companyName || job.company || "Company";
+  const companyName = job.companyName || job.company || "";
   const status = (job.status || "OPEN").toUpperCase();
 
   let logoSrc = null;
@@ -65,6 +65,27 @@ const JobCard = ({
   const isClosed = status === "CLOSED";
   const statusClass = isClosed ? "closed" : job.featured ? "featured" : "open";
   const statusText = isClosed ? "Closed" : job.featured ? "Featured" : "Open";
+  const metaPills = [
+    job.location,
+    job.experienceLevel,
+    job.employmentType,
+    job.workMode,
+    job.department,
+  ].filter(Boolean);
+  const detailItems = [
+    { label: "Company", value: companyName },
+    { label: "Location", value: job.location },
+    { label: "Type", value: job.employmentType },
+    { label: "Experience", value: job.experienceLevel },
+    { label: "Work Mode", value: job.workMode },
+    { label: "Department", value: job.department },
+    {
+      label: "Apply By",
+      value: job.applicationLastDate
+        ? new Date(job.applicationLastDate).toLocaleDateString()
+        : "",
+    },
+  ].filter((item) => item.value);
 
   return (
     <div className="job-card" style={style}>
@@ -91,23 +112,24 @@ const JobCard = ({
               <img src={logoSrc} alt={companyName} className="job-logo-img" />
             ) : (
               <span className="job-logo-fallback">
-                {companyName.charAt(0).toUpperCase()}
+                {(companyName || job.title || "?").charAt(0).toUpperCase()}
               </span>
             )}
           </div>
 
           <div className="job-card-title-block">
-            <div className="job-company-name">{companyName}</div>
-            <h3 className="job-title">{job.title || "Untitled role"}</h3>
+            {companyName && <div className="job-company-name">{companyName}</div>}
+            <h3 className="job-title">{job.title}</h3>
           </div>
         </div>
 
-        <div className="job-meta-pills">
-          <span className="meta-pill">{job.location || "Remote"}</span>
-          <span className="meta-pill">{job.experienceLevel || "All Levels"}</span>
-          <span className="meta-pill">{job.employmentType || "Full-time"}</span>
-          <span className="meta-pill">{job.workMode || "Flexible"}</span>
-        </div>
+        {metaPills.length > 0 && (
+          <div className="job-meta-pills">
+            {metaPills.map((pill) => (
+              <span key={pill} className="meta-pill">{pill}</span>
+            ))}
+          </div>
+        )}
 
         {job.description && (
           <div className="job-description-preview">
@@ -185,28 +207,20 @@ const JobCard = ({
           <div>
             <div className="expanded-section-label">Description</div>
             <div className="expanded-section-text">
-              {job.description || "No description provided."}
+              {job.description}
             </div>
           </div>
 
-          <div className="job-details-grid">
-            <div className="job-detail-item">
-              <span className="job-detail-label">Company</span>
-              <span className="job-detail-value">{companyName}</span>
+          {detailItems.length > 0 && (
+            <div className="job-details-grid">
+              {detailItems.map((item) => (
+                <div key={item.label} className="job-detail-item">
+                  <span className="job-detail-label">{item.label}</span>
+                  <span className="job-detail-value">{item.value}</span>
+                </div>
+              ))}
             </div>
-            <div className="job-detail-item">
-              <span className="job-detail-label">Location</span>
-              <span className="job-detail-value">{job.location || "Remote"}</span>
-            </div>
-            <div className="job-detail-item">
-              <span className="job-detail-label">Type</span>
-              <span className="job-detail-value">{job.employmentType || "Full-time"}</span>
-            </div>
-            <div className="job-detail-item">
-              <span className="job-detail-label">Experience</span>
-              <span className="job-detail-value">{job.experienceLevel || "All Levels"}</span>
-            </div>
-          </div>
+          )}
 
           {job.benefits?.length > 0 && (
             <div>
@@ -216,6 +230,13 @@ const JobCard = ({
                   <span key={i} className="benefit-tag">{benefit}</span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {job.hiringPreferences && (
+            <div>
+              <div className="expanded-section-label">Hiring Preferences</div>
+              <div className="expanded-section-text">{job.hiringPreferences}</div>
             </div>
           )}
 

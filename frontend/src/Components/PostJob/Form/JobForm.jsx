@@ -57,6 +57,7 @@ const JobForm = () => {
     preferredSkills: job?.preferredSkills || [],
     compensation: job?.compensation || {},
     hiringPreferences: job?.hiringPreferences || "",
+    applicationLastDate: job?.applicationLastDate || "",
     companyLogo: job?.basics?.companyLogoPreview || null,
     status: "OPEN",
   };

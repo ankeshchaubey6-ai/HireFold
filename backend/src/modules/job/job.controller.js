@@ -28,6 +28,54 @@ const uploadToCloudinary = (fileBuffer) => {
   });
 };
 
+const parseJsonField = (value, fallback) => {
+  if (value === undefined || value === null || value === "") {
+    return fallback;
+  }
+
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+};
+
+const normalizeIncomingJobData = (rawData) => {
+  const jobData = { ...rawData };
+
+  jobData.requiredSkills = parseJsonField(jobData.requiredSkills, jobData.requiredSkills);
+  jobData.preferredSkills = parseJsonField(jobData.preferredSkills, jobData.preferredSkills);
+  jobData.compensation = parseJsonField(jobData.compensation, {});
+
+  if (typeof jobData.requiredSkills === "string") {
+    jobData.requiredSkills = jobData.requiredSkills
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  if (typeof jobData.preferredSkills === "string") {
+    jobData.preferredSkills = jobData.preferredSkills
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  if (jobData.experienceLevel) {
+    jobData.experienceLevel = jobData.experienceLevel.toUpperCase();
+  }
+
+  if (jobData.hiringModel) {
+    jobData.hiringModel = jobData.hiringModel.toUpperCase();
+  }
+
+  return jobData;
+};
+
 /* =========================================================
    CREATE JOB (RECRUITER ONLY)
 ========================================================= */
@@ -41,26 +89,7 @@ export const createJob = async (req, res) => {
     }
 
     /* ================= BUILD DATA ================= */
-    const jobData = {
-      ...req.body,
-    };
-
-    /* ================= FIX SKILLS ================= */
-    if (typeof jobData.requiredSkills === "string") {
-      jobData.requiredSkills = [jobData.requiredSkills];
-    }
-
-    /* ================= FIX EXPERIENCE ================= */
-    if (jobData.experienceLevel) {
-      jobData.experienceLevel =
-        jobData.experienceLevel.toUpperCase();
-    }
-
-    /* ================= FIX HIRING MODEL ================= */
-    if (jobData.hiringModel) {
-      jobData.hiringModel =
-        jobData.hiringModel.toUpperCase();
-    }
+    const jobData = normalizeIncomingJobData(req.body);
 
     /* ================= CLOUDINARY LOGO UPLOAD ================= */
     if (req.file) {
@@ -155,16 +184,11 @@ export const updateJob = async (req, res) => {
       });
     }
 
-    const updatedData = { ...req.body };
+    const updatedData = normalizeIncomingJobData(req.body);
 
-    if (updatedData.experienceLevel) {
-      updatedData.experienceLevel =
-        updatedData.experienceLevel.toUpperCase();
-    }
-
-    if (updatedData.hiringModel) {
-      updatedData.hiringModel =
-        updatedData.hiringModel.toUpperCase();
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      updatedData.companyLogo = result.secure_url;
     }
 
     const job = await updateJobService(

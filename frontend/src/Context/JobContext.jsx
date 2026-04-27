@@ -11,11 +11,14 @@ const initialJobState = {
 
   basics: {
     title: "",
+    companyName: "",
     employmentType: "",
     department: "",
     experienceLevel: "",
     location: "",
     workMode: "Onsite",
+    companyLogoFile: null,
+    companyLogoPreview: null,
   },
 
   description: "",
@@ -29,6 +32,10 @@ const initialJobState = {
     currency: "USD",
     frequency: "Yearly",
     showPublicly: true,
+    bonus: "",
+    hasEquity: false,
+    equityRange: "",
+    vestingPeriod: "",
   },
 
   visibility: {
@@ -36,6 +43,17 @@ const initialJobState = {
     indeed: false,
     glassdoor: false,
   },
+
+  applicationLastDate: "",
+};
+
+const getExperienceLevelLabel = (value = "") => {
+  const normalizedValue = String(value).toUpperCase();
+
+  if (normalizedValue === "ENTRY") return "Entry";
+  if (normalizedValue === "MID") return "Mid";
+  if (normalizedValue === "SENIOR") return "Senior";
+  return value || "";
 };
 
 export const JobProvider = ({ children }) => {
@@ -76,15 +94,27 @@ export const JobProvider = ({ children }) => {
 
       basics: {
         title: jobData.basics?.title || jobData.title || "",
-        employmentType: jobData.basics?.employmentType || "",
-        department: jobData.basics?.department || "",
-        experienceLevel: jobData.basics?.experienceLevel || "",
-        location: jobData.basics?.location || "",
-        workMode: jobData.basics?.workMode || "Onsite",
+        companyName: jobData.basics?.companyName || jobData.companyName || "",
+        employmentType: jobData.basics?.employmentType || jobData.employmentType || "",
+        department: jobData.basics?.department || jobData.department || "",
+        experienceLevel:
+          getExperienceLevelLabel(jobData.basics?.experienceLevel || jobData.experienceLevel),
+        location: jobData.basics?.location || jobData.location || "",
+        workMode: jobData.basics?.workMode || jobData.workMode || "Onsite",
+        companyLogoFile: null,
+        companyLogoPreview:
+          jobData.basics?.companyLogoPreview ||
+          jobData.companyLogoPreview ||
+          jobData.companyLogo ||
+          null,
       },
 
       description: jobData.description || "",
-      skills: Array.isArray(jobData.skills) ? jobData.skills : [],
+      skills: Array.isArray(jobData.requiredSkills)
+        ? jobData.requiredSkills
+        : Array.isArray(jobData.skills)
+        ? jobData.skills
+        : [],
       preferredSkills: Array.isArray(jobData.preferredSkills)
         ? jobData.preferredSkills
         : [],
@@ -97,6 +127,10 @@ export const JobProvider = ({ children }) => {
         frequency: jobData.compensation?.frequency || "Yearly",
         showPublicly:
           jobData.compensation?.showPublicly ?? true,
+        bonus: jobData.compensation?.bonus || "",
+        hasEquity: jobData.compensation?.hasEquity ?? false,
+        equityRange: jobData.compensation?.equityRange || "",
+        vestingPeriod: jobData.compensation?.vestingPeriod || "",
       },
 
       visibility: {
@@ -104,6 +138,10 @@ export const JobProvider = ({ children }) => {
         indeed: jobData.visibility?.indeed ?? false,
         glassdoor: jobData.visibility?.glassdoor ?? false,
       },
+
+      applicationLastDate: jobData.applicationLastDate
+        ? String(jobData.applicationLastDate).slice(0, 10)
+        : "",
     });
   };
 

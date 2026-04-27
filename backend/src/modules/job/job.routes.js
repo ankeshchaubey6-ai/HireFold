@@ -45,7 +45,7 @@ router.post("/", protect, uploadLogo, createJob); //  FIXED
 router.get("/my-jobs", protect, getRecruiterJobs);
 
 /* UPDATE JOB */
-router.put("/:id", protect, updateJob);
+router.put("/:id", protect, uploadLogo, updateJob);
 
 /* CLOSE JOB */
 router.patch("/:id/close", protect, closeJob);

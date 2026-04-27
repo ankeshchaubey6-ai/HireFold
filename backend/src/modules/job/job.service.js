@@ -1,5 +1,38 @@
 import Job from "./job.model.js";
 
+const normalizeStringArray = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeCompensation = (value = {}) => ({
+  min:
+    value?.min === "" || value?.min === undefined || value?.min === null
+      ? null
+      : Number(value.min),
+  max:
+    value?.max === "" || value?.max === undefined || value?.max === null
+      ? null
+      : Number(value.max),
+  currency: value?.currency || "USD",
+  frequency: value?.frequency || "Yearly",
+  showPublicly: value?.showPublicly ?? true,
+  bonus: value?.bonus || "",
+  hasEquity: value?.hasEquity ?? false,
+  equityRange: value?.equityRange || "",
+  vestingPeriod: value?.vestingPeriod || "",
+});
+
 /* =========================================================
    CREATE JOB
 ========================================================= */
@@ -31,26 +64,25 @@ export const createJobService = async (data, recruiterId) => {
     throw new Error("Invalid hiring model");
   }
 
- return await Job.create({
-  title,
-  description,
-  location,
-  experienceLevel, // now matches ENUM: ENTRY/MID/SENIOR
-  requiredSkills: requiredSkills || [],
-  hiringModel: normalizedHiringModel,
-  recruiter: recruiterId,
-  status: "OPEN",
-  companyLogo: data.companyLogo || null,
-  companyName: companyName || "",
-  employmentType: employmentType || "",
-  department: department || "",
-  workMode: workMode || "Onsite",
-  preferredSkills: preferredSkills || [],
-  hiringPreferences: hiringPreferences || "",
-  compensation: compensation || {},
-  applicationLastDate: applicationLastDate || null,
-});
-
+  return await Job.create({
+    title,
+    description,
+    location,
+    experienceLevel,
+    requiredSkills: normalizeStringArray(requiredSkills),
+    hiringModel: normalizedHiringModel,
+    recruiter: recruiterId,
+    status: "OPEN",
+    companyLogo: data.companyLogo || null,
+    companyName: companyName || "",
+    employmentType: employmentType || "",
+    department: department || "",
+    workMode: workMode || "Onsite",
+    preferredSkills: normalizeStringArray(preferredSkills),
+    hiringPreferences: hiringPreferences || "",
+    compensation: normalizeCompensation(compensation),
+    applicationLastDate: applicationLastDate || null,
+  });
 };
 
 /* =========================================================
@@ -73,9 +105,23 @@ export const getSingleJobService = async (jobId) => {
    UPDATE JOB
 ========================================================= */
 export const updateJobService = async (jobId, recruiterId, data) => {
+  const normalizedData = { ...data };
+
+  if ("requiredSkills" in normalizedData) {
+    normalizedData.requiredSkills = normalizeStringArray(normalizedData.requiredSkills);
+  }
+
+  if ("preferredSkills" in normalizedData) {
+    normalizedData.preferredSkills = normalizeStringArray(normalizedData.preferredSkills);
+  }
+
+  if ("compensation" in normalizedData) {
+    normalizedData.compensation = normalizeCompensation(normalizedData.compensation);
+  }
+
   return await Job.findOneAndUpdate(
     { _id: jobId, recruiter: recruiterId },
-    data,
+    normalizedData,
     { new: true }
   );
 };

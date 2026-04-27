@@ -90,6 +90,10 @@ const jobSchema = new mongoose.Schema(
       currency: { type: String, default: "USD" },
       frequency: { type: String, default: "Yearly" },
       showPublicly: { type: Boolean, default: true },
+      bonus: { type: String, default: "" },
+      hasEquity: { type: Boolean, default: false },
+      equityRange: { type: String, default: "" },
+      vestingPeriod: { type: String, default: "" },
     },
 
     applicationLastDate: {
