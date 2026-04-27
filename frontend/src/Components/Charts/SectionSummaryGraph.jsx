@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 const STATUS_COLOR = {
-  strong: "#16a34a",
   good: "#16a34a",
-  average: "#f59e0b",
-  weak: "#ef4444",
-  poor: "#ef4444",
+  needs_improvement: "#f59e0b",
+  missing: "#ef4444",
 };
 
 const formatScore = (v) =>
@@ -24,7 +22,7 @@ const SectionSummaryGraph = ({ sections }) => {
     <div className="section-summary-graph">
       {sections.map((s, index) => {
         const color =
-          STATUS_COLOR[s.status] || STATUS_COLOR.average;
+          STATUS_COLOR[s.status] || STATUS_COLOR.needs_improvement;
 
         const score = Number(s.score) || 0;
 

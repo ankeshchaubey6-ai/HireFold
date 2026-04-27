@@ -15,8 +15,8 @@ import PropTypes from "prop-types";
 
 const STATUS_COLORS = {
   good: "#16a34a",
-  average: "#f59e0b",
-  poor: "#ef4444",
+  needs_improvement: "#f59e0b",
+  missing: "#ef4444",
 };
 
 const PRIORITY_LABELS = {
@@ -95,7 +95,7 @@ const SectionBreakdown = ({
 SectionBreakdown.propTypes = {
   title: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
-  status: PropTypes.oneOf(["good", "average", "poor"])
+  status: PropTypes.oneOf(["good", "needs_improvement", "missing"])
     .isRequired,
   priority: PropTypes.oneOf(["high", "medium", "low"])
     .isRequired,

@@ -14,6 +14,48 @@ import "../../Styles/resumeAnalysis.css";
 
 const ACTIVE_RESUME_KEY = "hirefold_active_resume_id";
 
+const normalizeSections = (analysis) => {
+  if (Array.isArray(analysis?.sections) && analysis.sections.length) {
+    return analysis.sections;
+  }
+
+  const scores = analysis?.sectionScores;
+  const feedback = analysis?.sectionFeedback;
+
+  if (!scores || !feedback) {
+    return [];
+  }
+
+  return Object.keys(scores).map((key) => ({
+    section: key.charAt(0).toUpperCase() + key.slice(1),
+    score: Number(scores[key]) || 0,
+    status: feedback[key]?.status || "missing",
+    priority:
+      feedback[key]?.status === "missing"
+        ? "high"
+        : feedback[key]?.status === "needs_improvement"
+        ? "medium"
+        : "low",
+    urgency:
+      feedback[key]?.status === "missing"
+        ? "high"
+        : feedback[key]?.status === "needs_improvement"
+        ? "medium"
+        : "low",
+    note: feedback[key]?.feedback || "",
+    suggestions: Array.isArray(feedback[key]?.suggestions)
+      ? feedback[key].suggestions
+      : [],
+    positives:
+      feedback[key]?.status === "good" && feedback[key]?.feedback
+        ? [feedback[key].feedback]
+        : [],
+    details: {
+      keywords: feedback[key]?.keywords || [],
+    },
+  }));
+};
+
 const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = null }) => {
   const navigate = useNavigate();
   const { resume, loadResumeIntoContext } = useResume();
@@ -44,8 +86,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
         return;
       }
 
-      const existingSections =
-        analysis?.sections || analysis?.sectionSummary || [];
+      const existingSections = normalizeSections(analysis);
       if (Array.isArray(existingSections) && existingSections.length > 0 && baseStructuredData) {
         return;
       }
@@ -78,8 +119,7 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
           }
         }
 
-        const storedSections =
-          fetchedResume?.ats?.sections || fetchedResume?.ats?.sectionSummary || [];
+        const storedSections = normalizeSections(fetchedResume?.ats);
 
         if (Array.isArray(storedSections) && storedSections.length > 0) {
           return;
@@ -137,19 +177,12 @@ const ResumeAnalysis = ({ embedded = false, resumeData = null, atsOverride = nul
       0
   );
 
-  const sections = useMemo(() => {
-    if (Array.isArray(analysis?.sections)) {
-      return analysis.sections;
-    }
-    if (Array.isArray(analysis?.sectionSummary)) {
-      return analysis.sectionSummary;
-    }
-    return [];
-  }, [analysis]);
+  const sections = useMemo(() => normalizeSections(analysis), [analysis]);
 
   const keywordGap = analysis?.keywordGap || {
-    missingKeywords: [],
-    suggestedKeywords: [],
+    foundKeywords: analysis?.keywords?.found || [],
+    missingKeywords: analysis?.keywords?.missing || [],
+    suggestedKeywords: analysis?.keywords?.missing || [],
     confidence: 0,
   };
 

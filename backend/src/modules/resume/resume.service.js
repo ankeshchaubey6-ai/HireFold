@@ -1,11 +1,12 @@
 import crypto from "crypto";
 import { ResumeModel } from "./resume.model.js";
 import { parseResumeBuffer } from "./resumeParser.service.js";
+import { normalizeResumeData } from "./resumeStandardization.service.js";
+import ATSService from "../ats/ats.service.js";
+import { enqueueResumeAnalysis, isResumeQueueConfigured } from "../../queues/resumeAnalysis.queue.js";
 
 export const ResumeService = {
-
   async upsertResume(payload) {
-
     const {
       resumeId,
       userId = "anonymous",
@@ -22,7 +23,16 @@ export const ResumeService = {
 
     if (!resumeId) throw new Error("resumeId is required");
 
-    const resume = await ResumeModel.findOneAndUpdate(
+    const normalizedStructuredData =
+      source === "upload"
+        ? normalizeResumeData(structuredData, {
+            parser: structuredData?.parser || "fallback",
+            parseQuality: structuredData?.parseQuality || "low",
+            meta: structuredData?.meta || {},
+          })
+        : structuredData;
+
+    return ResumeModel.findOneAndUpdate(
       { resumeId },
       {
         $set: {
@@ -31,7 +41,7 @@ export const ResumeService = {
           title,
           source,
           templateId,
-          structuredData,
+          structuredData: normalizedStructuredData,
           isEditable,
           isDraft,
           snapshotHtml,
@@ -46,115 +56,38 @@ export const ResumeService = {
         setDefaultsOnInsert: true,
       }
     ).lean();
-
-    return resume;
   },
 
   async uploadAndParseResume(file, user) {
     if (!file) throw new Error("Resume file is required");
 
-    const userId =
-      user?.id ||
-      user?._id ||
-      user?.userId ||
-      "anonymous";
+    console.log(
+      "[PIPELINE] Resume received:",
+      file.originalname,
+      "size:",
+      file.size,
+      "type:",
+      file.mimetype
+    );
 
+    const userId = user?.id || user?._id || user?.userId || "anonymous";
     const resumeId = crypto.randomUUID();
 
-    /* ================= FAST PARSE ================= */
-
-    let structuredData = {
+    const parseResult = await parseResumeBuffer(file.buffer, file.mimetype, file.originalname);
+    const structuredData = normalizeResumeData(parseResult.structuredData, {
+      parser: parseResult.structuredData?.parser,
+      parseQuality: parseResult.structuredData?.parseQuality,
       meta: {
+        ...(parseResult.structuredData?.meta || {}),
+        resumeId,
         source: "upload",
-        parser: "pdfjs-fast",
-        parseQuality: "unknown",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
         analysisStatus: "processing",
-        needsOCR: true,
       },
-      basics: {
-        fullName: "",
-        email: "",
-        phone: "",
-        location: "",
-        linkedin: "",
-        github: ""
-      },
-      summary: "Resume uploaded. AI analysis in progress.",
-      skills: [],
-      experience: [],
-      education: [],
-      projects: [],
-      certifications: [],
-      features: {
-        totalSkills: 0,
-        experienceCount: 0,
-        educationCount: 0,
-        projectCount: 0,
-        wordCount: 0,
-        totalExperienceMonths: 0,
-        highestEducationLevel: 0,
-        hasAdvancedDegree: false,
-        highComplexProjects: 0,
-        skillCounts: {},
-        skillDiversity: 0,
-        averageExperienceMonths: 0,
-        projectTechDiversity: 0,
-        certificationCount: 0,
-        sectionCount: 0,
-        textComplexity: "low",
-        normalized: {
-          skillsNorm: 0,
-          experienceNorm: 0,
-          educationNorm: 0,
-          projectsNorm: 0
-        }
-      },
-      rawText: "",
-    };
+    });
 
-    try {
-      const parseResult = await parseResumeBuffer(
-        file.buffer,
-        file.mimetype,
-        file.originalname
-      );
-
-      if (parseResult?.structuredData) {
-        // Merge the parsed data with our structure
-        structuredData = {
-          ...structuredData,
-          ...parseResult.structuredData,
-          // Ensure all required fields exist
-          basics: {
-            ...structuredData.basics,
-            ...(parseResult.structuredData.basics || {})
-          },
-          features: {
-            ...structuredData.features,
-            ...(parseResult.structuredData.features || {})
-          },
-          skills: parseResult.structuredData.skills || [],
-          experience: parseResult.structuredData.experience || [],
-          education: parseResult.structuredData.education || [],
-          projects: parseResult.structuredData.projects || [],
-          certifications: parseResult.structuredData.certifications || [],
-        };
-      }
-    } catch (err) {
-      void err;
-    }
-
-    structuredData.meta = {
-      ...(structuredData.meta || {}),
-      resumeId,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      analysisStatus: "processing",
-    };
-
-    /* ================= CREATE RESUME ENTITY ================= */
-    // Ensure all required fields have proper defaults
-    const entity = {
+    const entity = await ResumeModel.create({
       resumeId,
       userId,
       title: file.originalname?.replace(/\.[^/.]+$/, "") || "Uploaded Resume",
@@ -181,62 +114,44 @@ export const ResumeService = {
       },
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      structuredData: structuredData
-    };
+      structuredData,
+    });
 
-    /* ================= SAVE TO DATABASE ================= */
-    try {
-      const savedResume = await ResumeModel.create(entity);
-      
-      /* ================= QUEUE FOR DEEP ANALYSIS ================= */
-      try {
-        const { resumeAnalysisQueue } = await import("../../queues/resumeAnalysis.queue.js");
-        
-        await resumeAnalysisQueue.add(
-          "analyze-resume",
-          {
-            resumeId,
-            buffer: file.buffer.toString("base64"),
-            mimeType: file.mimetype,
-            fileName: file.originalname,
-            jobRole: "default"
-          },
-          {
-            attempts: 3,
-            removeOnComplete: true,
-            removeOnFail: false,
-            backoff: { type: "exponential", delay: 5000 },
-          }
-        );
-
-        // Update status to queued
-        await ResumeModel.updateOne(
-          { resumeId },
-          {
-            $set: {
-              "structuredData.meta.analysisStatus": "queued",
-              updatedAt: Date.now(),
-            },
-          }
-        );
-      } catch (queueErr) {
-        void queueErr;
-        // Don't throw - queue failure shouldn't break the upload
-      }
-
-      const finalResume = await ResumeModel.findOne({ resumeId }).lean();
-
-      return finalResume;
-    } catch (dbError) {
-      throw new Error(`Failed to save resume: ${dbError.message}`);
+    if (!isResumeQueueConfigured()) {
+      const analysis = await ATSService.analyzeResume(entity.toObject());
+      await this.updateResumeAnalysis(resumeId, analysis);
+      return ResumeModel.findOne({ resumeId }).lean();
     }
+
+    try {
+      await enqueueResumeAnalysis({
+        resumeId,
+        jobRole: "default",
+      });
+
+      await ResumeModel.updateOne(
+        { resumeId },
+        {
+          $set: {
+            "structuredData.meta.analysisStatus": "queued",
+            updatedAt: Date.now(),
+          },
+        }
+      );
+    } catch (error) {
+      console.error("[QUEUE] Falling back to synchronous analysis:", error?.message || error);
+      const analysis = await ATSService.analyzeResume(entity.toObject());
+      await this.updateResumeAnalysis(resumeId, analysis);
+    }
+
+    return ResumeModel.findOne({ resumeId }).lean();
   },
 
   async getResumeById(resumeId) {
     if (!resumeId) return null;
     try {
       return await ResumeModel.findOne({ resumeId }).lean();
-    } catch (error) {
+    } catch {
       return null;
     }
   },
@@ -244,52 +159,39 @@ export const ResumeService = {
   async getResumesByUser(userId) {
     if (!userId) return [];
     try {
-      return await ResumeModel.find({ userId })
-        .sort({ updatedAt: -1 })
-        .lean();
-    } catch (error) {
+      return await ResumeModel.find({ userId }).sort({ updatedAt: -1 }).lean();
+    } catch {
       return [];
     }
   },
 
   async deleteResume(resumeId, userId = null) {
-    try {
-      const query = { resumeId };
-      if (userId) query.userId = userId;
-      const result = await ResumeModel.deleteOne(query);
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const query = { resumeId };
+    if (userId) query.userId = userId;
+    return ResumeModel.deleteOne(query);
   },
-  
+
   async updateResumeAnalysis(resumeId, analysisData) {
-    try {
-      const update = {
+    const result = await ResumeModel.updateOne(
+      { resumeId },
+      {
         $set: {
-          atsScore: analysisData.score,
+          atsScore: analysisData.totalScore ?? analysisData.score,
           ats: analysisData.ats,
-          "structuredData.meta.analysisStatus": "completed",
-          "structuredData.meta.atsEvaluatedAt": Date.now(),
-          updatedAt: Date.now()
-        }
-      };
-      
-      // If we have enhanced structured data from AI, update it
-      if (analysisData.structuredData) {
-        update.$set["structuredData"] = {
-          ...analysisData.structuredData,
-          meta: {
-            ...analysisData.structuredData.meta,
-            analysisStatus: "completed"
-          }
-        };
+          structuredData: {
+            ...analysisData.structuredData,
+            meta: {
+              ...(analysisData.structuredData?.meta || {}),
+              analysisStatus: "completed",
+              atsEvaluatedAt: Date.now(),
+            },
+          },
+          updatedAt: Date.now(),
+        },
       }
-      
-      const result = await ResumeModel.updateOne({ resumeId }, update);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
+    );
+
+    console.log("[DB] ATS result saved for resumeId:", resumeId);
+    return result;
+  },
 };

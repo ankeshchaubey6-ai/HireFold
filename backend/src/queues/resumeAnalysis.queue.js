@@ -1,115 +1,78 @@
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
 
-/**
- * =========================================================
- * HIREFOLD REDIS QUEUE SINGLETON (UPSTASH SAFE)
- * =========================================================
- * FIXES:
- * Stable TLS connection (Upstash required)
- * Prevent ECONNRESET loops
- * Singleton connection (no memory leaks)
- * Queue + Worker safe
- * =========================================================
- */
-
-/**
- * =========================================================
- * REDIS SINGLETON CONNECTION
- * =========================================================
- */
 let redisConnection = null;
+let resumeAnalysisQueue = null;
 
-function getRedisConnection() {
-  if (redisConnection) {
-    return redisConnection;
+function createRedisConnection() {
+  if (!process.env.REDIS_URL) {
+    return null;
   }
 
-  redisConnection = new IORedis(process.env.REDIS_URL, {
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
+  if (!redisConnection) {
+    redisConnection = new IORedis(process.env.REDIS_URL, {
+      maxRetriesPerRequest: null,
+      enableReadyCheck: false,
+      tls: {},
+      keepAlive: 30000,
+      connectTimeout: 15000,
+    });
 
-    // Upstash TLS requirement
-    tls: {},
-
-    // Prevent aggressive reconnect loops
-    retryStrategy(times) {
-      const delay = Math.min(times * 100, 3000);
-      return delay;
-    },
-
-    // Stability improvements
-    keepAlive: 30000,
-    connectTimeout: 20000,
-  });
-
-  /**
-   * =========================================================
-   * CONNECTION EVENTS
-   * =========================================================
-   */
-
-  redisConnection.on("connect", () => {
-    // Connection established
-  });
-
-  redisConnection.on("ready", () => {
-    // Ready to accept commands
-  });
-
-  redisConnection.on("error", (err) => {
-    // Handle connection error
-  });
-
-  redisConnection.on("close", () => {
-    // Connection closed
-  });
-
-  redisConnection.on("reconnecting", () => {
-    // Attempting to reconnect
-  });
+    redisConnection.on("error", (error) => {
+      console.error("[QUEUE] Redis connection error:", error?.message || error);
+    });
+  }
 
   return redisConnection;
 }
 
-/**
- * =========================================================
- * HIREFOLD RESUME ANALYSIS QUEUE
- * =========================================================
- */
+export function isResumeQueueConfigured() {
+  return Boolean(process.env.REDIS_URL);
+}
 
-export const resumeAnalysisQueue = new Queue("resume-analysis-queue", {
-  connection: getRedisConnection(),
+export function getResumeAnalysisQueue() {
+  if (!isResumeQueueConfigured()) {
+    return null;
+  }
 
-  defaultJobOptions: {
+  if (!resumeAnalysisQueue) {
+    const connection = createRedisConnection();
+    if (!connection) return null;
+
+    resumeAnalysisQueue = new Queue("resume-analysis-queue", {
+      connection,
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: false,
+        attempts: 3,
+        backoff: {
+          type: "exponential",
+          delay: 5000,
+        },
+      },
+    });
+
+    resumeAnalysisQueue.on("error", (error) => {
+      console.error("[QUEUE] Queue error:", error?.message || error);
+    });
+  }
+
+  return resumeAnalysisQueue;
+}
+
+export async function enqueueResumeAnalysis(payload) {
+  const queue = getResumeAnalysisQueue();
+  if (!queue) {
+    throw new Error("Redis queue unavailable");
+  }
+
+  return queue.add("analyze-resume", payload, {
+    attempts: 3,
     removeOnComplete: true,
     removeOnFail: false,
+    backoff: { type: "exponential", delay: 5000 },
+  });
+}
 
-    attempts: 3,
+export default getResumeAnalysisQueue;
 
-    backoff: {
-      type: "exponential",
-      delay: 5000,
-    },
-  },
-});
-
-/**
- * =========================================================
- * QUEUE EVENTS
- * =========================================================
- */
-
-resumeAnalysisQueue.on("error", (err) => {
-  // Queue error handler
-});
-
-resumeAnalysisQueue.on("completed", (job) => {
-  // Job completed successfully
-});
-
-resumeAnalysisQueue.on("failed", (job, err) => {
-  // Job failed handler
-});
-
-export default resumeAnalysisQueue;

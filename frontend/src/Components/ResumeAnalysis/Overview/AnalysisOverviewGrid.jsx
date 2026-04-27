@@ -2,10 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import "../../../Styles/analysisOverviewGrid.css";
 
 const STATUS_META = {
-  strong: { label: "Strong", color: "#16a34a" },
   good: { label: "Good", color: "#22c55e" },
-  average: { label: "Average", color: "#f59e0b" },
-  weak: { label: "Needs Work", color: "#ef4444" },
+  needs_improvement: { label: "Needs Work", color: "#f59e0b" },
+  missing: { label: "Missing", color: "#ef4444" },
 };
 
 const URGENCY_META = {
@@ -60,7 +59,7 @@ const AnimatedProgress = ({ value, color }) => {
 const normalizeSection = (section) => ({
   section:     section.section   || "Unknown",
   score:       clampScore(section.score),
-  status:      section.status    || "average",
+  status:      section.status    || "missing",
   priority:    section.priority  || "medium",
   urgency:     section.urgency   || null,
   note:        section.note      || "",
@@ -92,7 +91,7 @@ const AnalysisOverviewGrid = ({ sections }) => {
 
       <div className="analysis-overview-grid">
         {normalizedSections.map((s) => {
-          const meta        = STATUS_META[s.status] || STATUS_META.average;
+          const meta        = STATUS_META[s.status] || STATUS_META.needs_improvement;
           const urgencyMeta = s.urgency ? URGENCY_META[s.urgency] : null;
 
           return (
@@ -135,6 +134,14 @@ const AnalysisOverviewGrid = ({ sections }) => {
               {/* ===== SCORE EXPLANATION NOTE ===== */}
               {s.note && (
                 <p className="overview-note">{s.note}</p>
+              )}
+
+              {Array.isArray(s.details.keywords) && s.details.keywords.length > 0 && (
+                <div className="overview-metrics">
+                  <div>
+                    <strong>Keywords:</strong> {s.details.keywords.slice(0, 6).join(", ")}
+                  </div>
+                </div>
               )}
 
               {/* ===== WHAT'S GOOD ===== */}

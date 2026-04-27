@@ -2,8 +2,23 @@ const percent = (value) => Math.max(0, Math.min(100, Math.round(Number(value) ||
 
 export function generateResumeImprovements({ structuredData, ats }) {
   const score = percent(ats?.score ?? ats?.atsScore ?? ats?.overallScore ?? 0);
-  const missingKeywords = ats?.keywordGap?.missingKeywords || [];
-  const plan = [];
+  const missingKeywords = ats?.keywordGap?.missingKeywords || ats?.keywords?.missing || [];
+  const plan = Array.isArray(ats?.improvementPlan?.plan) ? [...ats.improvementPlan.plan] : [];
+
+  if (plan.length) {
+    return {
+      verdict:
+        score >= 80
+          ? "Your resume is in strong shape."
+          : score >= 60
+          ? "Your resume is competitive but can be improved."
+          : "Your resume needs a few targeted updates.",
+      summary:
+        ats?.improvementPlan?.summary ||
+        `Your resume scored ${score}/100 in ATS evaluation.`,
+      plan,
+    };
+  }
 
   if (score < 80) {
     plan.push({
