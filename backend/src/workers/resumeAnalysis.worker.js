@@ -28,6 +28,8 @@ if (process.env.REDIS_URL) {
     queueName,
     async (job) => {
       let resumeId = null;
+      let retryCount = 0;
+      const MAX_RETRIES = 5; // Retry up to 5 times for OCR
 
       try {
         const { resumeId: jobResumeId, jobRole = "default" } = job.data || {};
@@ -37,17 +39,46 @@ if (process.env.REDIS_URL) {
           throw new Error("resumeId is required in job data");
         }
 
-        const resume = await ResumeModel.findOne({ resumeId });
+        let resume = await ResumeModel.findOne({ resumeId });
         if (!resume) {
           throw new Error(`Resume not found: ${resumeId}`);
         }
 
-        const currentStructuredData = resume.structuredData || {};
-        const rawText = currentStructuredData.rawText || "";
+        let currentStructuredData = resume.structuredData || {};
+        
+        // Check if this is an image-based resume waiting for OCR
+        const needsOCR = currentStructuredData?.meta?.needsOCR || false;
+        const hasEmptyData =
+          !currentStructuredData?.rawText &&
+          (!currentStructuredData?.skills || currentStructuredData.skills.length === 0) &&
+          (!currentStructuredData?.experience || currentStructuredData.experience.length === 0);
+
+        // If image-based PDF and data is still empty, retry with backoff (OCR might still be processing)
+        if ((needsOCR || hasEmptyData) && retryCount < MAX_RETRIES) {
+          // Fetch fresh copy to check if OCR has completed
+          resume = await ResumeModel.findOne({ resumeId });
+          currentStructuredData = resume?.structuredData || {};
+
+          // Still empty after OCR should have completed?
+          const stillEmpty =
+            !currentStructuredData?.rawText &&
+            (!currentStructuredData?.skills || currentStructuredData.skills.length === 0) &&
+            (!currentStructuredData?.experience || currentStructuredData.experience.length === 0);
+
+          if (stillEmpty && retryCount < MAX_RETRIES) {
+            retryCount++;
+            // Throw to trigger job retry with exponential backoff
+            throw new Error(
+              `Resume data not ready (retry ${retryCount}/${MAX_RETRIES}). OCR may still be processing.`
+            );
+          }
+        }
 
         // Extract structured data if raw text exists
         let structuredData = currentStructuredData;
-        if (rawText) {
+        const rawText = currentStructuredData?.rawText || "";
+
+        if (rawText && rawText.length > 100) {
           try {
             const extracted = extractStructuredDataFromText(rawText);
             structuredData = {
@@ -62,7 +93,7 @@ if (process.env.REDIS_URL) {
             };
           } catch (parseError) {
             console.error(`Error parsing resume ${resumeId}:`, parseError.message);
-            // Continue with unparsed data
+            // Continue with unparsed data (canvas/builder resumes often have no rawText)
           }
         }
 
@@ -97,6 +128,7 @@ if (process.env.REDIS_URL) {
             analysisStatus: "completed",
             evaluatedAt: Date.now(),
             atsEngine: "hirefold-ats-v2.0",
+            ocrCompleted: !needsOCR || !!rawText,
           },
         };
         resume.updatedAt = Date.now();
@@ -109,12 +141,19 @@ if (process.env.REDIS_URL) {
           score: analysis.score,
           sectionsCount: (analysis.sections || []).length,
           verdict: analysis.verdict?.level,
+          hasRawText: !!rawText,
+          sourceType: structuredData?.meta?.source || "unknown",
         };
       } catch (error) {
         console.error(
-          `Worker error processing resume ${resumeId}:`,
+          `Worker error processing resume ${resumeId} (attempt: ${retryCount}):`,
           error.message
         );
+
+        // If this is a retry-able error and we haven't exceeded max retries, throw to trigger job retry
+        if (error.message.includes("retry") && retryCount < MAX_RETRIES) {
+          throw error; // BullMQ will retry
+        }
 
         // Try to set failure state on resume
         if (resumeId) {

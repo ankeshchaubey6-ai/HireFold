@@ -47,6 +47,55 @@ export const ResumeService = {
       }
     ).lean();
 
+    // Queue ATS analysis for resumes with substantial structured data
+    // Works for both draft (auto-save) and final resumes
+    const hasSkills = structuredData?.skills?.length > 0;
+    const hasExperience = structuredData?.experience?.length > 0;
+    const hasEducation = structuredData?.education?.length > 0;
+    const hasSomething = hasSkills || hasExperience || hasEducation;
+
+    if (hasSomething) {
+      try {
+        const { resumeAnalysisQueue } = await import("../../queues/resumeAnalysis.queue.js");
+        
+        // Check if already queued/analyzed
+        const currentResume = await ResumeModel.findOne({ resumeId });
+        const analysisStatus = currentResume?.structuredData?.meta?.analysisStatus;
+        
+        // Only queue if not already queued/completed
+        if (!analysisStatus || analysisStatus === "processing") {
+          await resumeAnalysisQueue.add(
+            "analyze-resume",
+            {
+              resumeId,
+              jobRole: "default",
+              source: source || "builder"
+            },
+            {
+              attempts: 3,
+              removeOnComplete: true,
+              removeOnFail: false,
+              backoff: { type: "exponential", delay: 5000 },
+            }
+          );
+
+          // Update status to queued
+          await ResumeModel.updateOne(
+            { resumeId },
+            {
+              $set: {
+                "structuredData.meta.analysisStatus": "queued",
+                updatedAt: Date.now(),
+              },
+            }
+          );
+        }
+      } catch (queueErr) {
+        console.error(`Failed to queue ATS analysis for ${resumeId}:`, queueErr.message);
+        // Don't throw - queue failure shouldn't break the save
+      }
+    }
+
     return resume;
   },
 
