@@ -64,35 +64,71 @@ export const ResumeService = {
         
         // Only queue if not already queued/completed
         if (!analysisStatus || analysisStatus === "processing") {
-          await resumeAnalysisQueue.add(
-            "analyze-resume",
-            {
-              resumeId,
-              jobRole: "default",
-              source: source || "builder"
-            },
-            {
-              attempts: 3,
-              removeOnComplete: true,
-              removeOnFail: false,
-              backoff: { type: "exponential", delay: 5000 },
-            }
-          );
-
-          // Update status to queued
-          await ResumeModel.updateOne(
-            { resumeId },
-            {
-              $set: {
-                "structuredData.meta.analysisStatus": "queued",
-                updatedAt: Date.now(),
+          try {
+            await resumeAnalysisQueue.add(
+              "analyze-resume",
+              {
+                resumeId,
+                jobRole: "default",
+                source: source || "builder"
               },
+              {
+                attempts: 3,
+                removeOnComplete: true,
+                removeOnFail: false,
+                backoff: { type: "exponential", delay: 5000 },
+              }
+            );
+
+            // Update status to queued
+            await ResumeModel.updateOne(
+              { resumeId },
+              {
+                $set: {
+                  "structuredData.meta.analysisStatus": "queued",
+                  updatedAt: Date.now(),
+                },
+              }
+            );
+          } catch (queueErr) {
+            // Queue failed - run analysis synchronously as fallback
+            console.warn(`Queue failed, running ATS synchronously: ${queueErr.message}`);
+            try {
+              const ATSService = (await import("../ats/ats.service.js")).default;
+              const freshResume = await ResumeModel.findOne({ resumeId });
+              const analysis = await ATSService.analyzeResume(freshResume, "default");
+              
+              await ResumeModel.updateOne(
+                { resumeId },
+                {
+                  $set: {
+                    atsScore: analysis.score,
+                    ats: analysis.ats,
+                    "structuredData.meta.analysisStatus": "completed",
+                    "structuredData.meta.evaluatedAt": Date.now(),
+                    updatedAt: Date.now(),
+                  },
+                }
+              );
+            } catch (analysisErr) {
+              console.error(`Synchronous ATS analysis failed: ${analysisErr.message}`);
+              // Mark as failed
+              await ResumeModel.updateOne(
+                { resumeId },
+                {
+                  $set: {
+                    "structuredData.meta.analysisStatus": "ats_failed",
+                    "structuredData.meta.analysisError": analysisErr.message,
+                    updatedAt: Date.now(),
+                  },
+                }
+              );
             }
-          );
+          }
         }
-      } catch (queueErr) {
-        console.error(`Failed to queue ATS analysis for ${resumeId}:`, queueErr.message);
-        // Don't throw - queue failure shouldn't break the save
+      } catch (err) {
+        console.error(`Failed to process ATS for ${resumeId}:`, err.message);
+        // Don't throw - save should succeed even if ATS fails
       }
     }
 
@@ -269,8 +305,39 @@ export const ResumeService = {
           }
         );
       } catch (queueErr) {
-        void queueErr;
-        // Don't throw - queue failure shouldn't break the upload
+        // Queue failed - run analysis synchronously as fallback
+        console.warn(`Queue failed during upload, running ATS synchronously: ${queueErr.message}`);
+        try {
+          const ATSService = (await import("../ats/ats.service.js")).default;
+          const freshResume = await ResumeModel.findOne({ resumeId });
+          const analysis = await ATSService.analyzeResume(freshResume, "default");
+          
+          await ResumeModel.updateOne(
+            { resumeId },
+            {
+              $set: {
+                atsScore: analysis.score,
+                ats: analysis.ats,
+                "structuredData.meta.analysisStatus": "completed",
+                "structuredData.meta.evaluatedAt": Date.now(),
+                updatedAt: Date.now(),
+              },
+            }
+          );
+        } catch (analysisErr) {
+          console.error(`Synchronous ATS analysis failed after upload: ${analysisErr.message}`);
+          // Mark as failed
+          await ResumeModel.updateOne(
+            { resumeId },
+            {
+              $set: {
+                "structuredData.meta.analysisStatus": "ats_failed",
+                "structuredData.meta.analysisError": analysisErr.message,
+                updatedAt: Date.now(),
+              },
+            }
+          );
+        }
       }
 
       const finalResume = await ResumeModel.findOne({ resumeId }).lean();
