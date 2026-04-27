@@ -2,9 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const KeywordGapPanel = ({ keywordGap }) => {
-  const found = Array.isArray(keywordGap?.foundKeywords)
-    ? keywordGap.foundKeywords
-    : [];
   const missing = Array.isArray(keywordGap?.missingKeywords)
     ? keywordGap.missingKeywords
     : [];
@@ -16,21 +13,6 @@ const KeywordGapPanel = ({ keywordGap }) => {
   return (
     <div className="keyword-gap-panel">
       <div className="keyword-gap-grid">
-        <div className="keyword-gap-card">
-          <h4 className="keyword-gap-title">Found Keywords</h4>
-          {found.length === 0 ? (
-            <p className="keyword-empty">No role keywords were matched yet.</p>
-          ) : (
-            <div className="keyword-chip-grid">
-              {found.map((keyword) => (
-                <span key={keyword} className="keyword-chip keyword-chip-suggested">
-                  {keyword}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
         <div className="keyword-gap-card">
           <h4 className="keyword-gap-title">Missing Keywords</h4>
           {missing.length === 0 ? (
@@ -76,7 +58,6 @@ const KeywordGapPanel = ({ keywordGap }) => {
 
 KeywordGapPanel.propTypes = {
   keywordGap: PropTypes.shape({
-    foundKeywords: PropTypes.arrayOf(PropTypes.string),
     missingKeywords: PropTypes.arrayOf(PropTypes.string),
     suggestedKeywords: PropTypes.arrayOf(PropTypes.string),
     confidence: PropTypes.number,

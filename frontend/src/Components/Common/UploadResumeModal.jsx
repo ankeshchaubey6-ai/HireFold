@@ -3,14 +3,6 @@ import { createPortal } from "react-dom";
 import api from "../../services/api";
 import { useResume } from "../../Context/ResumeContext";
 
-const resolveATSScore = (resume = {}) =>
-  resume?.atsScore ??
-  resume?.totalScore ??
-  resume?.score ??
-  resume?.ats?.totalScore ??
-  resume?.ats?.score ??
-  null;
-
 const UploadResumeModal = ({ onClose }) => {
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
@@ -49,15 +41,11 @@ const UploadResumeModal = ({ onClose }) => {
       const response = await api.post("/resumes/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log("[FRONTEND] Upload resume API response:", response.data);
 
       const savedResume = response?.data?.data;
       if (!savedResume?.resumeId) {
         throw new Error("Resume upload did not return a valid record");
       }
-
-      const resolvedScore = resolveATSScore(savedResume);
-      console.log("[FRONTEND] Upload resolved ATS score:", resolvedScore);
 
       localStorage.setItem("hirefold_active_resume_id", savedResume.resumeId);
 
@@ -68,7 +56,7 @@ const UploadResumeModal = ({ onClose }) => {
           resumeId: savedResume.resumeId,
           source: "upload",
           isEditable: false,
-          atsScore: resolvedScore,
+          atsScore: savedResume.atsScore ?? null,
         },
         ats: savedResume.ats ?? null,
       });

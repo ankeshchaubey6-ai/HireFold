@@ -36,7 +36,7 @@ const ExperienceSchema = new mongoose.Schema({
   role: { type: String, default: "" },
   company: { type: String, default: "" },
   duration: { type: DurationSchema, default: () => ({}) },
-  description: { type: String, default: "" },
+  description: [String],
   achievements: [String]
 }, { _id: false });
 
@@ -44,8 +44,6 @@ const EducationSchema = new mongoose.Schema({
   degree: { type: String, default: "" },
   field: { type: String, default: "" },
   institution: { type: String, default: "" },
-  institute: { type: String, default: "" },
-  fieldOfStudy: { type: String, default: "" },
   year: { type: Number, default: null },
   level: { type: Number, default: null },
   raw: { type: String, default: "" }
@@ -53,7 +51,6 @@ const EducationSchema = new mongoose.Schema({
 
 const ProjectSchema = new mongoose.Schema({
   name: { type: String, default: "" },
-  title: { type: String, default: "" },
   techStack: [String],
   complexity: { type: String, enum: ["low", "medium", "high"], default: "low" },
   description: { type: String, default: "" },
@@ -63,7 +60,6 @@ const ProjectSchema = new mongoose.Schema({
 
 const CertificationSchema = new mongoose.Schema({
   name: { type: String, default: "" },
-  title: { type: String, default: "" },
   issuer: { type: String, default: "" },
   year: { type: Number, default: null }
 }, { _id: false });
@@ -104,32 +100,15 @@ const StructuredDataSchema = new mongoose.Schema({
   education: [EducationSchema],
   projects: [ProjectSchema],
   certifications: [CertificationSchema],
-  parseQuality: { type: String, enum: ["high", "medium", "low"], default: "low" },
-  parser: { type: String, enum: ["affinda", "pdfjs", "ocr", "fallback"], default: "fallback" },
   features: { type: FeaturesSchema, default: () => ({}) },
   meta: { type: mongoose.Schema.Types.Mixed, default: {} }
 }, { _id: false });
 
 const ATSSchema = new mongoose.Schema({
-  totalScore: { type: Number, default: null },
   score: { type: Number, default: null },
   engine: { type: String, default: "hirefold-ats-v2.0" },
   jobRole: { type: String, default: "default" },
   evaluatedAt: { type: Number, default: null },
-  analyzedAt: { type: Number, default: null },
-  verdict: { type: mongoose.Schema.Types.Mixed, default: null },
-  sectionScores: { type: mongoose.Schema.Types.Mixed, default: {} },
-  sectionFeedback: { type: mongoose.Schema.Types.Mixed, default: {} },
-  keywords: { type: mongoose.Schema.Types.Mixed, default: {} },
-  parseQuality: { type: String, default: "low" },
-  parserUsed: { type: String, default: "fallback" },
-  resumeId: { type: String, default: null },
-  userId: { type: String, default: null },
-  recommendations: { type: [mongoose.Schema.Types.Mixed], default: [] },
-  sections: { type: [mongoose.Schema.Types.Mixed], default: [] },
-  sectionSummary: { type: [mongoose.Schema.Types.Mixed], default: [] },
-  keywordGap: { type: mongoose.Schema.Types.Mixed, default: null },
-  improvementPlan: { type: mongoose.Schema.Types.Mixed, default: null },
   breakdown: { type: mongoose.Schema.Types.Mixed, default: null },
   rawMetrics: { type: mongoose.Schema.Types.Mixed, default: null }
 }, { _id: false });

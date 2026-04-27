@@ -1,12 +1,5 @@
 import api from "./api";
 
-const resolveATSScore = (record = {}) =>
-  record?.atsScore ??
-  record?.totalScore ??
-  record?.score ??
-  record?.ats?.totalScore ??
-  record?.ats?.score ??
-  null;
 
 export const ResumeStorageService = {
   async saveResume(payload) {
@@ -22,7 +15,6 @@ export const ResumeStorageService = {
       const response = await api.get(
         `/resumes/${resumeId}`
       );
-      console.log("[FRONTEND] Resume API response:", response.data);
 
       const record = response.data?.data;
 
@@ -40,7 +32,7 @@ export const ResumeStorageService = {
         structuredData: record.structuredData || {},
 
         ats: record.ats ?? null,
-        atsScore: resolveATSScore(record),
+        atsScore: record.atsScore ?? null,
 
         isEditable: record.isEditable,
         isDraft: record.isDraft,
@@ -48,18 +40,6 @@ export const ResumeStorageService = {
         createdAt: record.createdAt,
         updatedAt: record.updatedAt,
       };
-    } catch (error) {
-      return null;
-    }
-  },
-
-  async getResumeAnalysis(resumeId) {
-    if (!resumeId) return null;
-
-    try {
-      const response = await api.get(`/ats/analyze/${resumeId}`);
-      console.log("[FRONTEND] ATS API response:", response.data);
-      return response?.data?.data || null;
     } catch (error) {
       return null;
     }
@@ -80,24 +60,15 @@ export const ResumeStorageService = {
 
       // Normalize all backend shapes (production safe)
       if (Array.isArray(data?.resumes)) {
-        return data.resumes.map((resume) => ({
-          ...resume,
-          atsScore: resolveATSScore(resume),
-        }));
+        return data.resumes;
       }
 
       if (Array.isArray(data?.data)) {
-        return data.data.map((resume) => ({
-          ...resume,
-          atsScore: resolveATSScore(resume),
-        }));
+        return data.data;
       }
 
       if (Array.isArray(data)) {
-        return data.map((resume) => ({
-          ...resume,
-          atsScore: resolveATSScore(resume),
-        }));
+        return data;
       }
 
       return [];

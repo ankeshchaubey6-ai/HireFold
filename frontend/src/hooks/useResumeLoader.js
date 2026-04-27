@@ -55,7 +55,6 @@ export function useResumeLoader() {
 
         // ATS mirror (lightweight UI usage)
         atsScore: entity.atsScore ?? null,
-        ats: entity.ats ?? null,
 
         // Timestamps
         createdAt:

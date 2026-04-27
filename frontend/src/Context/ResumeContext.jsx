@@ -13,24 +13,6 @@ import resumeSanitizer from "../utils/resumeSanitizer";
 
 const ResumeContext = createContext(null);
 
-const resolveATSScore = (payload = {}) =>
-  payload?.atsScore ??
-  payload?.totalScore ??
-  payload?.score ??
-  payload?.ats?.totalScore ??
-  payload?.ats?.score ??
-  payload?.meta?.atsScore ??
-  payload?.meta?.ats?.totalScore ??
-  payload?.meta?.ats?.score ??
-  null;
-
-const hasRenderableATS = (payload = {}) => {
-  const resolvedScore = Number(resolveATSScore(payload));
-  const sectionCount = Object.keys(payload?.ats?.sectionScores || {}).length;
-
-  return (Number.isFinite(resolvedScore) && resolvedScore > 0) || sectionCount > 0;
-};
-
 export const ResumeProvider = ({ children }) => {
   const [activeResumeId, setActiveResumeId] = useState(null);
   const [resume, setResume] = useState(() => resumeSanitizer(resumeSchema));
@@ -63,13 +45,11 @@ export const ResumeProvider = ({ children }) => {
         if (!backendData) return;
 
         const safe = resumeSanitizer(backendData.structuredData);
-        const resolvedScore = resolveATSScore(backendData);
 
         safe.meta = {
           ...(safe.meta || {}),
           resumeId: backendData.resumeId,
-          atsScore: resolvedScore ?? safe.meta?.atsScore ?? null,
-          ats: backendData.ats || safe.meta?.ats || null,
+          atsScore: backendData.atsScore ?? safe.meta?.atsScore ?? null,
         };
         safe.ats = backendData.ats || null;
 
@@ -77,11 +57,7 @@ export const ResumeProvider = ({ children }) => {
 
         //  CORRECT STOP CONDITION: Check analysisStatus
         const analysisStatus = backendData.structuredData?.meta?.analysisStatus;
-        if (
-          analysisStatus === "completed" ||
-          analysisStatus === "ats_failed" ||
-          hasRenderableATS(backendData)
-        ) {
+        if (analysisStatus === "completed" || analysisStatus === "ats_failed") {
           clearInterval(interval);
 
         }
@@ -122,12 +98,10 @@ export const ResumeProvider = ({ children }) => {
       if (!backendData) return;
 
       const safe = resumeSanitizer(backendData.structuredData);
-      const resolvedScore = resolveATSScore(backendData);
       safe.meta = {
         ...(safe.meta || {}),
         resumeId,
-        atsScore: resolvedScore,
-        ats: backendData.ats || null,
+        atsScore: backendData.atsScore ?? null,
       };
       safe.ats = backendData.ats || null;
 
@@ -155,8 +129,7 @@ export const ResumeProvider = ({ children }) => {
     safe.meta = {
       ...(safe.meta || {}),
       resumeId,
-      atsScore: resolveATSScore(loadedResume),
-      ats: loadedResume?.ats || loadedResume?.meta?.ats || null,
+      atsScore: loadedResume?.meta?.atsScore ?? loadedResume?.atsScore ?? null,
     };
     safe.ats = loadedResume?.ats || null;
 

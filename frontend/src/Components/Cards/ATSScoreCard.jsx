@@ -14,13 +14,7 @@ const ATSScoreCard = ({ ats }) => {
     );
   }
 
-  const score = Number(
-    ats?.totalScore ??
-      ats?.score ??
-      ats?.atsScore ??
-      ats?.overallScore ??
-      0
-  );
+  const score = ats.score;
 
   let label = "Poor";
   if (score >= 80) label = "Excellent";
