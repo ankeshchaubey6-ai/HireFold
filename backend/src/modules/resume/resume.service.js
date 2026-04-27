@@ -95,7 +95,34 @@ export const ResumeService = {
             console.warn(`Queue failed, running ATS synchronously: ${queueErr.message}`);
             try {
               const ATSService = (await import("../ats/ats.service.js")).default;
-              const freshResume = await ResumeModel.findOne({ resumeId });
+              
+              // For OCR resumes, wait up to 5 attempts with backoff before analyzing
+              let freshResume = await ResumeModel.findOne({ resumeId });
+              const needsOCR = freshResume?.structuredData?.meta?.needsOCR;
+              
+              if (needsOCR) {
+                // Retry up to 5 times waiting for OCR
+                for (let attempt = 1; attempt <= 5; attempt++) {
+                  const structuredData = freshResume?.structuredData || {};
+                  const hasData = 
+                    (structuredData.skills?.length > 0) ||
+                    (structuredData.experience?.length > 0) ||
+                    (structuredData.education?.length > 0);
+                  
+                  if (hasData) {
+                    console.log(`OCR completed on attempt ${attempt} for ${resumeId}`);
+                    break;
+                  }
+                  
+                  if (attempt < 5) {
+                    const delay = Math.pow(2, attempt - 1) * 2000; // Exponential backoff: 2s, 4s, 8s, 16s
+                    console.log(`OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    freshResume = await ResumeModel.findOne({ resumeId });
+                  }
+                }
+              }
+              
               const analysis = await ATSService.analyzeResume(freshResume, "default");
               
               await ResumeModel.updateOne(
@@ -309,7 +336,34 @@ export const ResumeService = {
         console.warn(`Queue failed during upload, running ATS synchronously: ${queueErr.message}`);
         try {
           const ATSService = (await import("../ats/ats.service.js")).default;
-          const freshResume = await ResumeModel.findOne({ resumeId });
+          
+          // For OCR resumes, wait up to 5 attempts with backoff before analyzing
+          let freshResume = await ResumeModel.findOne({ resumeId });
+          const needsOCR = freshResume?.structuredData?.meta?.needsOCR;
+          
+          if (needsOCR) {
+            // Retry up to 5 times waiting for OCR
+            for (let attempt = 1; attempt <= 5; attempt++) {
+              const structuredData = freshResume?.structuredData || {};
+              const hasData = 
+                (structuredData.skills?.length > 0) ||
+                (structuredData.experience?.length > 0) ||
+                (structuredData.education?.length > 0);
+              
+              if (hasData) {
+                console.log(`OCR completed on attempt ${attempt} for ${resumeId}`);
+                break;
+              }
+              
+              if (attempt < 5) {
+                const delay = Math.pow(2, attempt - 1) * 2000; // Exponential backoff: 2s, 4s, 8s, 16s
+                console.log(`OCR still processing for ${resumeId}, retry ${attempt}/5 in ${delay}ms`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                freshResume = await ResumeModel.findOne({ resumeId });
+              }
+            }
+          }
+          
           const analysis = await ATSService.analyzeResume(freshResume, "default");
           
           await ResumeModel.updateOne(
