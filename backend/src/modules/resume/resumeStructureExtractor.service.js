@@ -150,14 +150,17 @@ function normalizeText(text) {
     .replace(/\r/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .replace(/[^\x00-\x7F]/g, " ")
-    .replace(/\s+/g, " ")
+    .replace(/[^\S\n]+/g, " ")
     .trim();
 }
 
 /* ================= SECTION DETECTION ================= */
 
 function detectSections(text) {
-  const lines = text.split("\n");
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
   const sections = {};
   let currentSection = "other";
   let sectionContent = [];
@@ -169,7 +172,13 @@ function detectSections(text) {
     // Check if line is a section header
     let foundSection = null;
     for (const [section, headers] of Object.entries(SECTION_HEADERS)) {
-      if (headers.some(header => lowerLine.includes(header) && line.length < 50)) {
+      if (
+        headers.some(
+          (header) =>
+            (lowerLine === header || lowerLine.startsWith(`${header}:`) || lowerLine.includes(header)) &&
+            line.length < 60
+        )
+      ) {
         foundSection = section;
         break;
       }
@@ -321,7 +330,9 @@ function parseExperienceEnhanced(text = "") {
   if (!text) return [];
   
   const experiences = [];
-  const lines = text.split("\n");
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const datePattern =
+    /((?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+\d{4}|\d{4})\s*[-–]\s*((?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+\d{4}|\d{4}|\bpresent\b|\bcurrent\b)/i;
   
   // Extract lines that look like experience entries
   for (let i = 0; i < lines.length; i++) {
@@ -329,7 +340,7 @@ function parseExperienceEnhanced(text = "") {
     if (!line) continue;
     
     // Check for date patterns (Jul 2025 - Aug 2025)
-    const dateMatch = line.match(/(\w+\s+\d{4})\s*[-]\s*(\w+\s+\d{4}|\bpresent\b)/i);
+    const dateMatch = line.match(datePattern);
     if (dateMatch) {
       const experience = {
         role: "",
@@ -340,18 +351,22 @@ function parseExperienceEnhanced(text = "") {
           months: 0,
           raw: dateMatch[0]
         },
-        description: [],
+        description: "",
         achievements: []
       };
       
       // Extract role (text before date)
       const beforeDate = line.substring(0, dateMatch.index).trim();
       if (beforeDate) {
-        experience.role = beforeDate;
+        const roleCompanyParts = beforeDate.split(/\s+\|\s+|\s+@\s+|\s+-\s+/);
+        experience.role = roleCompanyParts[0] || beforeDate;
+        if (roleCompanyParts.length > 1) {
+          experience.company = roleCompanyParts.slice(1).join(" ").trim();
+        }
       }
       
       // Check if company is on previous line
-      if (i > 0 && lines[i-1].trim() && !lines[i-1].match(/(\w+\s+\d{4})/)) {
+      if (!experience.company && i > 0 && lines[i-1].trim() && !lines[i-1].match(datePattern)) {
         experience.company = lines[i-1].trim();
       }
       
@@ -363,7 +378,7 @@ function parseExperienceEnhanced(text = "") {
           descLines.push(descLine);
         }
       }
-      experience.description = descLines;
+      experience.description = descLines.join(" ");
       
       // Extract achievements
       const achievementPatterns = [
@@ -382,7 +397,7 @@ function parseExperienceEnhanced(text = "") {
   // If no structured experiences found, try to extract from raw text
   if (experiences.length === 0) {
     const experienceText = text;
-    const expPattern = /([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+([A-Z][a-z]+\s+\d{4})\s*[-]\s*([A-Z][a-z]+\s+\d{4}|\bpresent\b)/gi;
+    const expPattern = /([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+((?:[A-Z][a-z]+\s+\d{4})|\d{4})\s*[-–]\s*(((?:[A-Z][a-z]+\s+\d{4})|\d{4}|\bpresent\b))/gi;
     let match;
     while ((match = expPattern.exec(experienceText)) !== null) {
       experiences.push({
@@ -394,7 +409,7 @@ function parseExperienceEnhanced(text = "") {
           months: 0,
           raw: `${match[2]} - ${match[3]}`
         },
-        description: [],
+        description: "",
         achievements: []
       });
     }
@@ -409,7 +424,7 @@ function parseEducationEnhanced(text = "") {
   if (!text) return [];
   
   const education = [];
-  const lines = text.split("\n");
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
   
   for (const line of lines) {
     const lowerLine = line.toLowerCase();
@@ -439,9 +454,9 @@ function parseEducationEnhanced(text = "") {
         edu.year = parseInt(yearMatch[0]);
       }
       
-      const institutionMatch = line.match(/(?:from|at|in)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
+      const institutionMatch = line.match(/(?:from|at|in)\s+([A-Z][A-Za-z&.,\-\s]+)/i);
       if (institutionMatch) {
-        edu.institution = institutionMatch[1];
+        edu.institution = institutionMatch[1].trim();
       }
       
       education.push(edu);
@@ -457,15 +472,19 @@ function parseProjectsEnhanced(text = "") {
   if (!text) return [];
   
   const projects = [];
-  const lines = text.split("\n");
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
   
   for (const line of lines) {
-    if (line.trim() && line.length < 200 && !line.match(/(education|experience|skills)/i)) {
+    if (
+      line.trim() &&
+      line.length < 220 &&
+      !line.match(/^(education|experience|skills|summary|profile|certifications?)$/i)
+    ) {
       const project = {
         name: line.trim().substring(0, 100),
         techStack: [],
         complexity: "low",
-        description: "",
+        description: line.trim(),
         impact: "",
         duration: null
       };
@@ -500,7 +519,7 @@ function parseCertifications(text = "") {
   if (!text) return [];
   
   const certifications = [];
-  const lines = text.split("\n");
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
   
   const certKeywords = [
     "certified", "certification", "certificate", "aws", "azure", 

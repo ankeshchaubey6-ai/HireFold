@@ -65,13 +65,28 @@ async function extractTextFromPDF(buffer) {
       try {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        
-        const pageText = content.items
-          .map(item => item.str || "")
-          .join(" ")
-          .replace(/\s+/g, " ");
-        
-        fullText += pageText + "\n";
+
+        const rows = [];
+        for (const item of content.items) {
+          const text = String(item?.str || "").trim();
+          if (!text) continue;
+
+          const y = Math.round((item?.transform?.[5] || 0) * 10) / 10;
+          const lastRow = rows[rows.length - 1];
+
+          if (!lastRow || Math.abs(lastRow.y - y) > 2) {
+            rows.push({ y, parts: [text] });
+          } else {
+            lastRow.parts.push(text);
+          }
+        }
+
+        const pageText = rows
+          .map((row) => row.parts.join(" ").replace(/[^\S\n]+/g, " ").trim())
+          .filter(Boolean)
+          .join("\n");
+
+        fullText += pageText + "\n\n";
         
         // Progress indicator
         if (i % 10 === 0) {
