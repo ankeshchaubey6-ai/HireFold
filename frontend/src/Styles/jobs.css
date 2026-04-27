@@ -317,21 +317,33 @@
 .filter-group input,
 .filter-group select {
   padding: 0.65rem 0.875rem;
-  background: var(--surface-2);
-  border: 1px solid var(--border-strong);
+  background: #ffffff;
+  border: 1px solid #d1d5db;
   border-radius: var(--radius-md);
-  color: var(--text-1);
+  color: #0d0f12;
   font-size: 0.875rem;
   font-family: var(--font-body);
   transition: all var(--transition-fast);
   outline: none;
 }
 
+.dark .filter-group input,
+.dark .filter-group select {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--text-1);
+}
+
 .filter-group input:focus,
 .filter-group select:focus {
   border-color: var(--brand);
-  background: var(--surface);
+  background: #ffffff;
   box-shadow: 0 0 0 3px var(--brand-glow);
+}
+
+.dark .filter-group input:focus,
+.dark .filter-group select:focus {
+  background: var(--surface);
 }
 
 .filter-actions { display: flex; align-items: flex-end; }

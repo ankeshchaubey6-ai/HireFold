@@ -195,15 +195,16 @@
 /* THEME TOGGLE */
 .candidate-navbar__theme {
   background: #f3f4f6;
-  border: 1px solid #d1d5db;
+  border: 2px solid #d1d5db;
   color: #1f2937;
-  padding: 8px 12px;
+  padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 18px;
-  display: flex;
+  font-size: 20px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
   transition: all 0.2s ease;
   width: 40px;
   height: 40px;
